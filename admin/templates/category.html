@@ -6,15 +6,15 @@
 <input type="hidden" id="categoryid" name="categoryid" value="[% category.categoryid %]"/>
 
 <label for="name">Name</label>
-<input id="name" name="name" type="text" value="[% category.name | html %]"/><span id="name-error" class="aform-error"></span>
+<input id="name" name="name" type="text" value="[% category.name | html %]"/><span class="name-error aform-error"></span>
 
 <label for="url">Url</label>
-<input id="url" name="url" type="text" value="[% category.url | html %]"/><span id="url-error" class="aform-error"></span>
+<input id="url" name="url" type="text" value="[% category.url | html %]"/><span class="url-error aform-error"></span>
 
 <br/>
 
 <input type="submit" value="[% IF category %]Edit Category[% ELSE %]Add Category[% END %]"/>
-<span id="category-mesg" class="aform-error"></span>
+<span class="aform-mesg aform-error"></span>
 
 <hr/>
 
@@ -25,10 +25,9 @@
 <script type="text/javascript" src="[% urlbase %]/admin/js/url-filler.js"></script>
 <script type="text/javascript">
 var aform = new AForm({
-    formId: "#category", processUrl: "[% urlbase %]/admin/category-js"});
-aform.onSuccess = function (data) {
-    location.href = "[% urlbase %]/admin/categories";
-}
+    formId: "#category",
+    processUrl: "[% urlbase %]/admin/category-js",
+    successUrl: "[% urlbase %]/admin/categories"});
 
 var urlFiller = new URLFiller({fromInputId: "#name", urlInputId: "#url"});
 
@@ -45,13 +44,13 @@ $("#delete").on("click", function () {
     });
     ajax.done(function (data, textStatus, jqXHR) {
         if (data.error) {
-            $("#category-mesg").text(data.mesg ? data.mesg : "Okay!");
+            $("#category .aform-mesg").text(data.mesg ? data.mesg : "Okay!");
             return;
         }
         location.href = "[% urlbase %]/admin/categories";
     });
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
-        $("#category-mesg").text(errorThrown);
+        $("#category .aform-mesg").text(errorThrown);
     });
 });
 </script>

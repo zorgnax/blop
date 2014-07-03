@@ -1,7 +1,7 @@
 function AForm (args) {
     this.args = args;
     this.form = $(this.args.formId);
-    this.mesg = $(this.args.formId + "-mesg");
+    this.mesg = this.form.find(".aform-mesg");
     var self = this;
     this.form.on("submit", function (event) {self.onSubmit(event)});
 }
@@ -20,13 +20,15 @@ AForm.prototype.onSubmit = function (event) {
 }
 
 AForm.prototype.onDone = function (data, textStatus, jqXHR) {
+    var self = this;
     this.form.find(":input[name]").each(function () {
+        var errorDiv = self.form.find("." + this.name + "Error");
         if (this.name + "Error" in data) {
-            $("#" + this.name + "-error").text(data[this.name + "Error"]);
+            errorDiv.text(data[this.name + "Error"]);
             $(this).css("backgroundColor", "lightpink");
         }
         else {
-            $("#" + this.name + "-error").text("");
+            errorDiv.text("");
             $(this).css("backgroundColor", "");
         }
     });
@@ -34,6 +36,9 @@ AForm.prototype.onDone = function (data, textStatus, jqXHR) {
         this.mesg.text(data.mesg ? data.mesg : "Okay!");
         if (this.args.successUrl) {
             location.href = this.args.successUrl;
+        }
+        else if (this.args.onSuccess) {
+            this.args.onSuccess(data);
         }
         else if (this.onSuccess) {
             this.onSuccess(data);

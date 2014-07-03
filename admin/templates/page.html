@@ -6,22 +6,22 @@
 <input type="hidden" id="pageid" name="pageid" value="[% page.pageid %]"/>
 
 <label for="title">Title <span class="input-info">Required.</span></label>
-<input id="title" name="title" type="text" value="[% page.title | html %]"/><span id="title-error" class="aform-error"></span>
+<input id="title" name="title" type="text" value="[% page.title | html %]"/><span class="title-error aform-error"></span>
 
 <label for="url">Url <span class="input-info">Required.</span></label>
-<input id="url" name="url" type="text" value="[% page.url | html %]"/><span id="url-error" class="aform-error"></span>
+<input id="url" name="url" type="text" value="[% page.url | html %]"/><span class="url-error aform-error"></span>
 
 <br/><br/>
 
 [% PROCESS editor.html entry=page %]
 
 <input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/>
-<span id="page-mesg" class="aform-error"></span>
+<span class="aform-mesg aform-error"></span>
 
 [% PROCESS upload.html entry=page %]
 
 <label for="published">Publish Date <span class="input-info">YYYY-MM-DD or leave empty to publish immediately.</span></label>
-<input id="published" name="published" type="text" value="[% page.published | html %]"/><span id="published-error" class="aform-error"></span>
+<input id="published" name="published" type="text" value="[% page.published | html %]"/><span class="published-error aform-error"></span>
 
 <br/>
 
@@ -77,13 +77,13 @@ $("#delete").on("click", function () {
     });
     ajax.done(function (data, textStatus, jqXHR) {
         if (data.error) {
-            $("#page-mesg").text(data.mesg ? data.mesg : "Okay!");
+            $("#page .aform-mesg").text(data.mesg ? data.mesg : "Okay!");
             return;
         }
         location.href = "[% urlbase %]/admin";
     });
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
-        $("#page-mesg").text(errorThrown);
+        $("#page .aform-mesg").text(errorThrown);
     });
 });
 </script>
