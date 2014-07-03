@@ -135,7 +135,7 @@ sub escape_uri {
 
 sub escape_html {
     my ($self, $str) = @_;
-    $str ||= "";
+    $str = "" if !defined $str;
     $str =~ s/&/&amp;/g;
     $str =~ s/>/&gt;/g;
     $str =~ s/</&lt;/g;
