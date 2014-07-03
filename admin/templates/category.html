@@ -1,0 +1,60 @@
+[% title = category ? "Edit Category " _ category.categoryid : "Add Category" %]
+[% PROCESS header.html x1="Manage" x2="Categories" %]
+
+<form id="category" name="category" method="post" class="aform">
+
+<input type="hidden" id="categoryid" name="categoryid" value="[% category.categoryid %]"/>
+
+<label for="name">Name</label>
+<input id="name" name="name" type="text" value="[% category.name | html %]"/><span id="name-error" class="aform-error"></span>
+
+<label for="url">Url</label>
+<input id="url" name="url" type="text" value="[% category.url | html %]"/><span id="url-error" class="aform-error"></span>
+
+<br/>
+
+<input type="submit" value="[% IF category %]Edit Category[% ELSE %]Add Category[% END %]"/>
+<span id="category-mesg" class="aform-error"></span>
+
+<hr/>
+
+<input type="button" id="delete" value="[% IF category %]Delete[% ELSE %]Cancel[% END %]"/>
+</form>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/url-filler.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#category", processUrl: "[% urlbase %]/admin/category-js"});
+aform.onSuccess = function (data) {
+    location.href = "[% urlbase %]/admin/categories";
+}
+
+var urlFiller = new URLFiller({fromInputId: "#name", urlInputId: "#url"});
+
+$("#delete").on("click", function () {
+    var categoryid = $("#categoryid").val();
+    if (!categoryid) {
+        location.href = "[% urlbase %]/admin/categories";
+        return;
+    }
+    var ajax = $.ajax({
+        url: "[% urlbase %]/admin/delete-category-js",
+        type: "POST",
+        data: {categoryid: categoryid}
+    });
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (data.error) {
+            $("#category-mesg").text(data.mesg ? data.mesg : "Okay!");
+            return;
+        }
+        location.href = "[% urlbase %]/admin/categories";
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        $("#category-mesg").text(errorThrown);
+    });
+});
+</script>
+
+[% PROCESS footer.html %]
+

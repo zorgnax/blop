@@ -1,0 +1,142 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+my $out = {};
+
+my $name = $cgi->param("name");
+if (!$name || $name =~ /^\s*$/) {
+    $out->{nameError} = "Name cannot be blank.";
+    $out->{error} = 1;
+}
+
+my $email = $cgi->param("email");
+if (!$email || $email =~ /^\s*$/) {
+    $out->{emailError} = "Email cannot be blank.";
+    $out->{error} = 1;
+}
+elsif ($email !~ /^[^\s\@]+\@.+\.\w+$/) {
+    $out->{emailError} = "Invalid email.";
+    $out->{error} = 1;
+}
+
+my $content = $cgi->param("content");
+if (!$content || $content =~ /^\s+$/) {
+    $out->{mesg} = "Content cannot be blank.";
+    $out->{error} = 1;
+}
+
+if ($out->{error}) {
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json($out);
+    exit;
+}
+
+my $postid = $cgi->param("postid");
+my $post;
+my $pageid = $cgi->param("pageid");
+my $page;
+
+if ($postid) {
+    $post = $blop->post(postid => $postid) or die "Invalid postid.\n";
+    undef $pageid;
+}
+elsif ($pageid) {
+    $page = $blop->page(pageid => $pageid) or die "Invalid pageid.\n";
+    undef $postid;
+}
+else {
+    die "A postid or a pageid is required.\n";
+}
+
+my $commentid = $cgi->param("commentid");
+
+if (!$blop->admin && !$commentid) {
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+select commentid from comments where ipaddr=? and added > now() - interval 1 minute
+EOSQL
+    my $rows = int $sth->execute($ENV{REMOTE_ADDR});
+    if ($rows) {
+        die "Please wait before submitting another comment.\n";
+    }
+    $sth = $blop->dbh->prepare(<<EOSQL);
+select commentid from comments where ipaddr=? and added > now() - interval 1 hour
+EOSQL
+    $rows = int $sth->execute($ENV{REMOTE_ADDR});
+    if ($rows > 9) {
+        die "Please wait before submitting another comment.\n";
+    }
+}
+
+my $cookie;
+if ($cgi->param("bake")) {
+    $cookie = $cgi->cookie("cmnt");
+    $cookie = $blop->token(22) if !$cookie;
+}
+
+my $now = Blop::Date->now->str;
+
+if (!$commentid) {
+    my $status = "pending";
+
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+insert into comments set
+    postid=?, pageid=?, name=?, email=?, ipaddr=?, cookie=?, added=?,
+    status=?, content=?
+EOSQL
+    $sth->execute(
+        $postid, $pageid, $name, $email, $ENV{REMOTE_ADDR}, $cookie, $now,
+        $status, $content);
+    $commentid = $sth->{mysql_insertid};
+
+    if ($cgi->param("bake")) {
+        my $cookie_header = $cgi->cookie(
+            -name => "cmnt", -value => $cookie, -expires => "+100d",
+            -path => "$blop->{urlbase}/");
+        print "Set-Cookie: $cookie_header\n";
+    }
+
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json({ok => 1, commentid => $commentid});
+    exit;
+}
+
+if (!$blop->admin) {
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+select commentid from comments where ipaddr=? and edited > now() - interval 1 hour
+EOSQL
+    my $rows = int $sth->execute($ENV{REMOTE_ADDR});
+    if ($rows > 9) {
+        die "Please wait before editing another comment.\n";
+    }
+}
+
+my $comment = $blop->comment(commentid => $commentid)
+    or die "Invalid commentid.\n";
+
+my %args;
+
+if ($comment->{name} ne $name) {
+    $args{name} = $name;
+}
+if ($comment->{email} ne $email) {
+    $args{email} = $email;
+}
+if ($comment->{content} ne $content) {
+    $args{content} = $content;
+}
+
+if (%args) {
+    my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+update comments set $sets, edited=? where commentid=?
+EOSQL
+    $sth->execute($now, $commentid);
+}
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1, commentid => $commentid});
+exit;
+

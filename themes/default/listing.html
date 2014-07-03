@@ -1,0 +1,37 @@
+[% PROCESS header.html title=blop.conf.title %]
+
+<div class="navigation-summary">[% navigation.summary %]</div>
+
+[% FOREACH post IN posts %]
+[% IF post.category %]
+<div class="category"><a href="[% urlbase %]/[% post.category.url | uri %]">[% post.category.name %]</a></div>
+[% END %]
+[% IF post.title %]
+<h2><a href="[% urlbase %]/[% post.url | uri %]">[% post.title | html %]</a></h2>
+[% ELSE %]
+<h2><a href="[% urlbase %]/[% post.url | uri %]">Post [% post.postid %]</a></h2>
+[% END %]
+<span class="published"><a href="[% urlbase %]/[% post.url | uri %]">[% post.published %]</a></span>
+[% IF post.num_comments %]
+<span class="num_comments">[% post.num_comments %] comment[% IF post.num_comments != 1 %]s[% END %]</span>
+[% END %]
+<div class="content">
+[% post.parsed_content %]
+</div>
+[% IF post.tags.size %]
+<div class="tags">
+Tags:
+[% FOREACH tag IN post.tags %]
+<a href="[% urlbase %]/tag/[% tag.name | uri %]">[% tag.name | html %]</a>
+[% END %]
+</div>
+[% END %]
+<hr/>
+<br/>
+[% END %]
+
+<br/>
+
+<div class="navigation-links">[% navigation.links %]</div>
+
+[% PROCESS footer.html %]

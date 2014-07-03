@@ -1,0 +1,154 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $out = {};
+
+my $postid = $cgi->param("postid");
+my $title = $cgi->param("title");
+my $content = $cgi->param("content");
+my $post;
+
+if ($postid) {
+    $post = $blop->post(postid => $postid);
+}
+
+my $url = $cgi->param("url");
+if (defined $url && length($url)) {
+    if (!$blop->url_available($url) && (!$post || $post->{url} ne $url)) {
+        $out->{urlError} = "Unavailable.";
+        $out->{error} = 1;
+    }
+}
+else {
+    while (1) {
+        $url = "post/" . $blop->token(4, "abcdefghijklmnopqrstuvwxyz");
+        last if $blop->url_available($url);
+    }
+}
+
+my $now = Blop::Date->now->str;
+
+my $published = $cgi->param("published");
+if (defined $published && length($published)) {
+    my $date = Blop::Date->new($published);
+    if ($date) {
+        $published = $date->str;
+    }
+    else {
+        $out->{publishedError} = "Invalid format.";
+        $out->{error} = 1;
+    }
+}
+else {
+    $published = $now;
+}
+
+my $category_name = $cgi->param("category");
+if (defined $category_name && length($category_name)) {
+    $category_name =~ s{^\s+|\s+$}{}g;
+    if ($category_name =~ m{,}) {
+        $out->{categoryError} = "Commas are not allowed.";
+        $out->{error} = 1;
+    }
+}
+
+my $tags = $cgi->param("tags");
+my @tags;
+if (defined $tags && length($tags)) {
+    while ($tags =~ /([^,]+)/gc) {
+        my $tag = $1;
+        $tag=~ s{^\s+|\s+$}{}g;
+        next if !length($tag);
+        push @tags, $tag;
+    }
+}
+
+if ($out->{error}) {
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json($out);
+    exit;
+}
+
+my $category;
+if (defined $category_name && length($category_name)) {
+    $category = $blop->category(name => $category_name);
+    if (!$category) {
+        $category = $blop->add_category(name => $category_name);
+    }
+}
+my $categoryid = $category ? $category->{categoryid} : 0;
+
+if (!$postid) {
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+insert into posts set
+    title=?, url=?, added=?, published=?, categoryid=?, content=?
+EOSQL
+    $sth->execute($title, $url, $now, $published, $categoryid, $content);
+    $postid = $sth->{mysql_insertid};
+
+    $sth = $blop->dbh->prepare(<<EOSQL);
+insert into tags set postid=?, name=?
+EOSQL
+    for my $tag (@tags) {
+        $sth->execute($postid, $tag);
+    }
+
+    $blop->log("Added post $postid");
+
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json({ok => 1, postid => $postid});
+    exit;
+}
+
+my %args;
+
+if ($post->{title} ne $title) {
+    $args{title} = $title;
+}
+if ($post->{url} ne $url) {
+    $args{url} = $url;
+}
+if ($post->{published} ne $published) {
+    $args{published} = $published;
+}
+if ($post->{categoryid} ne $categoryid) {
+    $args{categoryid} = $categoryid;
+}
+if ($post->{content} ne $content) {
+    $args{content} = $content;
+}
+
+if (%args) {
+    my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+update posts set $sets where postid=?
+EOSQL
+    $sth->execute($postid);
+}
+
+my %tag_hash;
+for my $tag (@tags) {
+    if (!$post->has_tag($tag)) {
+        $post->add_tag($tag);
+    }
+    $tag_hash{$tag} = $tag;
+}
+
+for my $tag (@{$post->tags}) {
+    if (!$tag_hash{$tag}) {
+        $post->rm_tag($tag);
+    }
+}
+
+$blop->log("Edited post $postid");
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1, postid => $postid});
+

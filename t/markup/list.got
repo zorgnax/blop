@@ -1,0 +1,7 @@
+<ul>
+<li>foo</li>
+<li><p>bar
+This is more</p></li>
+</ul>
+
+<p>And this is new paragraph.</p>

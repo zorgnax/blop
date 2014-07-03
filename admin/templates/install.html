@@ -1,0 +1,47 @@
+<link rel="stylesheet" type="text/css" href="[% urlbase %]/admin/css/blop.css">
+
+<h1>Installation</h1>
+
+<form id="install" name="install" class="aform" method="post" autocomplete="off">
+
+<label for="title">Blog Title</label>
+<input id="title" name="title" type="text"/><span id="title-error" class="aform-error"></span>
+
+<label for="slogan">Blog Slogan</label>
+<input id="slogan" name="slogan" type="text"/><span id="slogan-error" class="aform-error"></span>
+
+<label for="email">Admin Email</label>
+<input id="email" name="email" type="text"/><span id="email-error" class="aform-error"></span>
+
+<label for="pass">Admin Password</label>
+<input id="pass" name="pass" type="password"/><span id="pass-error" class="aform-error"></span>
+
+<label for="dbhost">Database Host</label>
+<input id="dbhost" name="dbhost" type="text"/><span id="dbhost-error" class="aform-error"></span>
+
+<label for="dbuser">Database Username</label>
+<input id="dbuser" name="dbuser" type="text"/><span id="dbuser-error" class="aform-error"></span>
+
+<label for="dbpass">Database Password</label>
+<input id="dbpass" name="dbpass" type="password"/><span id="dbpass-error" class="aform-error"></span>
+
+<label for="dbtable">Database Table</label>
+<input id="dbtable" name="dbtable" type="text"/><span id="dbtable-error" class="aform-error"></span>
+
+<br/>
+
+<input type="submit" value="Install"/>
+<span id="install-mesg" class="aform-error"></span>
+
+</form>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/jquery-1.11.0.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#install",
+    processUrl: "[% urlbase %]/admin/install-js",
+    successUrl: "[% urlbase %]/admin/install-completed"
+});
+</script>
+

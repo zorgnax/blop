@@ -1,0 +1,117 @@
+Python-Markdown
+===============
+
+This is a Python implementation of John Gruber's 
+[link "http://daringfireball.net/projects/markdown/"]Markdown[/link].
+It is almost completely compliant with the reference implementation,
+though there are a few very minor [link #differences]differences[/link].
+See John's [link http://daringfireball.net/projects/markdown/syntax]Syntax
+Documentation[/link] for the syntax rules.
+
+See the [link install.html]installation instructions[/link] to get started.
+
+Goals
+-----
+
+The Python-Markdown project is developed with the following goals in mind:
+
+- Maintain a Python 2 *and* Python 3 library (with an optional CLI wrapper)
+  suited to use in web server environments (never raise an exception, never 
+  write to stdout, etc.) as an implementation
+  of the markdown parser that follows the [link
+  http://daringfireball.net/projects/markdown/syntax]syntax rules[/link]
+  and the behavior of the original (markdown.pl) implementation as reasonably
+  as possible (see [link #differences]differences[/link] for a few exceptions).
+
+- Provide an [link extensions/api.html]Extension API[/link] which makes it possible
+  to change and/or extend the behavior of the parser.
+
+Features
+--------
+
+In addition to the basic markdown syntax, Python-Markdown supports the following
+features:
+
+- **International Input**
+
+    Python-Markdown will accept [link reference.html#text]input[/link] in any language 
+    supported by Unicode including bi-directional text. In fact the test suite 
+    includes documents written in Russian and Arabic.
+
+- **Extensions**
+
+    Various [link extensions/index.html]extensions[/link] are provided (including 
+    [link extensions/extra.html]extra[/link]) to change and/or extend the base syntax. 
+    Additionally, a public [link extensions/api.html]Extension API[/link] is available 
+    to write your own extensions.
+
+- **Output Formats**
+
+    Python-Markdown can output documents in HTML4, XHTML and HTML5. See the
+    [link reference.html#output_format]Library Reference[/link] for details.
+
+- **"Safe Mode"**
+
+    When using Python-Markdown to parse input from untrusted users on the web,
+    the handling of raw HTML can be controlled in various ways to prevent 
+    harmful code from being injected into your site. See the
+    [link reference.html#safe_mode]Library Reference[/link] for details.
+
+- **Command Line Interface**
+
+    In addition to being a Python Library, a 
+    [link cli.html]command line script[/link] is available for your convenience.
+
+Differences
+-----------
+
+While Python-Markdown strives to fully implement markdown as described in the 
+[link http://daringfireball.net/projects/markdown/syntax]syntax rules[/link], the rules 
+can be interpreted in different ways and different implementations 
+occasionally vary in their behavior (see the 
+[link http://johnmacfarlane.net/babelmark2/faq.html#what-are-some-examples-of-interesting-divergences-between-implementations]Babelmark FAQ[/link]
+for some examples). Known and intentional differences found in Python-Markdown 
+are summarized below:
+
+- **Middle-Word Emphasis**
+
+    Python-Markdown defaults to ignoring middle-word emphasis. In other words,
+    `some_long_filename.txt` will not become `some<em>long</em>filename.txt`.
+    This can be switched off if desired. See the 
+    [link reference.html#smart_emphasis]Library Reference[/link] for details.
+
+- **Indentation/Tab Length**
+
+    The [link http://daringfireball.net/projects/markdown/syntax#list]syntax rules[/link] 
+    clearly state that when a list item consists of multiple paragraphs, "each 
+    subsequent paragraph in a list item **must** be indented by either 4 spaces 
+    or one tab" (emphasis added). However, many implementations do not enforce 
+    this rule and allow less than 4 spaces of indentation. The implementers of 
+    Python-Markdown consider it a bug to not enforce this rule. 
+
+    This applies to any block level elements nested in a list, including
+    paragraphs, sub-lists, blockquotes, code blocks, etc. They **must** always 
+    be indented by at least four spaces (or one tab) for each level of nesting.
+
+    In the event that one would prefer different behavior,
+    [link reference.html#tab_length]tab_length[/link] can be set to whatever length is 
+    desired. Be warned however, as this will affect indentation for all aspects 
+    of the syntax (including root level code blocks).
+
+- **Consecutive Lists**
+
+    While the syntax rules are not clear on this, many implementations
+    (including the original) do not end one list and start a second
+    list when the list marker (asterisks, pluses, hyphens, and numbers)
+    changes. For consistency, Python-Markdown maintains the same behavior
+    with no plans to change in the foreseeable future. That said,
+    the [link extensions/sane_lists.html]Sane List Extension[/link]
+    is available to provide a less surprising behavior.
+    
+
+Support
+-------
+
+You may ask for help and discuss various other issues on the [link http://lists.sourceforge.net/lists/listinfo/python-markdown-discuss]mailing list[/link]
+and report bugs on the [link http://github.com/waylan/Python-Markdown/issues]bug tracker[/link].
+

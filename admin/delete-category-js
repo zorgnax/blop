@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $categoryid = $cgi->param("categoryid");
+if (!$categoryid) {
+    die "A categoryid is required.\n";
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+update posts set categoryid=0 where categoryid=?
+EOSQL
+$sth->execute($categoryid);
+
+$sth = $blop->dbh->prepare(<<EOSQL);
+delete from categories where categoryid=?
+EOSQL
+$sth->execute($categoryid);
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({
+    ok => 1,
+    mesg => "Deleted category $categoryid.\n",
+});
+

@@ -1,0 +1,3 @@
+/blop.conf
+/content/*/*
+!/content/*/.keep

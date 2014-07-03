@@ -1,0 +1,24 @@
+<pre><code>this is a code block</code></pre>
+
+<p>normal paragraph</p>
+
+<pre><code>code blocks can be
+multiple lines</code></pre>
+
+<p>normal paragraph</p>
+
+<pre><code>multiple lines
+
+multiple paragraphs</code></pre>
+
+<p>normal paragraph</p>
+
+<pre><code>&lt;content is&gt;encoded &amp; whatnot&lt;/yeah&gt;
+even &amp;amp;</code></pre>
+
+<p>normal paragraph</p>
+
+<pre><code>beyond the initial 4 spaces
+
+    content can be indented more.</code></pre>
+

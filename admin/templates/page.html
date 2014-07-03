@@ -1,0 +1,92 @@
+[% title = page ? "Edit Page " _ page.pageid : "Add Page" %]
+[% PROCESS header.html x1="Publish" x2="Page" %]
+
+<form id="page" name="page" method="post" class="aform">
+
+<input type="hidden" id="pageid" name="pageid" value="[% page.pageid %]"/>
+
+<label for="title">Title <span class="input-info">Required.</span></label>
+<input id="title" name="title" type="text" value="[% page.title | html %]"/><span id="title-error" class="aform-error"></span>
+
+<label for="url">Url <span class="input-info">Required.</span></label>
+<input id="url" name="url" type="text" value="[% page.url | html %]"/><span id="url-error" class="aform-error"></span>
+
+<br/><br/>
+
+[% PROCESS editor.html entry=page %]
+
+<input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/>
+<span id="page-mesg" class="aform-error"></span>
+
+[% PROCESS upload.html entry=page %]
+
+<label for="published">Publish Date <span class="input-info">YYYY-MM-DD or leave empty to publish immediately.</span></label>
+<input id="published" name="published" type="text" value="[% page.published | html %]"/><span id="published-error" class="aform-error"></span>
+
+<br/>
+
+<input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/>
+
+<hr/>
+
+<input type="button" id="delete" value="[% IF page %]Delete[% ELSE %]Cancel[% END %]"/>
+</form>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/url-filler.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/editor.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/upload.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#page", processUrl: "[% urlbase %]/admin/page-js"});
+aform.onSuccess = function (data) {
+    [% IF page %]
+    location.href = "[% urlbase %]/admin/page-edited/" + data.pageid;
+    [% ELSE %]
+    location.href = "[% urlbase %]/admin/page-added/" + data.pageid;
+    [% END %]
+}
+
+var urlFiller = new URLFiller({fromInputId: "#title", urlInputId: "#url"});
+
+var editor = new Editor({divId: "#editor"});
+
+var upload = new Upload({
+    divId: "#upload",
+    processUrl: "[% urlbase %]/admin/upload-page-js",
+    deleteUrl: "[% urlbase %]/admin/delete-file-page-js",
+    editor: editor
+});
+upload.extraParams = function () {
+    return {pageid: $("#pageid").val()};
+}
+upload.onSuccess = function (data) {
+    $("#pageid").val(data.pageid);
+}
+
+$("#delete").on("click", function () {
+    var pageid = $("#pageid").val();
+    if (!pageid) {
+        location.href = "[% urlbase %]/admin";
+        return;
+    }
+    var ajax = $.ajax({
+        url: "[% urlbase %]/admin/delete-page-js",
+        type: "POST",
+        data: {pageid: pageid}
+    });
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (data.error) {
+            $("#page-mesg").text(data.mesg ? data.mesg : "Okay!");
+            return;
+        }
+        location.href = "[% urlbase %]/admin";
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        $("#page-mesg").text(errorThrown);
+    });
+});
+</script>
+
+[% PROCESS footer.html %]
+

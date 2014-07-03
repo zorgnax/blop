@@ -1,0 +1,61 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $out = {};
+
+my $categoryid = $cgi->param("categoryid");
+my $category;
+if ($categoryid) {
+    $category = $blop->category(categoryid => $categoryid);
+}
+
+my $name = $cgi->param("name");
+if (!defined $name || !length($name)) {
+    $out->{nameError} = "Name cannot be empty.";
+    $out->{error} = 1;
+}
+elsif (!$category || $category->{name} ne $name) {
+    my $name_category = $blop->category(name => $name);
+    if ($name_category) {
+        $out->{nameError} = "Unavailable.";
+        $out->{error} = 1;
+    }
+}
+
+my $url = $cgi->param("url");
+if (!defined $url || !length($url)) {
+    $out->{urlError} = "URL cannot be empty.";
+    $out->{error} = 1;
+}
+elsif (!$category || $category->{url} ne $url) {
+    if (!$blop->url_available($url)) {
+        $out->{urlError} = "Unavailable.";
+        $out->{error} = 1;
+    }
+}
+
+if ($out->{error}) {
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json($out);
+    exit;
+}
+
+if (!$category) {
+    $category = $blop->add_category(name => $name, url => $url);
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json({ok => 1, categoryid => $category->{categoryid}});
+    exit;
+}
+
+$category->edit(name => $name, url => $url);
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1, categoryid => $category->{categoryid}});
+

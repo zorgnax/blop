@@ -1,0 +1,41 @@
+<div id="upload">
+<input type="file" multiple="multiple" name="files"/>
+<a href="#" class="abort" style="display:none">Abort</a>
+<span class="gallery-inserts"[% IF !entry.files.size %] style="display:none"[% END %]>
+Insert:
+<select>
+<option value=""></option>
+<option value="small-gallery">Small Gallery</option>
+<option value="medium-gallery">Medium Gallery</option>
+<option value="large-gallery">Large Gallery</option>
+<option value="listing">File Listing</option>
+</select>
+</span>
+<br/>
+<div id="upload-mesg" class="bform-error"></div>
+<table class="files-list"[% IF !entry.files.size %] style="display:none"[% END %]>
+<tr><th>File</th><th>Size</th><th>Insert</th><th>Action</th></tr>
+[% FOREACH file IN entry.files %]
+<tr data-name="[% file.name %]" data-url="[% file.url %]">
+    <td><a href="[% file.fullurl %]" target="_blank">[% file.name %]</a></td>
+    <td class="muted">[% file.size %]</td>
+    <td class="file-inserts">
+        <select>
+            <option value=""></option>
+        [% IF file.name.match("(?i)\.(jpe?g|png|gif)") %]
+            <option value="small-thumb">Small Thumb</option>
+            <option value="medium-thumb">Medium Thumb</option>
+            <option value="large-thumb">Large Thumb</option>
+            <option value="image">Image</option>
+        [% END %]
+            <option value="link">Link</option>
+        </select>
+    </td>
+    <td class="file-actions">
+        <a href="#" class="file-delete">delete</a>
+    </td>
+</tr>
+[% END %]
+</table>
+</div>
+

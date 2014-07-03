@@ -1,0 +1,104 @@
+.page-wrap {
+    padding-top: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+input, textarea {
+    font-family: Monaco, Consolas, ProFont, monospace;
+}
+
+.site-title a:link, .site-title a:visited {
+    text-decoration: none;
+    color: #000000;
+}
+
+.site-slogan {
+    font-size: 55%;
+    color: #666666;
+}
+
+.page-links {
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.navigation-summary {
+    display: inline-block;
+    float: right;
+}
+
+.sidebar {
+    float: right;
+    width: 230px;
+    margin-left: 18px;
+    background-color: #eeeeee;
+    min-height: 350px;
+    border: 1px solid #cccccc;
+    padding: 5px;
+}
+
+.categories {
+    list-style: none;
+    padding-left: 0px;
+}
+
+.archives {
+    list-style: none;
+    padding-left: 0px;
+}
+
+.footer {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    clear: both;
+    text-align: center;
+}
+
+.note {
+    background-color: #ffff99;
+    font-weight: bold;
+    padding: 12px;
+    border: 1px solid #cccc66;
+    display: inline-block;
+}
+
+.next-link {
+    float: left;
+}
+
+.prev-link {
+    float: right;
+}
+
+.pform td:first-child {
+    text-align: right;
+    vertical-align: top;
+}
+
+.pform-error {
+    margin-left: 1em;
+    color: red;
+}
+
+.pform textarea {
+    width: 420px;
+    height: 220px;
+}
+
+.comment {
+    padding: 5px;
+    border: 1px solid transparent;
+}
+
+.editing-comment {
+    border: 1px solid #cccccc;
+    background-color: #eeeeee;
+}
+
+.awaiting-moderation {
+    background-color: #ffff99;
+    font-weight: bold;
+    border: 1px solid #cccc66;
+}
+

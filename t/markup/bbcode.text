@@ -1,0 +1,24 @@
+[...undefined and unclosed...]
+
+[code][foo]bar[/foo] < [bar]foo[/bar][/code]
+
+An inline [code lang="C++"]code[/code] example.
+
+[code-foo lang="Python"]
+    This should work
+    [code]yup[/code]
+    Heck Ya!
+[/code-foo]
+
+Hr is a block level bbcode:
+
+[hr/]
+
+**[zoot]suit[/zoot]**
+
+A [link /tohere.html "optional title"]oh snap[/link] foo.
+
+A [link /tohere.html "has \"inner\" quotes"]oh snap[/link] foo.
+
+[link /foo]should **be** in p tags[/link]
+

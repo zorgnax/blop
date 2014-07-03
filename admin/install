@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+
+if (-s "$blop->{base}blop.conf") {
+    die <<EOERROR;
+Blop is already installed. Edit blop.conf directly if you need to work
+out issues with the database or login.
+EOERROR
+}
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("install.html");

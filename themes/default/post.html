@@ -1,0 +1,131 @@
+[% PROCESS header.html title=post.title _ " | " _ blop.conf.title %]
+
+[% IF !post.was_published %]<div class="note">Note: This post has not been published.</div>[% END %]
+
+[% IF post.category %]
+<div class="category"><a href="[% urlbase %]/[% post.category.url | uri %]">[% post.category.name %]</a></div>
+[% END %]
+
+<h2>[% post.title || "Post " _ post.postid | html %]</h2>
+<span class="published">[% post.published %]</span>
+<div class="content">
+[% post.parsed_content %]
+</div>
+
+[% IF post.tags.size %]
+<div class="tags">
+Tags:
+[% FOREACH tag IN post.tags %]
+<a href="[% urlbase %]/tag/[% tag.name | uri %]">[% tag.name | html %]</a>
+[% END %]
+</div>
+[% END %]
+
+<br/>
+
+[% IF post.next %]
+<span class="next-link">
+← <a href="[% urlbase %]/[% post.next.url | uri %]">[% post.next.title || "Next Post" | html %]</a>
+</span>
+[% END %]
+
+[% IF post.prev %]
+<span class="prev-link">
+<a href="[% urlbase %]/[% post.prev.url | uri %]">[% post.prev.title || "Previous Post" | html %]</a> →
+</span>
+[% END %]
+
+<br/>
+
+<h3>[% post.num_comments %] Comment[% IF post.num_comments != 1 %]s[% END %]</h3>
+
+[% FOREACH comment IN post.comments %]
+<div class="comment" id="comment-[% comment.commentid %]">
+<b>[% comment.name %]</b> on [% comment.added %]
+[% IF comment.status != "approved" %] <span class="awaiting-moderation">Awaiting moderation</span>[% END %]
+[% IF comment.editable %] <a href="#" class="edit-comment" data-commentid="[% comment.commentid %]">edit</a>[% END %]<br/>
+<div class="comment-content">
+[% comment.parsed_content %]
+</div>
+[% IF comment.editable %]
+<div class="edit-comment-form" style="display:none">
+
+<form method="post" class="pform">
+<input type="hidden" name="postid" value="[% post.postid %]"/>
+<input type="hidden" name="commentid" value="[% comment.commentid %]"/>
+
+<table><tr><td><label for="name-[% comment.commentid %]">Name:</label></td>
+<td><input id="name-[% comment.commentid %]" name="name" type="text" value="[% comment.name | html %]"/><span class="name-error pform-error"></span></td></tr>
+
+<tr><td><label for="email-[% comment.commentid %]">Email:</label></td>
+<td><input id="email-[% comment.commentid %]" name="email" type="text" value="[% comment.email %]"/><span class="email-error pform-error"></span></td></tr>
+
+<tr><td><label for="content-[% comment.commentid %]">Comment:</label></td>
+<td><textarea id="content-[% comment.commentid %]" name="content">[% comment.content | html %]</textarea></span></td></tr>
+
+<tr><td></td>
+<td><input type="submit" value="Post Comment"/><span class="pform-mesg pform-error"></span></td></tr></table>
+
+</form>
+
+[% IF comment.edited %]Last edited: [% comment.edited %][% END %]
+
+</div>
+[% END %]
+</div>
+<br/>
+[% END %]
+
+<form id="comment" method="post" class="pform">
+<input type="hidden" name="postid" value="[% post.postid %]"/>
+<input type="hidden" name="bake" value="1"/>
+
+<table><tr><td><label for="name">Name:</label></td>
+<td><input id="name" name="name" type="text" value=""/><span class="name-error pform-error"></span></td></tr>
+
+<tr><td><label for="email">Email:</label></td>
+<td><input id="email" name="email" type="text" value=""/><span class="email-error pform-error"></span></td></tr>
+
+<tr><td><label for="content">Comment:</label></td>
+<td><textarea id="content" name="content"></textarea></span></td></tr>
+
+<tr><td></td>
+<td><input type="submit" value="Post Comment"/><span class="pform-mesg pform-error"></span></td></tr></table>
+
+</form>
+
+<script type="text/javascript">
+var pform = new PForm({
+    formId: "#comment",
+    processUrl: "[% urlbase %]/admin/comment-js",
+    onSuccess: function () {location.reload();}});
+
+$(".edit-comment").each(function () {
+    var commentId = $(this).data("commentid");
+    var div = $("#comment-" + commentId);
+    var content = div.find(".comment-content");
+    var form = div.find(".edit-comment-form");
+    var ta = form.find("textarea")[0];
+    var pform = new PForm({
+        formId: form.find("form"),
+        processUrl: "[% urlbase %]/admin/comment-js",
+        onSuccess: function () {location.reload();}});
+    $(this).on("click", function (event) {
+        event.preventDefault();
+        if (form.is(":hidden")) {
+            content.hide();
+            form.show();
+            div.addClass("editing-comment");
+            ta.focus();
+            ta.selectionStart = ta.selectionEnd = ta.value.length;
+        }
+        else {
+            content.show();
+            form.hide();
+            div.removeClass("editing-comment");
+        }
+    });
+});
+</script>
+
+[% PROCESS footer.html %]

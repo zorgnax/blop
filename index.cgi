@@ -1,0 +1,156 @@
+#!/usr/bin/perl
+use lib "lib";
+use blopcgi;
+
+$blop->read_conf();
+$blop->load_theme();
+
+my $path = $cgi->param("path") || "";
+
+if ($path eq $blop->{conf}{allcat}) {
+    listing();
+}
+
+my @tags;
+if ($path =~ m{^tag/(.*)$}) {
+    my $tags = $1;
+    while ($tags =~ m{([^,]+)}g) {
+        my $tag = $1;
+        $tag =~ s/^\s+|\s+$//g;
+        push @tags, $tag;
+    }
+    listing();
+}
+
+my ($year, $month, $day);
+if ($path =~ m{^(\d{4})(/(\d+)(/(\d+))?)?($|/)}) {
+    $year = $1;
+    $month = $3;
+    $day = $5;
+    listing();
+}
+
+my $category = $blop->category(url => $path);
+if ($category) {
+    listing();
+}
+
+my $post = $blop->post(url => $path);
+if ($post) {
+    if (!$blop->admin && !$post->was_published) {
+        not_found();
+    }
+    post();
+}
+
+my $page = $blop->page(url => $path);
+if ($page) {
+    if (!$blop->admin && !$page->was_published) {
+        not_found();
+    }
+    page();
+}
+
+not_found();
+
+sub listing {
+    my $limit = $cgi->param("limit");
+    $limit = 3 if !defined $limit;
+    if ($limit !~ /^\d+$/) {
+        die "Invalid limit param.\n";
+    }
+
+    my $offset = $cgi->param("offset");
+    $offset = 0 if !defined $offset;
+    if ($offset !~ /^\d+$/) {
+        die "Invalid offset param.\n";
+    }
+
+    my $where = "";
+    my $join = "";
+
+    if ($category) {
+        $where .= "and p.categoryid=$category->{categoryid}\n";
+    }
+
+    if (@tags) {
+        $join = "left join tags t on t.postid=p.postid";
+        $where .= "and t.name in (" .
+                  join(", ", map $blop->dbh->quote($_), @tags) .
+                  ")\n";
+    }
+
+    if ($year) {
+        $where .= "and year(p.published) = $year\n";
+    }
+    if ($month) {
+        $where .= "and month(p.published) = $month\n";
+    }
+    if ($day) {
+        $where .= "and day(p.published) = $day\n";
+    }
+    
+    my $search = $cgi->param("s");
+    if ($search && length($search)) {
+        my $s = $blop->dbh->quote($search);
+        $join = "left join tags t on t.postid=p.postid";
+        $where .= "and (p.content regexp $s or p.title regexp $s or\n" .
+                  "c.name regexp $s or t.name regexp $s)\n";
+    }
+
+    my $query = <<EOSQL;
+select sql_calc_found_rows
+    p.*,
+    c.name category_str,
+    c.url category_url
+from
+    posts p
+    left join categories c on c.categoryid=p.categoryid
+    $join
+where
+    p.published <= now()
+    $where
+group by p.postid
+order by p.published desc
+limit $limit
+offset $offset
+EOSQL
+    my $sth = $blop->dbh->prepare($query);
+    $sth->execute();
+    my @posts;
+    while (my $post = $sth->fetchrow_hashref()) {
+        $post = bless $post, "Blop::Post";
+        push @posts, $post;
+    }
+
+    $sth = $blop->dbh->prepare("select found_rows()");
+    $sth->execute();
+    my ($found_rows) = $sth->fetchrow_array();
+    my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "post");
+
+    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->template(
+        "listing.html", category => $category, tags => \@tags, posts => \@posts,
+        navigation => $navigation);
+    exit;
+}
+
+sub post {
+    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->template("post.html", post => $post);
+    exit;
+}
+
+sub page {
+    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->template("page.html", page => $page);
+    exit;
+}
+
+sub not_found {
+    print "Status: 404 Not Found\n";
+    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->template("not-found.html", path => $path);
+    exit;
+}
+

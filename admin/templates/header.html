@@ -1,0 +1,31 @@
+<link rel="stylesheet" type="text/css" href="[% urlbase %]/admin/css/blop.css"/>
+<script type="text/javascript" src="[% urlbase %]/admin/js/jquery-1.11.0.js"></script>
+
+<div id="acontainer">
+<div class="alinks-top">
+<a href="[% urlbase %]/admin">Dashboard</a>
+<a href="[% urlbase %]/">View blog</a>
+<a href="[% urlbase %]/admin/logout">Log out</a>
+</div>
+<h1>[% title %]</h1>
+<div class="alinks">
+<a href="[% urlbase %]/admin/post"[% IF x1 == "Publish" %] class="selected"[% END %]>Publish</a>
+<a href="[% urlbase %]/admin/comments"[% IF x1 == "Comments" %] class="selected"[% END %]>Comments</a>
+<a href="[% urlbase %]/admin/posts"[% IF x1 == "Manage" %] class="selected"[% END %]>Manage</a>
+<a href="[% urlbase %]/admin/settings"[% IF x1 == "Settings" %] class="selected"[% END %]>Settings</a>
+<a href="[% urlbase %]/admin/themes"[% IF x1 == "Theme" %] class="selected"[% END %]>Themes</a>
+<a href="[% urlbase %]/admin/plugins"[% IF x1 == "Plugins" %] class="selected"[% END %]>Plugins</a>
+</div>
+
+[% IF x1 == "Publish" %]
+<div class="alinks">
+<a href="[% urlbase %]/admin/post"[% IF x2 == "Post" %] class="selected"[% END %]>Post</a>
+<a href="[% urlbase %]/admin/page"[% IF x2 == "Page" %] class="selected"[% END %]>Page</a>
+</div>
+[% ELSIF x1 == "Manage" %]
+<div class="alinks">
+<a href="[% urlbase %]/admin/posts"[% IF x2 == "Posts" %] class="selected"[% END %]>Posts</a>
+<a href="[% urlbase %]/admin/pages"[% IF x2 == "Pages" %] class="selected"[% END %]>Pages</a>
+<a href="[% urlbase %]/admin/categories"[% IF x2 == "Categories" %] class="selected"[% END %]>Categories</a>
+</div>
+[% END %]

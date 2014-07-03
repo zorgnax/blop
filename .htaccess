@@ -1,0 +1,16 @@
+AddHandler cgi-script .cgi .pl
+
+<FilesMatch "^[^/.A-Z]+$">
+    SetHandler cgi-script
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^blop.conf$ - [F,L]
+RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
+RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-d
+RewriteCond $1 !^admin/
+RewriteCond $1 !^\d+.shtml$
+RewriteRule ^(.*)$ index.cgi?path=$1 [QSA,L]
+</IfModule>
+

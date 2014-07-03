@@ -1,0 +1,128 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+use DBI;
+use Config::Tiny;
+
+my $out = {};
+
+if (!$cgi->param("title")) {
+    $out->{titleError} = "Please enter a title.";
+    $out->{error} = 1;
+}
+
+if ($cgi->param("email") && $cgi->param("email") !~ /\S+\@\S+\.\S+/) {
+    $out->{emailError} = "This email doesn't look right.";
+    $out->{error} = 1;
+}
+
+if (!$cgi->param("pass")) {
+    $out->{passError} = "Please enter a password.";
+    $out->{error} = 1;
+}
+
+my $dbhost = $cgi->param("dbhost") || "";
+my $dbuser = $cgi->param("dbuser") || "";
+my $dbpass = $cgi->param("dbpass") || "";
+my $dbtable = $cgi->param("dbtable") || "";
+my $dbh = DBI->connect(
+    "dbi:mysql:host=$dbhost;database=$dbtable;mysql_multi_statements=1",
+    $dbuser, $dbpass, {PrintError => 0, RaiseError => 0});
+if (!$dbh) {
+    $out->{dbhostError} = $DBI::errstr;
+    $out->{dbuserError} = "";
+    $out->{dbpassError} = "";
+    $out->{dbtableError} = "";
+    $out->{error} = 1;
+}
+
+if ($out->{error}) {
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json($out);
+    exit;
+}
+
+my $conf = Config::Tiny->new();
+$conf->{_}{dbuser} = $cgi->param("dbuser");
+$conf->{_}{dbpass} = $cgi->param("dbpass");
+$conf->{_}{dbhost} = $cgi->param("dbhost");
+$conf->{_}{dbtable} = $cgi->param("dbtable");
+$conf->write("$blop->{base}blop.conf") or die $Config::Tiny::errstr;
+
+$dbh->{RaiseError} = 1;
+
+$dbh->do(<<EOSQL);
+create table posts (
+    postid int unsigned primary key auto_increment,
+    title varchar(128) not null,
+    url varchar(128) unique,
+    added datetime,
+    published datetime,
+    categoryid int unsigned not null,
+    content text not null);
+
+create table categories (
+    categoryid int unsigned primary key auto_increment,
+    name varchar(128) not null unique,
+    url varchar(128) unique);
+
+create table tags (
+    tagid int unsigned primary key auto_increment,
+    postid int unsigned not null,
+    name varchar(128) not null,
+    unique (postid, name));
+
+create table pages (
+    pageid int unsigned primary key auto_increment,
+    title varchar(128),
+    url varchar(128) unique,
+    added datetime,
+    published datetime,
+    content text);
+
+create table comments (
+    commentid int unsigned primary key auto_increment,
+    postid int unsigned,
+    pageid int unsigned,
+    name varchar(128),
+    email varchar(128),
+    ipaddr varchar(16),
+    cookie varchar(32),
+    added datetime,
+    edited datetime,
+    status enum("pending", "approved", "spam"),
+    content text);
+
+create table sessions (
+    sessionid varchar(32) not null primary key,
+    admin int unsigned,
+    ipaddr varchar(16),
+    added datetime);
+
+create table config (
+    name varchar(64) not null primary key,
+    value text);
+
+create table log (
+    logid int unsigned primary key auto_increment,
+    date datetime not null,
+    content text,
+    ipaddr varchar(16),
+    uri varchar(128));
+EOSQL
+
+my $sth = $dbh->prepare("insert into config set name=?, value=?");
+$sth->execute(title => $cgi->param("title"));
+$sth->execute(slogan => $cgi->param("slogan"));
+$sth->execute(email => $cgi->param("email"));
+$sth->execute(pass => $cgi->param("pass"));
+$sth->execute(allcat => "");
+$sth->execute(uncat => "uncategorized");
+$sth->execute(theme => "default");
+
+$blop->{dbh} = $dbh;
+$blop->log("Installed");
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1});
+

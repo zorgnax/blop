@@ -1,0 +1,26 @@
+<link rel="stylesheet" type="text/css" href="[% urlbase %]/admin/css/blop.css">
+
+<h1>Login</h1>
+
+<form id="login" name="login" class="aform" method="post">
+
+<label for="pass">Admin password</label>
+<input id="pass" name="pass" type="password"/><span id="pass-error" class="aform-error"></span>
+
+<br/>
+
+<input type="submit" value="Login"/>
+<span id="login-mesg" class="aform-error"></span>
+
+</form>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/jquery-1.11.0.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#login",
+    processUrl: "[% urlbase %]/admin/login-js",
+    successUrl: [% redirect %]
+});
+</script>
+

@@ -1,0 +1,11 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+
+if (!-s "$blop->{base}blop.conf") {
+    die "Blop has not been installed.\n";
+}
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("install-completed.html");
+

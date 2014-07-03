@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>[% title | html %]</title>
+    <link rel="stylesheet" type="text/css" href="[% url('style.css') %]"/>
+    <script type="text/javascript" src="[% url('jquery-1.11.0.js') %]"></script>
+    <script type="text/javascript" src="[% url('pform.js') %]"></script>
+</head>
+
+<body>
+<div class="page-wrap">
+
+<h1 class="site-title"><a href="[% urlbase %]/">[% blop.conf.title %]</a>
+[% IF blop.conf.slogan %]
+<span class="site-slogan">[% blop.conf.slogan %]</span>
+[% END %]
+</h1>
+
+<div class="sidebar">
+<form name="search" method="get" action="[% urlbase %]/[% blop.conf.allcat | uri %]">
+<input type="search" name="s" value="[% cgi.param('s') | html %]"/>
+<input type="submit" value="Search"/>
+</form>
+<h3>Categories</h3>
+<ul class="categories">
+[% FOREACH category IN blop.categories %]
+<li><a href="[% urlbase %]/[% category.url %]">[% category.name %] ([% category.posts %])</a></li>
+[% END %]
+</ul>
+
+<h3>Archives</h3>
+<ul class="archives">
+[% FOREACH archive IN blop.date_archives %]
+<li><a href="[% urlbase %]/[% archive.url %]">[% archive.name %] ([% archive.posts %])</a></li>
+[% END %]
+</ul>
+</div>
+
+<div class="content-wrap">
+
+<div class="page-links">
+[% FOREACH pagelink IN blop.pages %]
+<a href="[% urlbase %]/[% pagelink.url | uri %]">[% pagelink.title %]</a>
+[% END %]
+[% IF blop.conf.allcat %]
+<a href="[% urlbase %]/[% blop.conf.allcat | uri %]">Blog</a>
+[% END %]
+</div>

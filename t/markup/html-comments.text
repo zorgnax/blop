@@ -1,0 +1,15 @@
+normal paragraph.
+
+<!-- this is a simple comment -->
+
+<!--
+    this is another comment.
+-->
+
+<!-- one comment block -- -- with two comments -->
+
+asdf<!-- whats this -->and this.
+
+<!-- enclosed tag </div> -->
+
+<!-- double--dash (invalid SGML comment) -->

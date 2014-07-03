@@ -1,0 +1,168 @@
+<link rel="stylesheet" type="text/css" href="[% urlbase %]/admin/css/blop.css">
+
+<h1>Edit Help</h1>
+
+<p>The posting format is similar to <a href="http://daringfireball.net/projects/markdown/">Markdown</a>, except "<code>[</code>" is used differently, more like <a href="https://www.phpbb.com/community/faq.php?mode=bbcode">bbcode</a>:</p>
+
+<ul>
+
+<li><p>HTML is passed through untouched.</p>
+
+<pre><code>&lt;a href="/page.html"&gt;No Problem&lt;/a&gt;</code></pre>
+
+</li>
+
+<li><p>Indented lines are preformatted text. HTML characters are encoded
+automatically.</p>
+
+<pre><code>This is a normal paragraph.
+
+    This is a preformatted &lt;code&gt; block.</code></pre>
+
+</li>
+
+<li><p>Lines starting with "<code>&gt;</code>" are block quoted.</p>
+
+<pre><code>This is a normal paragraph.
+
+> This is a blockquote.</code></pre>
+
+</li>
+
+<li><p>Square bracket commands are for special tasks. There can be
+any number of square bracket commands depending on the plugins you
+have installed. If the command is unrecognized, the text will be
+unmodified.</p> 
+
+<p>These are the commands available by default:</p>
+
+<ul>
+    <li><p><code>[code]</code> will show its content as a code sample. You can
+    put text after the tag name to escape inner <code>[code][/code]</code>
+    spans like this <code>[code-ex1][code][/code][/code-ex1]</code>. You
+    can even give it a lang attribute, which can be used for syntax
+    highlighting. Otherwise, the result is exactly like an indented block
+    or <code>`backticks`</code>. In fact, if it's alone in a paragraph
+    it gets surrounded by <code>&lt;pre&gt;</code> tags:</p>
+
+    <pre><code>
+    [code lang="Python"]
+    def average(values):
+        """Computes the arithmetic mean of a list of numbers.
+
+        &gt;&gt;&gt; print average([20, 30, 70])
+        40.0
+        """
+        return sum(values, 0.0) / len(values)
+    [/code]
+    </code></pre>
+    </li>
+
+    <li><p><code>[link]</code> is a shortcut for adding links. If the
+    link starts with "/", the URL base for the blog will be prepended
+    so the links will work even if the blog is moved to a different
+    directory. They look like this:</p>
+
+    <pre><code>
+    [link /page.html "optional title"]Click here![/link]
+    </code></pre>
+    </li>
+
+    <li><p><code>[gallery]</code> will show a list of thumbnail links
+    to the images attached to the post. The size attribute can be used
+    to set the size of the thumbnails, which can be either "small",
+    "medium", "large", or "200x200" (nxn).</p>
+
+    <pre><code>
+    [gallery size="medium" /]
+    </pre></code>
+    </li>
+
+    <li><p><code>[thumb]</code> will show one picture as a clickable
+    thumbnail. The thumbnail size can be set with the size attribute. The
+    name of the picture is the first (unnamed) argument. It needs
+    to be found in the post's (or page's) content directory (usually
+    /content/post/1234/).</p>
+
+    <pre><code>
+    [thumb image.jpg size="medium" /]
+    </code></pre>
+    </li>
+
+    <li><p><code>[image]</code> will show an image in the post.</p>
+
+    <pre><code>
+    [image image.jpg /]
+    </code></pre>
+    </li>
+
+    <li><p><code>[listing]</code> will show a list of links to files
+    attached to the post.</p>
+
+    <pre><code>
+    [listing /]
+    </code></pre>
+    </li>
+</ul>
+
+</li>
+
+<li><p>Headers are underlined or start with hash marks.</p>
+
+<pre><code>Header 1
+========
+
+Header 2
+--------
+
+# Header 1
+
+## Header 2</code></pre>
+
+</li>
+
+<li><p>Bold text can be surrounded by "<code>**</code>". Unlike Markdown,
+you cannot use "<code>__</code>".</p>
+
+<pre><code>**bold text**</code></pre>
+
+</li>
+
+<li><p>Italicized text can be surrounded by "<code>*</code>". Unlike
+Markdown, you cannot use "<code>_</code>".</p>
+
+<pre><code>*italicized text*</code></pre>
+
+</li>
+
+<li><p>Backslashes can be used to escape characters that would otherwise cause markup to change.</p>
+
+<pre><code>\*\*not bolded\*\*</code></pre>
+
+</li>
+
+<li><p>Three or more astericks or dashes result in a horizontal rule</p>
+
+<pre><code>* * *
+
+---</code></pre>
+</li>
+
+<li><p>Text starting with <code>http://</code> are automatically converted to links.</p>
+
+<pre><code>Check out http://google.com.</code></pre>
+
+</li>
+
+<li><p>Lists can be any block of text that starts with a "<code>*</code>", "<code>+</code>", "<code>-</code>", or a digit followed by "<code>.</code>". If the item content is more than one line. It will be surrounded by <code>&lt;p&gt;</code> tags.
+
+<pre><code>* foo
+* bar
+    1. items
+    2. can
+    3. be nested
+* baz
+</code></pre>
+
+</li>
+</ul>

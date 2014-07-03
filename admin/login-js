@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if ($blop->session) {
+    die "Please logout before logging in.\n";
+}
+
+my $pass = $cgi->param("pass") || "";
+if ($pass ne $blop->{conf}{pass}) {
+    die "Incorrect!\n";
+}
+
+my $sesh = $blop->token(22);
+my $sth = $blop->dbh->prepare(<<EOSQL);
+insert into sessions set sessionid=?, admin=1, ipaddr=?, added=now()
+EOSQL
+$sth->execute($sesh, $ENV{REMOTE_ADDR});
+
+my $cookie_header = $cgi->cookie(
+    -name => "sesh", -value => $sesh, -expires => "+100d",
+    -path => "$blop->{urlbase}/");
+
+print "Set-Cookie: $cookie_header\n";
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1});
+

@@ -1,0 +1,76 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi; 
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $category;
+my $tag_name;
+
+my $path_info = $ENV{PATH_INFO} || "";
+if ($path_info =~ m{/tag/(.*)}) {
+    $tag_name = $1;
+}
+elsif ($path_info =~ m{/(.*)}) {
+    my $url = $1;
+    $category = $blop->category(url => $url)
+        or die "Cannot find category with url $url.\n";
+}
+elsif ($path_info) {
+    die "Unrecognized path info.\n";
+}
+
+my $limit = $cgi->param("limit");
+$limit = 1000 if !defined $limit;
+if ($limit !~ /^\d+$/) {
+    die "Invalid limit param.\n";
+}
+
+my $offset = $cgi->param("offset");
+$offset = 0 if !defined $offset;
+if ($offset !~ /^\d+$/) {
+    die "Invalid offset param.\n";
+}
+
+my $where = "";
+my $join = "";
+if ($category) {
+    $where = "where p.categoryid=$category->{categoryid}";
+}
+if ($tag_name) {
+    $join = "left join tags t on t.postid=p.postid";
+    $where .= $where ? " and\n" : "where ";
+    $where .= "t.name=" . $blop->dbh->quote($tag_name);
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+select sql_calc_found_rows
+    p.*,
+    c.name category_str,
+    c.url category_url
+from
+    posts p
+    left join categories c on c.categoryid=p.categoryid
+    $join
+$where
+group by p.postid
+order by !p.published, p.added desc
+limit $limit
+offset $offset
+EOSQL
+$sth->execute();
+my @posts;
+while (my $post = $sth->fetchrow_hashref()) {
+    $post = bless $post, "Blop::Post";
+    push @posts, $post;
+}
+
+$sth = $blop->dbh->prepare("select found_rows()");
+$sth->execute();
+my ($found_rows) = $sth->fetchrow_array();
+my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "post");
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("posts.html", category => $category, posts => \@posts, navigation => $navigation);
+

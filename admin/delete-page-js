@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $pageid = $cgi->param("pageid");
+if (!$pageid) {
+    die "A pageid is required.\n";
+}
+
+system "rm", "-rf", "$blop->{base}/content/page/$pageid";
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+delete from pages where pageid=?
+EOSQL
+$sth->execute($pageid);
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({
+    ok => 1,
+    mesg => "Deleted page $pageid.\n",
+});
+

@@ -1,0 +1,41 @@
+normal paragraph.
+
+> quoted paragraph
+
+> multiline quoted
+> paragraph
+
+> two quoted paragraphs
+>
+> heres the second
+
+he said:
+> goodbye,
+> farewell,
+> & amen
+
+> example:
+>
+>     sub status {
+>         print "working";
+>     }
+>
+> or:
+>
+>     sub status {
+>         return "working";
+>     }
+
+> blockquotes
+>> can nest
+>> pretty far
+>>> down
+> if you want
+
+>>> whats this do?
+
+> there
+> > can be
+> > spaces before the blockquotes
+> heck ya
+

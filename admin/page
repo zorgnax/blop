@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi; 
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $page;
+
+my $path_info = $ENV{PATH_INFO} || "";
+if ($path_info =~ m{/(\d+)$}) {
+    my $pageid = $1;
+    $page = $blop->page(pageid => $pageid) or die "Cannot find page $pageid.\n";
+}
+elsif ($path_info) {
+    die "Unrecognized path info.\n";
+}
+
+print "Content-Type: text/html; charset=utf8\n\n";
+print $blop->template("page.html", page => $page);
+

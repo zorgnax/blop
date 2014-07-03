@@ -1,0 +1,55 @@
+Blop
+====
+
+A Blog site written in Perl. Uses MySQL. Similar to WordPress.
+
+Installation
+============
+
+Copy blop folder to your website's document root. It can also be placed
+into a subfolder. Go to the website, and fill out the installation form
+with a blog title, login info, and database details. Manage posts and
+pages in the admin interface at /admin.
+
+Features
+========
+
+- Complete top level URL control. example.com/about or
+  example.com/mycategory or example.com/mycategory/subcategory. Posts,
+  categories, and pages can all have whatever URL they want as long as
+  they don't conflict with each other or an existing file.
+
+    - A page can be the home page, the special "all" category can be somewhere
+      else. /blog for example. Just edit the URL in /admin/pages and
+      /admin/categories.
+
+- Themes
+
+- Plugins
+
+- Only intended for one user to administrate/add posts.
+
+- Files are organized by post, not date uploaded.
+
+- html / markdown / bbcode hybrid input.
+
+- Rich text editing is more trouble than it's worth.
+
+
+Seven Unforgivable Sins of WordPress
+====================================
+
+- All the links to media, posts, categories, etc are absolute
+  (http://example.com/category/foo)
+
+- Tags automatically are converted to slugs of just the alphanumerics
+  making it impossible to have tags like ":)" and ":(".
+
+- Posting format is html, which makes it hard to write by hand. Plugins
+  which add features to the editing format have no standard way of extending
+  so they use search and replaces and that can cause conflicts.
+
+- Written in PHP
+
+- Doesn't let you edit your own comments.
+

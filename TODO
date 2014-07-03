@@ -1,0 +1,13 @@
+gallery backend
+file listing backend
+front page display posts
+better tags/category/published widgets
+color widget
+csrf tokens
+backup plugin
+set time zone as config option
+log postid pageid categoryid etc.
+anything in admin/ is not available_url
+uncategoried, and all special categories
+href javascript void
+comments

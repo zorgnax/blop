@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi; 
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $limit = $cgi->param("limit");
+$limit = 1000 if !defined $limit;
+if ($limit !~ /^\d+$/) {
+    die "Invalid limit param.\n";
+}
+
+my $offset = $cgi->param("offset");
+$offset = 0 if !defined $offset;
+if ($offset !~ /^\d+$/) {
+    die "Invalid offset param.\n";
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+select sql_calc_found_rows c.*, count(p.postid) posts
+from categories c
+left join posts p on p.categoryid=c.categoryid
+group by c.categoryid
+limit $limit
+offset $offset
+EOSQL
+$sth->execute();
+my @categories;
+while (my $category = $sth->fetchrow_hashref()) {
+    $category = bless $category, "Blop::Category";
+    push @categories, $category;
+}
+
+$sth = $blop->dbh->prepare("select found_rows()");
+$sth->execute();
+my ($found_rows) = $sth->fetchrow_array();
+my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "category", "categories");
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("categories.html", categories => \@categories, navigation => $navigation);
+

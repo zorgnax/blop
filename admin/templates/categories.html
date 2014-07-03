@@ -1,0 +1,81 @@
+[% PROCESS header.html title="Manage Categories" x1="Manage" x2="Categories" %]
+
+<br/>
+
+<form id="special-cat" name="special-cat" method="post" class="aform">
+
+<table>
+<tr>
+<td>
+    <label for="allcat">All Categories URL
+    <span id="allcat-error" class="aform-error"></span>
+    </label>
+    <input id="allcat" name="allcat" type="text" value="[% blop.conf.allcat | html %]"/>
+</td>
+<td>
+    <label for="uncat">Uncategorized URL
+    <span id="uncat-error" class="aform-error"></span>
+    </label>
+    <input id="uncat" name="uncat" type="text" value="[% blop.conf.uncat | html %]"/>
+</td>
+<td valign="bottom">
+    <input type="submit" value="Submit"/>
+    <span id="special-cat-mesg" class="aform-error"></span>
+</td>
+</tr>
+</table>
+
+</form>
+
+<div class="navigation-summary">[% navigation.summary %]</div>
+
+<table class="entry-list">
+<tr><th>Name</th><th>URL</th><th>Posts</th><th>Actions</th></tr>
+[% FOREACH category IN categories %]
+<tr data-categoryid="[% category.categoryid %]">
+    <td>[% category.name | html %]</td>
+    <td><a href="[% urlbase %]/[% category.url | uri %]">/[% category.url | html %]</a></td>
+    <td><a href="[% urlbase %]/admin/posts/[% category.url %]">[% category.posts | html %]</a></td>
+    <td class="entry-actions">
+        <a href="[% urlbase %]/admin/category/[% category.categoryid %]">Edit</a>
+        <a href="#" class="delete-category">Delete</a>
+    </td>
+</tr>
+[% END %]
+</table>
+
+<br/>
+<div>[% navigation.links %]</div>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#special-cat", processUrl: "[% urlbase %]/admin/special-cat-js"});
+
+$(".delete-category").on("click", function (event) {
+    event.preventDefault();
+    var tr = $(this).closest("tr");
+    var td = tr.find("td.entry-actions");
+    var categoryid = tr.data("categoryid");
+    var ajax = $.ajax({
+        url: "[% urlbase %]/admin/delete-category-js",
+        type: "POST",
+        data: {categoryid: categoryid}
+    });
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (data.error) {
+            td.text(data.mesg ? data.mesg : "Okay!");
+        }
+        else {
+            tr.css("background", "lightpink");
+            td.addClass("deleted");
+            td.html("Deleted!");
+        }
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        td.text(errorThrown);
+    });
+});
+</script>
+
+[% PROCESS footer.html %]

@@ -1,0 +1,149 @@
+.aform label {
+    display: block;
+    margin-top: 1em;
+}
+
+.aform input[type="text"], .aform input[type="password"] {
+    width: 300px;
+    padding: 5px;
+    font-family: Monaco, Consolas, ProFont, monospace;
+}
+
+.aform input[type="submit"] {
+    margin-top: 1em;
+}
+
+.aform .input-info {
+    color: #cccccc;
+    font-size: smaller;
+}
+
+.aform-error {
+    margin-left: 1em;
+    color: red;
+}
+
+.bform-error {
+    color: red;
+}
+
+.muted {
+    color: #cccccc;
+    font-size: smaller;
+}
+
+#acontainer {
+    padding-top: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.alinks-top {
+    text-align: right;
+}
+
+.alinks {
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.alinks a {
+    text-decoration: none;
+    margin-right: 10px;
+    padding-bottom: 3px;
+    border-bottom: 3px solid #dddddd;
+    display: inline-block;
+}
+
+.alinks a.selected {
+    border-bottom: 3px solid blue;
+}
+
+#content {
+    width: 100%;
+    height: 300px;
+    padding: 5px;
+    font-family: Monaco, Consolas, ProFont, monospace;
+}
+
+.edit-toolbar {
+    display: inline-block;
+}
+
+.edit-help {
+    display: inline-block;
+    float: right;
+}
+
+.gallery-inserts {
+    display: inline-block;
+    float: right;
+    color: #cccccc;
+    font-size: smaller;
+}
+
+.gallery-inserts a:link, .gallery-inserts a:visited {
+    color: #aaaaaa;    
+}
+
+#upload {
+    background-color: #eeeeee;
+    border: 1px solid #dddddd;
+    margin-top: 12px;
+}
+
+.file-inserts {
+    color: #cccccc;
+    font-size: smaller;
+}
+
+.file-inserts a:link, .file-inserts a:visited {
+    color: #aaaaaa;    
+}
+
+.file-actions {
+    color: #cccccc;
+    font-size: smaller;
+}
+
+.file-actions a:link, .file-actions a:visited {
+    color: #aaaaaa;    
+}
+
+.files-list td, .files-list th {
+    padding-right: 12px;
+}
+
+table.entry-list {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.entry-list td {
+    border: 1px solid #eeeeee;
+    padding: 5px;
+}
+
+table.entry-list th {
+    padding: 5px;
+}
+
+table.entry-list td.entry-actions {
+    font-size: smaller;
+    color: #cccccc;
+}
+
+table.entry-list td.entry-actions a:link,
+table.entry-list td.entry-actions a:hover {
+    color: #aaaaaa;
+}
+
+table.entry-list td.deleted {
+    color: red;
+}
+
+.navigation-summary {
+    display: inline-block;
+    float: right;
+}
+

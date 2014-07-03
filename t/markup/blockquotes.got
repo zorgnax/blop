@@ -1,0 +1,41 @@
+<p>normal paragraph.</p>
+
+<blockquote><p>quoted paragraph</p></blockquote>
+
+<blockquote><p>multiline quoted
+paragraph</p></blockquote>
+
+<blockquote><p>two quoted paragraphs</p>
+
+<p>heres the second</p></blockquote>
+
+<p>he said:</p>
+<blockquote><p>goodbye,
+farewell,
+&amp; amen</p></blockquote>
+
+<blockquote><p>example:</p>
+
+<pre><code>sub status {
+    print "working";
+}</code></pre>
+
+<p>or:</p>
+
+<pre><code>sub status {
+    return "working";
+}</code></pre></blockquote>
+
+<blockquote><p>blockquotes</p>
+<blockquote><p>can nest
+pretty far</p>
+<blockquote><p>down</p></blockquote></blockquote>
+<p>if you want</p></blockquote>
+
+<blockquote><blockquote><blockquote><p>whats this do?</p></blockquote></blockquote></blockquote>
+
+<blockquote><p>there</p>
+<blockquote><p>can be
+spaces before the blockquotes</p></blockquote>
+<p>heck ya</p></blockquote>
+

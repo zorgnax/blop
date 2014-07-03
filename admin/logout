@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+
+$blop->read_conf();
+
+if (!$blop->session) {
+    die "Not logged in.\n";
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+delete from sessions where sessionid=?
+EOSQL
+$sth->execute($cgi->cookie("sesh"));
+
+my $cookie = $cgi->cookie(-name => "sesh", -value => "",
+                          -expires => "-100d", -path => "$blop->{urlbase}/");
+
+print "Set-Cookie: $cookie\n";
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("logout.html");
+

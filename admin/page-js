@@ -1,0 +1,101 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $out = {};
+
+my $pageid = $cgi->param("pageid");
+my $content = $cgi->param("content");
+my $page;
+
+if ($pageid) {
+    $page = $blop->page(pageid => $pageid);
+}
+
+my $title = $cgi->param("title");
+if (!defined $title || !length($title)) {
+    $out->{titleError} = "Title cannot be empty.";
+    $out->{error} = 1;
+}
+
+my $url = $cgi->param("url");
+$url = "" if !defined $url;
+if (!$page || $page->{url} ne $url) {
+    if (!$blop->url_available($url)) {
+        $out->{urlError} = "Unavailable.";
+        $out->{error} = 1;
+    }
+}
+
+my $now = Blop::Date->now->str;
+
+my $published = $cgi->param("published");
+if (defined $published && length($published)) {
+    my $date = Blop::Date->new($published);
+    if ($date) {
+        $published = $date->str;
+    }
+    else {
+        $out->{publishedError} = "Invalid format.";
+        $out->{error} = 1;
+    }
+}
+else {
+    $published = $now;
+}
+
+if ($out->{error}) {
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json($out);
+    exit;
+}
+
+if (!$pageid) {
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+insert into pages set
+    title=?, url=?, added=?, published=?, content=?
+EOSQL
+    $sth->execute($title, $url, $now, $published, $content);
+    $pageid = $sth->{mysql_insertid};
+
+    $blop->log("Added page $pageid");
+
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json({ok => 1, pageid => $pageid});
+    exit;
+}
+
+my %args;
+
+if ($page->{title} ne $title) {
+    $args{title} = $title;
+}
+if ($page->{url} ne $url) {
+    $args{url} = $url;
+}
+if ($page->{published} ne $published) {
+    $args{published} = $published;
+}
+if ($page->{content} ne $content) {
+    $args{content} = $content;
+}
+
+if (%args) {
+    my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+update pages set $sets where pageid=?
+EOSQL
+    $sth->execute($pageid);
+}
+
+$blop->log("Edited page $pageid");
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1, pageid => $pageid});
+

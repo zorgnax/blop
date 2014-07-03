@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $postid = $cgi->param("postid");
+if (!$postid) {
+    die "A postid is required.\n";
+}
+
+system "rm", "-rf", "$blop->{base}/content/post/$postid";
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+delete from tags where postid=?
+EOSQL
+$sth->execute($postid);
+
+$sth = $blop->dbh->prepare(<<EOSQL);
+delete from posts where postid=?
+EOSQL
+$sth->execute($postid);
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({
+    ok => 1,
+    mesg => "Deleted post $postid.\n",
+});
+

@@ -1,0 +1,67 @@
+[% title = "Manage Posts" %]
+[% IF category %]
+    [% title = title _ ": " _ category.name %]
+[% END %]
+[% PROCESS header.html x1="Manage" x2="Posts" %]
+
+<br/>
+
+<div class="navigation-summary">[% navigation.summary %]</div>
+
+<table class="entry-list">
+<tr><th>Title</th><th>URL</th><th>Category</th><th>Tags</th><th>Published</th><th><img src="[% urlbase %]/admin/img/icomoon/16px/attachment.png"/></th><th>Actions</th></tr>
+[% FOREACH post IN posts %]
+<tr data-postid="[% post.postid %]">
+    [% IF !post.published %]
+    <td colspan="5" align="center">-*- Draft -*-</td>
+    [% ELSE %]
+    <td>[% post.title | html %]</td>
+    <td>[% IF post.url.defined %]<a href="[% urlbase %]/[% post.url | uri %]">/[% post.url | html %]</a>[% END %]</td>
+    <td>[% IF post.category %]<a href="[% urlbase %]/admin/posts/[% post.category.url %]">[% post.category.name | html %]</a>[% END %]</td>
+    <td>
+    [% FOREACH tag IN post.tags %]
+        <a href="[% urlbase %]/admin/posts/tag/[% tag.name | uri %]">[% tag.name | html %]</a>[% ", " IF !loop.last %]
+    [% END %]
+    </td>
+    <td>[% post.published | html %]</td>
+    [% END %]
+    <td>[% post.num_files %]</td>
+    <td class="entry-actions">
+        <a href="[% urlbase %]/admin/post/[% post.postid %]">Edit</a>
+        <a href="#" class="delete-post">Delete</a>
+    </td>
+</tr>
+[% END %]
+</table>
+
+<br/>
+<div>[% navigation.links %]</div>
+
+<script type="text/javascript">
+$(".delete-post").on("click", function (event) {
+    event.preventDefault();
+    var tr = $(this).closest("tr");
+    var td = tr.find("td.entry-actions");
+    var postid = tr.data("postid");
+    var ajax = $.ajax({
+        url: "[% urlbase %]/admin/delete-post-js",
+        type: "POST",
+        data: {postid: postid}
+    });
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (data.error) {
+            td.text(data.mesg ? data.mesg : "Okay!");
+        }
+        else {
+            tr.css("background", "lightpink");
+            td.addClass("deleted");
+            td.html("Deleted!");
+        }
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        td.text(errorThrown);
+    });
+});
+</script>
+
+[% PROCESS footer.html %]

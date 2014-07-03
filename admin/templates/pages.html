@@ -1,0 +1,58 @@
+[% PROCESS header.html title="Manage Pages" x1="Manage" x2="Pages" %]
+
+<br/>
+
+<div class="navigation-summary">[% navigation.summary %]</div>
+
+<table class="entry-list">
+<tr><th>Title</th><th>URL</th><th>Published</th><th><img src="[% urlbase %]/admin/img/icomoon/16px/attachment.png"/></th><th>Actions</th></tr>
+[% FOREACH page IN pages %]
+<tr data-pageid="[% page.pageid %]">
+    [% IF !page.published %]
+    <td colspan="3" align="center">-*- Draft -*-</td>
+    [% ELSE %]
+    <td>[% page.title | html %]</td>
+    <td>[% IF page.url.defined %]<a href="[% urlbase %]/[% page.url | uri %]">/[% page.url | html %]</a>[% END %]</td>
+    <td>[% page.published | html %]</td>
+    [% END %]
+    <td>[% page.num_files %]</td>
+    <td class="entry-actions">
+        <a href="[% urlbase %]/admin/page/[% page.pageid %]">Edit</a>
+        <a href="#" class="delete-page">Delete</a>
+    </td>
+</tr>
+[% END %]
+</table>
+
+<br/>
+<div>[% navigation.links %]</div>
+
+<script type="text/javascript">
+$(".delete-page").on("click", function (event) {
+    event.preventDefault();
+    var tr = $(this).closest("tr");
+    var td = tr.find("td.entry-actions");
+    var pageid = tr.data("pageid");
+    var ajax = $.ajax({
+        url: "[% urlbase %]/admin/delete-page-js",
+        type: "POST",
+        data: {pageid: pageid}
+    });
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (data.error) {
+            td.text(data.mesg ? data.mesg : "Okay!");
+        }
+        else {
+            tr.css("background", "lightpink");
+            td.addClass("deleted");
+            td.html("Deleted!");
+        }
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        td.text(errorThrown);
+    });
+});
+</script>
+
+[% PROCESS footer.html %]
+

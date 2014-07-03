@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi; 
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $category;
+
+my $path_info = $ENV{PATH_INFO} || "";
+if ($path_info =~ m{/(\d+)$}) {
+    my $categoryid = $1;
+    $category = $blop->category(categoryid => $categoryid)
+        or die "Cannot find category $categoryid.\n";
+}
+elsif ($path_info) {
+    die "Unrecognized path info.\n";
+}
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("category.html", category => $category);
+
