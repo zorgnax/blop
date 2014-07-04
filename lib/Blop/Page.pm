@@ -86,5 +86,32 @@ sub was_published {
     return 1;
 }
 
+sub comments {
+    my ($self) = @_;
+    return $self->{comments} if $self->{comments};
+    my $blop = Blop::instance();
+    my $where = "pageid=$self->{pageid} and ";
+    my $or_cookie = "";
+    if ($blop->cgi->cookie("cmnt")) {
+        $or_cookie = " or cookie=" . $blop->dbh->quote($blop->cgi->cookie("cmnt"));
+    }
+    $where .=  "(status='approved'$or_cookie)";
+    $self->{comments} = Blop::Comment->list($where);
+    return $self->{comments};
+}
+
+sub num_comments {
+    my ($self) = @_;
+    return $self->{num_comments} if exists $self->{num_comments};
+    my $blop = Blop::instance();
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+select count(*) from comments where pageid=$self->{pageid} and status="approved"
+EOSQL
+    $sth->execute();
+    my ($count) = $sth->fetchrow_array();
+    $self->{num_comments} = $count;
+    return $count;
+}
+
 1;
 

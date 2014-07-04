@@ -13,4 +13,4 @@ href javascript void
 comments in pages
 show uncategorized in categories list
 theme paths from a theme object
-post counts on /admin/categories
+disable comments on all pages/posts
