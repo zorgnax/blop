@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+my $commentid = $cgi->param("commentid");
+if (!$commentid) {
+    die "A commentid is required.\n";
+}
+
+my $comment = $blop->comment(commentid => $commentid)
+    or die "Invalid commentid.\n";
+
+if (!$blop->admin) {
+    my $cookie = $cgi->cookie("cmnt");
+    if (!$cookie || $cookie ne $comment->{cookie}) {
+        die "Unauthorized.\n";
+    }
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+delete from comments where commentid=?
+EOSQL
+$sth->execute($commentid);
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({
+    ok => 1,
+    mesg => "Deleted comment $commentid.\n",
+});
+

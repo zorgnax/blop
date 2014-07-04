@@ -3,10 +3,15 @@
 <h3>[% entry.num_comments %] Comment[% IF entry.num_comments != 1 %]s[% END %]</h3>
 
 [% FOREACH comment IN entry.comments %]
-<div class="comment" id="comment-[% comment.commentid %]">
-<b>[% comment.name %]</b> on [% comment.added %]
+<div class="comment[% IF comment.editable %] editable-comment[% END %]" data-commentid="[% comment.commentid %]">
+<div class="comment-heading">
+<b>[% comment.name | html %]</b> on [% comment.added | html %]
 [% IF comment.status != "approved" %] <span class="awaiting-moderation">Awaiting moderation</span>[% END %]
-[% IF comment.editable %] <a href="#" class="edit-comment" data-commentid="[% comment.commentid %]">edit</a>[% END %]<br/>
+[% IF comment.editable %]
+<a href="#" class="edit-comment">edit</a>
+<a href="#" class="delete-comment">delete</a>
+[% END %]
+</div>
 <div class="comment-content">
 [% comment.parsed_content %]
 </div>
@@ -57,37 +62,12 @@
 
 </form>
 
+<script type="text/javascript" src="[% url('comments.js') %]"></script>
 <script type="text/javascript">
-var pform = new PForm({
+var comments = new Comments({
     formId: "#comment",
+    editableComments: ".editable-comment",
     processUrl: "[% urlbase %]/admin/comment-js",
-    onSuccess: function () {location.reload();}});
-
-$(".edit-comment").each(function () {
-    var commentId = $(this).data("commentid");
-    var div = $("#comment-" + commentId);
-    var content = div.find(".comment-content");
-    var form = div.find(".edit-comment-form");
-    var ta = form.find("textarea")[0];
-    var pform = new PForm({
-        formId: form.find("form"),
-        processUrl: "[% urlbase %]/admin/comment-js",
-        onSuccess: function () {location.reload();}});
-    $(this).on("click", function (event) {
-        event.preventDefault();
-        if (form.is(":hidden")) {
-            content.hide();
-            form.show();
-            div.addClass("editing-comment");
-            ta.focus();
-            ta.selectionStart = ta.selectionEnd = ta.value.length;
-        }
-        else {
-            content.show();
-            form.hide();
-            div.removeClass("editing-comment");
-        }
-    });
-});
+    deleteUrl: "[% urlbase %]/admin/delete-comment-js"});
 </script>
 

@@ -13,4 +13,6 @@ href javascript void
 comments in pages
 show uncategorized in categories list
 theme paths from a theme object
-disable comments on all pages/posts
+option to disable comments on all pages/posts
+fill comment name and email with your prior comment's
+

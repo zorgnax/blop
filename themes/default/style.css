@@ -102,3 +102,9 @@ input, textarea {
     border: 1px solid #cccc66;
 }
 
+.comment-deleted {
+    background-color: #ff9999;
+    font-weight: bold;
+    border: 1px solid #cc6666;
+}
+
