@@ -28,4 +28,9 @@
 <a href="[% urlbase %]/admin/pages"[% IF x2 == "Pages" %] class="selected"[% END %]>Pages</a>
 <a href="[% urlbase %]/admin/categories"[% IF x2 == "Categories" %] class="selected"[% END %]>Categories</a>
 </div>
+[% ELSIF x1 == "Comments" %]
+<div class="alinks">
+<a href="[% urlbase %]/admin/comments"[% IF x2 == "All" %] class="selected"[% END %]>All</a>
+<a href="[% urlbase %]/admin/comments/pending"[% IF x2 == "Pending" %] class="selected"[% END %]>Pending</a>
+</div>
 [% END %]

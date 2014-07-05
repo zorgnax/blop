@@ -46,5 +46,20 @@ sub parsed_content {
     return "<p>" . $self->{content} . "</p>";
 }
 
+sub added_to {
+    my ($self) = @_;
+    if ($self->{postid}) {
+        my $title = $self->{post_title} || "Post " . $self->{postid};
+        my $url = $self->{post_url};
+        return {title => $title, url => $url};
+    }
+    elsif ($self->{pageid}) {
+        my $title = $self->{page_title} || "Page " . $self->{pageid};
+        my $url = $self->{page_url};
+        return {title => $title, url => $url};
+    }
+    return undef;
+}
+
 1;
 

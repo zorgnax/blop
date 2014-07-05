@@ -7,23 +7,23 @@ $blop->read_conf();
 my $out = {};
 
 my $name = $cgi->param("name");
-if (!$name || $name =~ /^\s*$/) {
+if (defined $name && $name =~ /^\s*$/) {
     $out->{nameError} = "Name cannot be blank.";
     $out->{error} = 1;
 }
 
 my $email = $cgi->param("email");
-if (!$email || $email =~ /^\s*$/) {
+if (defined $email && $email =~ /^\s*$/) {
     $out->{emailError} = "Email cannot be blank.";
     $out->{error} = 1;
 }
-elsif ($email !~ /^[^\s\@]+\@.+\.\w+$/) {
+elsif (defined $email && $email !~ /^[^\s\@]+\@.+\.\w+$/) {
     $out->{emailError} = "Invalid email.";
     $out->{error} = 1;
 }
 
 my $content = $cgi->param("content");
-if (!$content || $content =~ /^\s+$/) {
+if (defined $content && $content =~ /^\s*$/) {
     $out->{mesg} = "Content cannot be blank.";
     $out->{error} = 1;
 }
@@ -46,9 +46,6 @@ if ($postid) {
 elsif ($pageid) {
     $page = $blop->page(pageid => $pageid) or die "Invalid pageid.\n";
     undef $postid;
-}
-else {
-    die "A postid or a pageid is required.\n";
 }
 
 my $commentid = $cgi->param("commentid");
@@ -79,6 +76,11 @@ if ($cgi->param("bake")) {
 my $now = Blop::Date->now->str;
 
 if (!$commentid) {
+    die "Name must be defined.\n" if !defined $name;
+    die "Email must be defined.\n" if !defined $email;
+    die "Content must be defined.\n" if !defined $content;
+    die "A postid or a pageid is required.\n" if !$postid && !$pageid;
+
     my $status = "pending";
 
     my $sth = $blop->dbh->prepare(<<EOSQL);
@@ -118,14 +120,21 @@ my $comment = $blop->comment(commentid => $commentid)
 
 my %args;
 
-if ($comment->{name} ne $name) {
+if (defined $name && $name ne $comment->{name}) {
     $args{name} = $name;
 }
-if ($comment->{email} ne $email) {
+if (defined $email && $email ne $comment->{email}) {
     $args{email} = $email;
 }
-if ($comment->{content} ne $content) {
+if (defined $content && $content ne $comment->{content}) {
     $args{content} = $content;
+}
+
+if ($blop->admin) {
+    my $status = $cgi->param("status");
+    if (defined $status && $status ne $comment->{status}) {
+        $args{status} = $status;
+    }
 }
 
 if (%args) {

@@ -1,0 +1,100 @@
+[% PROCESS header.html title="Comments" x1="Comments" x2=pending ? "Pending" : "All" %]
+
+<br/>
+
+<div class="navigation-summary">[% navigation.summary %]</div>
+
+<table class="entry-list">
+<tr><th>Author</th><th>Status</th><th>Comment</th><th>Added To</th></tr>
+[% FOREACH comment IN comments %]
+<tr data-commentid="[% comment.commentid %]" class="comment-[% comment.status %]">
+    <td>[% comment.name | html %]<br/>[% comment.email | html %]<br/>[% comment.ipaddr | html %]</td>
+    <td>[% comment.status %]</td>
+    <td>
+        <p>Added on [% comment.added %]</p>
+        <pre><code>[% comment.content | html %]</code></pre>
+        <div class="entry-actions">
+            [% IF comment.status == "approved" %]
+            <a href="#" class="unapprove-comment">Unapprove</a>
+            [% END %]
+            [% IF comment.status != "approved" %]
+            <a href="#" class="approve-comment">Approve</a>
+            [% END %]
+            <a href="#" class="delete-comment">Delete</a>
+        </div>
+    </td>
+    <td>
+        <a href="[% urlbase %]/[% comment.added_to.url %]">[% comment.added_to.title %]</a>
+    </td>
+</tr>
+[% END %]
+</table>
+
+<br/>
+<div>[% navigation.links %]</div>
+
+<script type="text/javascript">
+function ajaxCall (processUrl, requestData, onSuccess) {
+    if (!requestData)
+        return;
+    var ajax = $.ajax({url: processUrl, type: "POST", data: requestData});
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (data.error) {
+            alert(data.mesg ? data.mesg : "Failed!");
+        }
+        else {
+            onSuccess(data);
+        }
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+    });
+}
+
+function approveComment (event) {
+    event.preventDefault();
+    var tr = $(this).closest("tr");
+    var commentId = tr.data("commentid");
+    var requestData = {commentid: commentId, status: "approved"};
+    ajaxCall("[% urlbase %]/admin/comment-js", requestData, function (data) {
+        tr.attr("class", "comment-approved");
+        tr.find("td:nth-child(2)").text("approved");
+        var unapprove = $("<a href='#' class='unapprove-comment'>Unapprove</a>");
+        unapprove.on("click", unapproveComment);
+        tr.find(".approve-comment").replaceWith(unapprove);
+    });
+}
+
+function unapproveComment (event) {
+    event.preventDefault();
+    var tr = $(this).closest("tr");
+    var commentId = tr.data("commentid");
+    var requestData = {commentid: commentId, status: "pending"};
+    ajaxCall("[% urlbase %]/admin/comment-js", requestData, function (data) {
+        tr.attr("class", "comment-pending");
+        tr.find("td:nth-child(2)").text("pending");
+        var approve = $("<a href='#' class='approve-comment'>Approve</a>");
+        approve.on("click", approveComment);
+        tr.find(".unapprove-comment").replaceWith(approve);
+    });
+}
+
+function deleteComment (event) {
+    event.preventDefault();
+    var tr = $(this).closest("tr");
+    var commentId = tr.data("commentid");
+    var requestData = {commentid: commentId};
+    ajaxCall("[% urlbase %]/admin/delete-comment-js", requestData, function (data) {
+        tr.attr("class", "comment-deleted");
+        tr.find("td:nth-child(2)").text("deleted");
+        tr.find(".entry-actions").html("-*- Deleted -*-");
+    });
+}
+
+$(".approve-comment").on("click", approveComment);
+$(".unapprove-comment").on("click", unapproveComment);
+$(".delete-comment").on("click", deleteComment);
+
+</script>
+
+[% PROCESS footer.html %]

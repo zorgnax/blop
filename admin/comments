@@ -1,0 +1,68 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi; 
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $pending;
+my $path_info = $ENV{PATH_INFO} || "";
+if ($path_info =~ m{/pending$}) {
+    $pending = 1;
+}
+elsif ($path_info) {
+    die "Unrecognized path info.\n";
+}
+
+my $limit = $cgi->param("limit");
+$limit = 1000 if !defined $limit;
+if ($limit !~ /^\d+$/) {
+    die "Invalid limit param.\n";
+}
+
+my $offset = $cgi->param("offset");
+$offset = 0 if !defined $offset;
+if ($offset !~ /^\d+$/) {
+    die "Invalid offset param.\n";
+}
+
+my $where = "";
+if ($pending) {
+    $where = "where c.status=\"pending\"";
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+select sql_calc_found_rows
+    c.*,
+    p.url page_url,
+    p.title page_title,
+    q.url post_url,
+    q.title post_title
+from
+    comments c
+    left join pages p on p.pageid=c.pageid
+    left join posts q on q.postid=c.postid
+$where
+order by c.added desc
+limit $limit
+offset $offset
+EOSQL
+$sth->execute();
+my @comments;
+while (my $comment = $sth->fetchrow_hashref()) {
+    $comment = bless $comment, "Blop::Comment";
+    push @comments, $comment;
+}
+
+$sth = $blop->dbh->prepare("select found_rows()");
+$sth->execute();
+my ($found_rows) = $sth->fetchrow_array();
+my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "comment");
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template(
+    "comments.html",
+    pending => $pending,
+    comments => \@comments,
+    navigation => $navigation);
+

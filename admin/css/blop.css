@@ -1,3 +1,8 @@
+code {
+    font-family: Monaco, Consolas, ProFont, monospace;
+    font-size: 12px;
+}
+
 .aform label {
     display: block;
     margin-top: 1em;
@@ -145,5 +150,21 @@ table.entry-list td.deleted {
 .navigation-summary {
     display: inline-block;
     float: right;
+}
+
+.comment-pending {
+    background-color: #ffffcc;
+}
+
+.comment-approved {
+    background-color: #ccffcc;
+}
+
+.comment-spam {
+    background-color: #ffeecc;
+}
+
+.comment-deleted {
+    background-color: #ffcccc;
 }
 
