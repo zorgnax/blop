@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use lib "../lib";
-use blopcgi; 
+use blopcgi;
 
 $blop->read_conf();
 $blop->require_admin();

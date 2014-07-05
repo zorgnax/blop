@@ -239,6 +239,18 @@ sub comment {
     return $comment;
 }
 
+sub pending_comments {
+    my ($self) = @_;
+    return $self->{pending_comments} if exists $self->{pending_comments};
+    my $sth = $self->dbh->prepare(<<EOSQL);
+select count(*) from comments where status="pending"
+EOSQL
+    $sth->execute();
+    my ($count) = $sth->fetchrow_array();
+    $self->{pending_comments} = $count;
+    return $count;
+}
+
 sub date_archives {
     my ($self) = @_;
     return $self->{date_archives} if $self->{date_archives};

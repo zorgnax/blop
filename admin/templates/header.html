@@ -10,7 +10,7 @@
 <h1>[% title %]</h1>
 <div class="alinks">
 <a href="[% urlbase %]/admin/post"[% IF x1 == "Publish" %] class="selected"[% END %]>Publish</a>
-<a href="[% urlbase %]/admin/comments"[% IF x1 == "Comments" %] class="selected"[% END %]>Comments</a>
+<a href="[% urlbase %]/admin/comments"[% IF x1 == "Comments" %] class="selected"[% END %]>Comments[% IF blop.pending_comments %] ([% blop.pending_comments %])[% END %]</a>
 <a href="[% urlbase %]/admin/posts"[% IF x1 == "Manage" %] class="selected"[% END %]>Manage</a>
 <a href="[% urlbase %]/admin/settings"[% IF x1 == "Settings" %] class="selected"[% END %]>Settings</a>
 <a href="[% urlbase %]/admin/themes"[% IF x1 == "Theme" %] class="selected"[% END %]>Themes</a>
