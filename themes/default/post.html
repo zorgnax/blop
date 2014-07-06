@@ -25,13 +25,13 @@ Tags:
 
 [% IF post.next(category) %]
 <span class="next-link">
-← <a href="[% urlbase %]/[% post.next.url | uri %][% IF category %]?cat=[% category.categoryid %][% END %]">[% post.next.title || "Next Post" | html %]</a>
+← <a href="[% post.next.fullurl %]">[% post.next.title || "Next Post" | html %]</a>
 </span>
 [% END %]
 
 [% IF post.prev(category) %]
 <span class="prev-link">
-<a href="[% urlbase %]/[% post.prev.url | uri %][% IF category %]?cat=[% category.categoryid %][% END %]">[% post.prev.title || "Previous Post" | html %]</a> →
+<a href="[% post.prev.fullurl %]">[% post.prev.title || "Previous Post" | html %]</a> →
 </span>
 [% END %]
 

@@ -41,7 +41,10 @@ EOSQL
     my $sth = $blop->dbh->prepare($query);
     $sth->execute($self->{published});
     my $next = $sth->fetchrow_hashref();
-    $next = bless $next, "Blop::Post" if $next;
+    if ($next) {
+        $next = bless $next, "Blop::Post";
+        $next->{chain_category} = $category;
+    }
     $self->{next} = $next;
     return $next;
 }
@@ -65,7 +68,10 @@ EOSQL
     my $sth = $blop->dbh->prepare($query);
     $sth->execute($self->{published});
     my $prev = $sth->fetchrow_hashref();
-    $prev = bless $prev, "Blop::Post" if $prev;
+    if ($prev) {
+        $prev = bless $prev, "Blop::Post";
+        $prev->{chain_category} = $category;
+    }
     $self->{prev} = $prev;
     return $prev;
 }
@@ -119,7 +125,11 @@ EOSQL
 sub fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return "$blop->{urlbase}/$self->{url}";
+    my $url = "$blop->{urlbase}/$self->{url}";
+    if ($self->{chain_category}) {
+        $url .= "?cat=" . $self->{chain_category}{categoryid};
+    }
+    return $url;
 }
 
 sub editurl {
