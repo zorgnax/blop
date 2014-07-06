@@ -22,8 +22,8 @@
 </form>
 <h3>Categories</h3>
 <ul class="categories">
-[% FOREACH category IN blop.categories %]
-<li><a href="[% urlbase %]/[% category.url %]">[% category.name %] ([% category.posts %])</a></li>
+[% FOREACH category_ IN blop.categories %]
+<li><a href="[% urlbase %]/[% category_.url %]">[% category_.name %] ([% category_.posts %])</a></li>
 [% END %]
 </ul>
 

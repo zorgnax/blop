@@ -23,12 +23,19 @@ EOSQL
 }
 
 sub next {
-    my ($self) = @_;
+    my ($self, $category) = @_;
     return $self->{next} if exists $self->{next};
     my $blop = Blop::instance();
+    my $where = "";
+    if ($category && !$category->{special}) {
+        $where = " and categoryid=$category->{categoryid}";
+    }
+    elsif ($category && $category->{special} eq "uncat") {
+        $where = " and categoryid=0";
+    }
     my $query = <<EOSQL;
 select postid, title, url
-from posts where published > ?
+from posts where published > ?$where
 order by published asc limit 1
 EOSQL
     my $sth = $blop->dbh->prepare($query);
@@ -40,12 +47,19 @@ EOSQL
 }
 
 sub prev {
-    my ($self) = @_;
+    my ($self, $category) = @_;
     return $self->{prev} if exists $self->{prev};
     my $blop = Blop::instance();
+    my $where = "";
+    if ($category && !$category->{special}) {
+        $where = " and categoryid=$category->{categoryid}";
+    }
+    elsif ($category && $category->{special} eq "uncat") {
+        $where = " and categoryid=0";
+    }
     my $query = <<EOSQL;
 select postid, title, url
-from posts where published < ?
+from posts where published < ?$where
 order by published desc limit 1
 EOSQL
     my $sth = $blop->dbh->prepare($query);

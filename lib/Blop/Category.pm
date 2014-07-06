@@ -111,5 +111,26 @@ EOSQL
     return $count;
 }
 
+sub latest_post {
+    my ($self) = @_;
+    return $self->{latest_post} if exists $self->{latest_post};
+    my $blop = Blop::instance();
+    my $where = "";
+    if (!$self->{special}) {
+        $where = " and categoryid=$self->{categoryid}";
+    }
+    elsif ($self->{special} eq "uncat") {
+        $where = " and categoryid=0"
+    }
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+select * from posts where published <= now()$where order by published desc limit 1
+EOSQL
+    $sth->execute();
+    my $post = $sth->fetchrow_hashref();
+    $self->{latest_post} = $post;
+    $post = bless $post, "Blop::Post" if $post;
+    return $post;
+}
+
 1;
 

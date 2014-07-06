@@ -50,6 +50,11 @@ if ($page) {
 not_found();
 
 sub listing {
+    if ($blop->{conf}{catlatest} && $category) {
+        $post = $category->latest_post() or die "No posts.\n";
+        post();
+    }
+
     my $limit = $cgi->param("limit");
     $limit = 3 if !defined $limit;
     if ($limit !~ /^\d+$/) {
@@ -138,8 +143,13 @@ EOSQL
 }
 
 sub post {
+    my $categoryid = $cgi->param("cat");
+    if ($categoryid) {
+        $category = $blop->category(categoryid => $categoryid)
+            or die "Invalid categoryid.\n";
+    }
     print "Content-Type: text/html; charset=utf-8\n\n";
-    print $blop->template("post.html", post => $post);
+    print $blop->template("post.html", post => $post, category => $category);
     exit;
 }
 
