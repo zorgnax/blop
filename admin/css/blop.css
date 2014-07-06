@@ -88,7 +88,7 @@ code {
 }
 
 .gallery-inserts a:link, .gallery-inserts a:visited {
-    color: #aaaaaa;    
+    color: #aaaaaa;
 }
 
 #upload {
@@ -103,7 +103,7 @@ code {
 }
 
 .file-inserts a:link, .file-inserts a:visited {
-    color: #aaaaaa;    
+    color: #aaaaaa;
 }
 
 .file-actions {
@@ -112,7 +112,7 @@ code {
 }
 
 .file-actions a:link, .file-actions a:visited {
-    color: #aaaaaa;    
+    color: #aaaaaa;
 }
 
 .files-list td, .files-list th {
@@ -168,3 +168,6 @@ table.entry-list td.deleted {
     background-color: #ffcccc;
 }
 
+.special-category {
+    background-color: #ffccff;
+}

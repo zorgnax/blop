@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use lib "../lib";
-use blopcgi; 
+use blopcgi;
 
 $blop->read_conf();
 $blop->require_admin();
@@ -35,8 +35,11 @@ if ($offset !~ /^\d+$/) {
 
 my $where = "";
 my $join = "";
-if ($category) {
+if ($category && !$category->{special}) {
     $where = "where p.categoryid=$category->{categoryid}";
+}
+elsif ($category && $category->{special} eq "uncat") {
+    $where = "where p.categoryid=0";
 }
 if ($tag_name) {
     $join = "left join tags t on t.postid=p.postid";

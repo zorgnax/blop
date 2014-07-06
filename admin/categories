@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use lib "../lib";
-use blopcgi; 
+use blopcgi;
 
 $blop->read_conf();
 $blop->require_admin();
@@ -22,6 +22,7 @@ select sql_calc_found_rows c.*, count(p.postid) posts
 from categories c
 left join posts p on p.categoryid=c.categoryid
 group by c.categoryid
+order by c.categoryid
 limit $limit
 offset $offset
 EOSQL

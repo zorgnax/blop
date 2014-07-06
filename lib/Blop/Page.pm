@@ -113,5 +113,10 @@ EOSQL
     return $count;
 }
 
+sub parsed_content {
+    my ($self) = @_;
+    return "<p>" . $self->{content} . "</p>";
+}
+
 1;
 

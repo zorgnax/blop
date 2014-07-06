@@ -18,13 +18,15 @@ EOSQL
     return $category;
 }
 
-sub list {
-    my ($class, %args) = @_;
+# non-special published list
+sub nsp_list {
+    my ($class) = @_;
     my $blop = Blop::instance();
     my $sth = $blop->dbh->prepare(<<EOSQL);
 select c.*, count(p.postid) posts
 from categories c
 left join posts p on p.categoryid=c.categoryid
+where c.special is null and (p.postid is null or p.published <= now())
 group by c.categoryid
 order by c.categoryid
 EOSQL
@@ -86,6 +88,27 @@ sub get_available_url {
         last if $blop->url_available($url);
     }
     return $url;
+}
+
+sub num_posts {
+    my ($self) = @_;
+    return $self->{num_posts} if exists $self->{num_posts};
+    if (!$self->{special}) {
+        $self->{num_posts} = $self->{posts};
+        return $self->{num_posts};
+    }
+    my $where = "";
+    if ($self->{special} eq "uncat") {
+        $where = " where categoryid=0";
+    }
+    my $blop = Blop::instance();
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+select count(*) from posts$where
+EOSQL
+    $sth->execute();
+    my ($count) = $sth->fetchrow_array();
+    $self->{num_posts} = $count;
+    return $count;
 }
 
 1;

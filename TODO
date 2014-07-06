@@ -16,4 +16,5 @@ theme paths from a theme object
 option to disable comments on all pages/posts
 fill comment name and email with your prior comment's
 give an url to be the most recent post
-
+config item to customize the default url for posts
+br inside admin header

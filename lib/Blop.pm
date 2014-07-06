@@ -214,10 +214,17 @@ sub category {
     return $category;
 }
 
+sub allcat {
+    my ($self) = @_;
+    return $self->{allcat} if $self->{allcat};
+    $self->{allcat} = $self->category(special => "allcat");
+    return $self->{allcat};
+}
+
 sub categories {
     my ($self, %args) = @_;
     return $self->{categories} if $self->{categories};
-    $self->{categories} = Blop::Category->list(%args);
+    $self->{categories} = Blop::Category->nsp_list(%args);
     return $self->{categories};
 }
 
@@ -292,8 +299,6 @@ sub url_available {
         return 0;
     }
     return 0 if $url =~ m{^(tag|themes|\d{4})(/|$)};
-    return 0 if $url eq $self->{conf}{allcat};
-    return 0 if $url eq $self->{conf}{uncat};
     return 0 if $self->post(url => $url);
     return 0 if $self->page(url => $url);
     return 0 if $self->category(url => $url);

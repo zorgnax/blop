@@ -64,7 +64,8 @@ create table posts (
 create table categories (
     categoryid int unsigned primary key auto_increment,
     name varchar(128) not null unique,
-    url varchar(128) unique);
+    url varchar(128) unique,
+    special varchar(128) unique);
 
 create table tags (
     tagid int unsigned primary key auto_increment,
@@ -116,9 +117,11 @@ $sth->execute(title => $cgi->param("title"));
 $sth->execute(slogan => $cgi->param("slogan"));
 $sth->execute(email => $cgi->param("email"));
 $sth->execute(pass => $cgi->param("pass"));
-$sth->execute(allcat => "");
-$sth->execute(uncat => "uncategorized");
 $sth->execute(theme => "default");
+
+$sth = $dbh->prepare("insert into categories set special=?, name=?, url=?");
+$sth->execute(allcat => "All", "");
+$sth->execute(uncat => "Uncategorized", "uncategorized");
 
 $blop->{dbh} = $dbh;
 $blop->log("Installed");

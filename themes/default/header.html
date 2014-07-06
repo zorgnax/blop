@@ -16,7 +16,7 @@
 </h1>
 
 <div class="sidebar">
-<form name="search" method="get" action="[% urlbase %]/[% blop.conf.allcat | uri %]">
+<form name="search" method="get" action="[% urlbase %]/[% blop.allcat.url | uri %]">
 <input type="search" name="s" value="[% cgi.param('s') | html %]"/>
 <input type="submit" value="Search"/>
 </form>
@@ -41,7 +41,7 @@
 [% FOREACH pagelink IN blop.pages %]
 <a href="[% urlbase %]/[% pagelink.url | uri %]">[% pagelink.title %]</a>
 [% END %]
-[% IF blop.conf.allcat %]
-<a href="[% urlbase %]/[% blop.conf.allcat | uri %]">Blog</a>
+[% IF blop.allcat.url %]
+<a href="[% urlbase %]/[% blop.allcat.url | uri %]">Blog</a>
 [% END %]
 </div>

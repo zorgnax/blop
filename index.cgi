@@ -7,10 +7,6 @@ $blop->load_theme();
 
 my $path = $cgi->param("path") || "";
 
-if ($path eq $blop->{conf}{allcat}) {
-    listing();
-}
-
 my @tags;
 if ($path =~ m{^tag/(.*)$}) {
     my $tags = $1;
@@ -69,7 +65,13 @@ sub listing {
     my $where = "";
     my $join = "";
 
-    if ($category) {
+    if ($category && $category->{special} && $category->{special} eq "allcat") {
+        # ok
+    }
+    elsif ($category && $category->{special} && $category->{special} eq "uncat") {
+        $where .= "and p.categoryid=0\n";
+    }
+    elsif ($category) {
         $where .= "and p.categoryid=$category->{categoryid}\n";
     }
 
@@ -89,7 +91,7 @@ sub listing {
     if ($day) {
         $where .= "and day(p.published) = $day\n";
     }
-    
+
     my $search = $cgi->param("s");
     if ($search && length($search)) {
         my $s = $blop->dbh->quote($search);
