@@ -50,7 +50,7 @@ input, textarea {
 
 .footer {
     margin-top: 12px;
-    margin-bottom: 12px;
+    min-height: 12px;
     clear: both;
     text-align: center;
 }
