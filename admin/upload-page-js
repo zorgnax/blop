@@ -60,7 +60,7 @@ my $file = {
     path => $path,
     url => $url,
     fullurl => "$blop->{urlbase}$url",
-    size => $blop->human_readable(-s $file),
+    size => $blop->human_readable(-s $path),
     pageid => $pageid,
 };
 
