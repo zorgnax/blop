@@ -1,5 +1,3 @@
-gallery backend
-file listing backend
 front page display posts
 better tags/category/published widgets
 color widget
@@ -12,3 +10,6 @@ show uncategorized in categories list
 theme paths from a theme object
 option to disable comments on all pages/posts
 fill comment name and email with your prior comment's
+dont rely on config::tiny or test::more
+allow blop.conf to be deleted, use .blop to find base directory
+Encorporate upload-page-js into upload-js

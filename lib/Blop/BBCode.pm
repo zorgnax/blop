@@ -1,6 +1,8 @@
 package Blop::BBCode;
 use strict;
 use warnings;
+use Blop;
+use Image::Magick;
 
 my %bbcode = (
     hr => {block => 1, display => \&display_hr},
@@ -96,7 +98,12 @@ sub display_link {
         $title =~ s/"/&quot;/g;
         $title = " title=\"$title\"";
     }
-    return "<a href=\"$elem->{args}[0]\"$title>$elem->{str}</a>";
+    my $url = $elem->{args}[0];
+    my $blop = Blop::instance();
+    if ($blop && $url =~ m{^/}) {
+        $url = "$blop->{urlbase}$url";
+    }
+    return "<a href=\"$url\"$title>$elem->{str}</a>";
 }
 
 sub display_code {
@@ -113,30 +120,115 @@ sub display_code {
 
 sub display_listing {
     my ($markup, $elem) = @_;
-    return "TODO LISTING";
+    my $blop = Blop::instance() or return "";
+    my $entry = $markup->{entry} or return "";
+    my $html = "<ul class=\"listing\">\n";
+    my $files = $entry->files;
+    for my $file (@$files) {
+        $html .= "<li><a href=\"$file->{fullurl}\">" .
+                 $blop->escape_html($file->{name}) .
+                 "</a> <span class=\"muted\">" . $file->{size} .
+                 "</span></li>\n";
+    }
+    $html .= "</ul>";
+    return $html;
 }
 
 sub update_gallery {
     my ($markup, $elem) = @_;
-}
-
-sub display_gallery {
-    my ($markup, $elem) = @_;
-    return "TODO GALLERY";
+    my $entry = $markup->{entry} or return;
+    if ($markup->{file}) {
+        create_thumb($entry, $markup->{file}{name}, $elem->{hash}{size}, "force");
+        return;
+    }
+    my $files = $entry->files;
+    for my $file (@$files) {
+        create_thumb($entry, $file->{name}, $elem->{hash}{size});
+    }
 }
 
 sub update_thumb {
     my ($markup, $elem) = @_;
+    my $entry = $markup->{entry} or return;
+    my $name = $elem->{args}[0] or return;
+    if ($markup->{file}) {
+        if ($markup->{file}{name} eq $name) {
+            create_thumb($entry, $name, $elem->{hash}{size}, "force");
+        }
+        return;
+    }
+    create_thumb($entry, $name, $elem->{hash}{size});
+}
+
+sub create_thumb {
+    my ($entry, $file_name, $size, $force) = @_;
+    return if $file_name !~ /\.(jpe?g|gif|png)$/i;
+    my $blop = Blop::instance() or return;
+    my %default = (small => "x125>", medium => "x250>", large => "700>");
+    $size ||= "medium";
+    my $geometry = $blop->{conf}{"gallery_$size"} || $default{$size} || $size;
+    my $dir = create_thumb_dir($entry);
+    my $thumb = "$dir/$file_name";
+    $thumb =~ s{(\.\w+)$}{.$size$1};
+    return if -e $thumb && !$force;
+    my $magick = Image::Magick->new;
+    my $path = $entry->content_path . "/$file_name";
+    $magick->Read($path);
+    $magick->Resize(geometry => $geometry);
+    $magick->Write($thumb);
+}
+
+sub create_thumb_dir {
+    my ($entry) = @_;
+    my $dir = $entry->content_path;
+    if (!-e $dir) {
+        mkdir $dir or die "Can't mkdir $dir: $!\n";
+    }
+    $dir = "$dir/thumb";
+    if (!-e $dir) {
+        mkdir $dir or die "Can't mkdir $dir: $!\n";
+    }
+    return $dir;
+}
+
+sub display_gallery {
+    my ($markup, $elem) = @_;
+    my $entry = $markup->{entry} or return "";
+    my $blop = Blop::instance();
+    my $size = $elem->{hash}{size} || "medium";
+    my $html = "<div class=\"gallery\">\n";
+    my $files = $entry->files;
+    for my $file (@$files) {
+        next if $file->{name} !~ /\.(jpe?g|gif|png)$/i;
+        my $thumb = $entry->content_fullurl . "/thumb/$file->{name}";
+        $thumb =~ s{(\.\w+)$}{.$size$1};
+        $html .= "<a href=\"" . $file->{fullurl} . "\"><img src=\"" .
+                 $thumb . "\"/></a>\n";
+    }
+    $html .= "</div>\n";
+    return $html;
 }
 
 sub display_thumb {
     my ($markup, $elem) = @_;
-    return "TODO THUMB";
+    my $entry = $markup->{entry} or return "";
+    my $name = $elem->{args}[0] or return "";
+    my $blop = Blop::instance();
+    my $size = $elem->{hash}{size} || "medium";
+    my $thumb = $entry->content_fullurl . "/thumb/$name";
+    $thumb =~ s{(\.\w+)$}{.$size$1};
+    my $url = $entry->content_fullurl . "/$name";
+    my $html = "<a href=\"$url\"><img src=\"$thumb\"/></a>\n";
+    return $html;
 }
 
 sub display_image {
     my ($markup, $elem) = @_;
-    return "TODO IMAGE";
+    my $entry = $markup->{entry} or return "";
+    my $name = $elem->{args}[0] or return "";
+    my $url = $entry->content_fullurl . "/$name";
+    my $html = "<img src=\"$url\"/>\n";
+    return $html;
 }
 
 1;

@@ -175,6 +175,18 @@ sub files {
     return \@files;
 }
 
+sub content_path {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return "$blop->{base}content/post/$self->{postid}";
+}
+
+sub content_fullurl {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return "$blop->{urlbase}/content/post/$self->{postid}";
+}
+
 sub num_files {
     my ($self) = @_;
     my $count = 0;
@@ -189,6 +201,12 @@ sub num_files {
 sub parsed_content {
     my ($self) = @_;
     my $markup = Blop::Markup->new(entry => $self);
+    return $markup->convert($self->{content});
+}
+
+sub update_content {
+    my ($self, %args) = @_;
+    my $markup = Blop::Markup->new(entry => $self, update => 1, %args);
     return $markup->convert($self->{content});
 }
 

@@ -15,7 +15,7 @@ my $content = $cgi->param("content");
 my $page;
 
 if ($pageid) {
-    $page = $blop->page(pageid => $pageid);
+    $page = $blop->page(pageid => $pageid) or die "Invalid pageid.\n";
 }
 
 my $title = $cgi->param("title");
@@ -64,6 +64,9 @@ EOSQL
     $sth->execute($title, $url, $now, $published, $content);
     $pageid = $sth->{mysql_insertid};
 
+    $page = $blop->page(pageid => $pageid);
+    $page->update_content;
+
     $blop->log("Added page $pageid");
 
     print "Content-Type: application/json\n\n";
@@ -84,6 +87,7 @@ if ($page->{published} ne $published) {
 }
 if ($page->{content} ne $content) {
     $args{content} = $content;
+    $page->{content} = $content;
 }
 
 if (%args) {
@@ -93,6 +97,8 @@ update pages set $sets where pageid=?
 EOSQL
     $sth->execute($pageid);
 }
+
+$page->update_content;
 
 $blop->log("Edited page $pageid");
 

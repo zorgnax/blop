@@ -108,3 +108,8 @@ input, textarea {
     border: 1px solid #cc6666;
 }
 
+.muted {
+    color: #cccccc;
+    font-size: smaller;
+}
+

@@ -16,7 +16,7 @@ my $content = $cgi->param("content");
 my $post;
 
 if ($postid) {
-    $post = $blop->post(postid => $postid);
+    $post = $blop->post(postid => $postid) or die "Invalid postid.\n";
 }
 
 my $url = $cgi->param("url");
@@ -100,6 +100,9 @@ EOSQL
         $sth->execute($postid, $tag);
     }
 
+    $post = $blop->post(postid => $postid);
+    $post->update_content;
+
     $blop->log("Added post $postid");
 
     print "Content-Type: application/json\n\n";
@@ -123,6 +126,7 @@ if ($post->{categoryid} ne $categoryid) {
 }
 if ($post->{content} ne $content) {
     $args{content} = $content;
+    $post->{content} = $content;
 }
 
 if (%args) {
@@ -146,6 +150,8 @@ for my $tag (@{$post->tags}) {
         $post->rm_tag($tag);
     }
 }
+
+$post->update_content;
 
 $blop->log("Edited post $postid");
 

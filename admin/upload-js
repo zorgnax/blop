@@ -9,7 +9,11 @@ if (!$blop->admin) {
 }
 
 my $postid = $cgi->param("postid");
-if (!$postid) {
+my $post;
+if ($postid) {
+    $post = $blop->post(postid => $postid) or die "Invalid postid.\n";
+}
+else {
     my $sth = $blop->dbh->prepare("insert into posts set added=now()");
     $sth->execute();
     $postid = $sth->{mysql_insertid};
@@ -31,18 +35,18 @@ if ($upload =~ m{/}) {
     die "File name can't include \"/\".\n";
 }
 
-my $file = "$dir/$upload";
-if ($upload eq "image.jpg" && -e $file) {
+my $path = "$dir/$upload";
+if ($upload eq "image.jpg" && -e $path) {
     my $i = 2;
     while (1) {
         $upload = "image$i.jpg";
-        $file = "$dir/$upload";
-        last if !-e $file;
+        $path = "$dir/$upload";
+        last if !-e $path;
         $i++;
     }
 }
 
-open my $fh, ">", $file or die "Unable to open $file: $!\n";
+open my $fh, ">", $path or die "Unable to open $path: $!\n";
 binmode $fh;
 my $buffer;
 while ($uploadfh2->read($buffer, 1024)) {
@@ -51,13 +55,19 @@ while ($uploadfh2->read($buffer, 1024)) {
 close $fh;
 
 my $url = "/content/post/$postid/$upload";
-
-print "Content-Type: application/json\n\n";
-print $blop->escape_json({
+my $file = {
     name => $upload,
+    path => $path,
     url => $url,
     fullurl => "$blop->{urlbase}$url",
-    size => $blop->human_readable(-s $file),
+    size => $blop->human_readable(-s $path),
     postid => $postid,
-});
+};
+
+if ($post) {
+    $post->update_content(file => $file);
+}
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json($file);
 

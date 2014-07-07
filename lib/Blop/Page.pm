@@ -77,6 +77,18 @@ sub num_files {
     return $count;
 }
 
+sub content_path {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return "$blop->{base}content/page/$self->{pageid}";
+}
+
+sub content_fullurl {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return "$blop->{urlbase}/content/page/$self->{pageid}";
+}
+
 sub was_published {
     my ($self) = @_;
     return 0 if !$self->{published};
@@ -115,7 +127,14 @@ EOSQL
 
 sub parsed_content {
     my ($self) = @_;
-    return "<p>" . $self->{content} . "</p>";
+    my $markup = Blop::Markup->new(entry => $self);
+    return $markup->convert($self->{content});
+}
+
+sub update_content {
+    my ($self, %args) = @_;
+    my $markup = Blop::Markup->new(entry => $self, update => 1, %args);
+    return $markup->convert($self->{content});
 }
 
 1;
