@@ -2,7 +2,7 @@
 use lib "../lib";
 use blopcgi;
 
-if (-s "$blop->{base}blop.conf") {
+if (-e "$blop->{base}blop.conf") {
     die <<EOERROR;
 Blop is already installed. Edit blop.conf directly if you need to work
 out issues with the database or login.

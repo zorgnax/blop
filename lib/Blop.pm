@@ -81,7 +81,7 @@ sub theme_url {
 
 sub read_conf {
     my ($self) = @_;
-    if (!-s "$self->{base}blop.conf") {
+    if (!-e "$self->{base}blop.conf") {
         print <<EOHEADER;
 Status: 303 See Other
 Location: $self->{urlbase}/admin/install

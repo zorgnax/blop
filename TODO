@@ -7,10 +7,10 @@ log postid pageid categoryid etc.
 anything in admin/ is not available_url
 show uncategorized in categories list
 theme paths from a theme object
+parsed comment display
 option to disable comments on all pages/posts
 fill comment name and email with your prior comment's
 dont rely on config::tiny or test::more
-allow blop.conf to be deleted, use .blop to find base directory
 order pages
 javascript to pop up images in gallery and thumbs
 [link] relative to entry

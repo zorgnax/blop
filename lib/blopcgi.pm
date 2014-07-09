@@ -26,7 +26,7 @@ sub find_bases {
     my $rel = "";
     my $dir = Cwd::cwd;
     while (length($dir)) {
-        if (-e "$dir/blop.conf" && -e "$dir/index.cgi") {
+        if (-e "$dir/.blop" && -e "$dir/index.cgi") {
             last;
         }
         $dir =~ s{(/+[^/]+)$}{};

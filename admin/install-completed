@@ -2,7 +2,7 @@
 use lib "../lib";
 use blopcgi;
 
-if (!-s "$blop->{base}blop.conf") {
+if (!-e "$blop->{base}blop.conf") {
     die "Blop has not been installed.\n";
 }
 
