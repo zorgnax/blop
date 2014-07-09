@@ -98,7 +98,7 @@ sub display_link {
         $title =~ s/"/&quot;/g;
         $title = " title=\"$title\"";
     }
-    my $url = $elem->{args}[0];
+    my $url = $elem->{args}[0] || "";
     my $blop = Blop::instance();
     if ($blop && $url =~ m{^/}) {
         $url = "$blop->{urlbase}$url";

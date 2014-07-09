@@ -13,3 +13,5 @@ fill comment name and email with your prior comment's
 dont rely on config::tiny or test::more
 allow blop.conf to be deleted, use .blop to find base directory
 Encorporate upload-page-js into upload-js
+order pages
+

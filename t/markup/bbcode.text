@@ -22,3 +22,7 @@ A [link /tohere.html "has \"inner\" quotes"]oh snap[/link] foo.
 
 [link /foo]should **be** in p tags[/link]
 
+[asdf]extra stuff
+
+[link]not in the link
+

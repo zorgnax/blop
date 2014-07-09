@@ -244,32 +244,34 @@ sub add_str_to_content {
 
 sub parse_bbcode_element {
     my ($self, $str) = @_;
-    my $elem;
-    if ($$str =~ m{\G \[ ([^/\s\]=]+) ([^\]]*) /]}xmsgc) {
-        my $tag = $1;
-        my $attr = $2;
-        $elem = {type => "bbcode", tag => $tag, attr => $attr};
-        $elem->{settings} = Blop::BBCode::settings($self, $elem->{tag}) || {};
+    return if $$str !~ m{\G \[ ([^/\s\]=]+) ([^\]]*?) (/?)\]}xmsgc;
+    my $tag = $1;
+    my $attr = $2;
+    my $slash = $3;
+    my $settings = Blop::BBCode::settings($self, $tag);
+    return "[$tag$attr/]" if $slash && !$settings;
+    my $elem = {type => "bbcode", tag => $tag, attr => $attr};
+    $elem->{settings} = $settings;
+    return $elem if $slash && $settings;
+    if ($settings && $settings->{norecurse}) {
+        $$str =~ m{\G (.*?) \[/\Q$tag\E\] }xmsgc;
+        my $content = $1;
+        $elem->{content} = $content;
+        return $elem;
     }
-    elsif ($$str =~ m{\G \[ ([^/\s\]=]+) ([^\]]*) \]}xmsgc) {
-        my $tag = $1;
-        my $attr = $2;
-        my $content;
-        $elem = {type => "bbcode", tag => $tag, attr => $attr};
-        $elem->{settings} = Blop::BBCode::settings($self, $elem->{tag}) || {};
-        if ($elem->{settings}{norecurse}) {
-            $$str =~ m{\G (.*?) \[/\Q$tag\E\] }xmsgc;
-            $content = $1;
-            $elem->{content} = $content;
-        }
-        else {
-            $content = $self->parse_paragraph_content($str);
-            if ($$str !~ m{\G \[/\Q$tag\E\] }xmsgc) {
-                return ["[$tag$attr]", $content->{content}];
-            }
-            $elem->{content} = $content->{content};
-        }
+    my $content = $self->parse_paragraph_content($str);
+    $content = $content->{content};
+    my $close;
+    if ($$str =~ m{\G (\[/\Q$tag\E\]) }xmsgc) {
+        $close = $1;
     }
+    if (!$settings) {
+        return ["[$tag$attr]", $content, $close];
+    }
+    if (!$close) {
+        return [$elem, $content];
+    }
+    $elem->{content} = $content;
     return $elem;
 }
 
