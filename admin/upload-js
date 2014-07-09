@@ -9,38 +9,54 @@ if (!$blop->admin) {
 }
 
 my $postid = $cgi->param("postid");
-my $post;
+my $pageid = $cgi->param("pageid");
+my $entry;
 if ($postid) {
-    $post = $blop->post(postid => $postid) or die "Invalid postid.\n";
+    $entry = $blop->post(postid => $postid) or die "Invalid postid.\n";
 }
-else {
+elsif ($pageid) {
+    $entry = $blop->page(pageid => $pageid) or die "Invalid pageid.\n";
+}
+elsif (defined $postid) {
     my $sth = $blop->dbh->prepare("insert into posts set added=now()");
     $sth->execute();
     $postid = $sth->{mysql_insertid};
+    $entry = bless {postid => $postid}, "Blop::Post";
+}
+elsif (defined $pageid) {
+    my $sth = $blop->dbh->prepare("insert into pages set added=now()");
+    $sth->execute();
+    $pageid = $sth->{mysql_insertid};
+    $entry = bless {pageid => $pageid}, "Blop::Post";
+}
+else {
+    die "An entry is required.\n";
 }
 
 my $uploadfh = $cgi->upload("file") or die "Couldn't find upload filehandle.\n";
 my $uploadfh2 = $uploadfh->handle;
 
-my $dir = "$blop->{base}content/post/$postid";
+my $dir = $entry->content_path;
 if (!-e $dir) {
     mkdir $dir or die "Unable to mkdir $dir: $!\n";
 }
 
-my $upload = $cgi->param("file") or die "No file name given.\n";
-if ($upload =~ m{(^|/)\.\.($|/)}) {
+my $name = $cgi->param("file") or die "No file name given.\n";
+if ($name =~ m{(^|/)\.\.($|/)}) {
     die "File name can't include \"..\".\n";
 }
-if ($upload =~ m{/}) {
+if ($name =~ m{/}) {
     die "File name can't include \"/\".\n";
 }
 
-my $path = "$dir/$upload";
-if ($upload eq "image.jpg" && -e $path) {
+my $path = "$dir/$name";
+
+# iPhone names all images image.jpg, so don't overwrite each one
+if ($name eq "image.jpg" && -e $path) {
     my $i = 2;
     while (1) {
-        $upload = "image$i.jpg";
-        $path = "$dir/$upload";
+        $name = "image$i.jpg";
+        $path = "$dir/$name";
         last if !-e $path;
         $i++;
     }
@@ -54,19 +70,18 @@ while ($uploadfh2->read($buffer, 1024)) {
 }
 close $fh;
 
-my $url = "/content/post/$postid/$upload";
+my $url = $entry->content_url . "/$name";
 my $file = {
-    name => $upload,
+    name => $name,
     path => $path,
     url => $url,
     fullurl => "$blop->{urlbase}$url",
     size => $blop->human_readable(-s $path),
-    postid => $postid,
 };
+$file->{pageid} = $pageid if $pageid;
+$file->{postid} = $postid if $postid;
 
-if ($post) {
-    $post->update_content(file => $file);
-}
+$entry->update_content(file => $file);
 
 print "Content-Type: application/json\n\n";
 print $blop->escape_json($file);

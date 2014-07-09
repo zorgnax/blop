@@ -9,8 +9,22 @@ if (!$blop->admin) {
 }
 
 my $postid = $cgi->param("postid");
-if (!$postid) {
-    die "A postid is required.\n";
+my $pageid = $cgi->param("pageid");
+my $entry;
+if ($postid) {
+    if ($postid !~ /^\d+$/) {
+        die "Invalid postid.\n";
+    }
+    $entry = bless {postid => $postid}, "Blop::Post";
+}
+elsif ($pageid) {
+    if ($pageid !~ /^\d+$/) {
+        die "Invalid pageid.\n";
+    }
+    $entry = bless {pageid => $pageid}, "Blop::Page";
+}
+else {
+    die "An entry is required.\n";
 }
 
 my $name = $cgi->param("name");
@@ -21,8 +35,8 @@ if ($name =~ m{(^|/)\.\.($|/)}) {
     die "Name cannot traverse upwards.\n";
 }
 
-my $file = "$blop->{base}content/post/$postid/$name";
-unlink $file;
+my $path = $entry->content_path . "/$name";
+unlink $path;
 
 print "Content-Type: application/json\n\n";
 print $blop->escape_json({

@@ -181,10 +181,15 @@ sub content_path {
     return "$blop->{base}content/post/$self->{postid}";
 }
 
+sub content_url {
+    my ($self) = @_;
+    return "/content/post/$self->{postid}";
+}
+
 sub content_fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return "$blop->{urlbase}/content/post/$self->{postid}";
+    return $blop->{urlbase} . $self->content_url;
 }
 
 sub num_files {

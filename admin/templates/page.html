@@ -53,8 +53,8 @@ var editor = new Editor({divId: "#editor"});
 
 var upload = new Upload({
     divId: "#upload",
-    processUrl: "[% urlbase %]/admin/upload-page-js",
-    deleteUrl: "[% urlbase %]/admin/delete-file-page-js",
+    processUrl: "[% urlbase %]/admin/upload-js",
+    deleteUrl: "[% urlbase %]/admin/delete-file-js",
     editor: editor
 });
 upload.extraParams = function () {

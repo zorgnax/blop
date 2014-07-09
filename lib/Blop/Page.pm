@@ -83,10 +83,15 @@ sub content_path {
     return "$blop->{base}content/page/$self->{pageid}";
 }
 
+sub content_url {
+    my ($self) = @_;
+    return "/content/page/$self->{pageid}";
+}
+
 sub content_fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return "$blop->{urlbase}/content/page/$self->{pageid}";
+    return $blop->{urlbase} . $self->content_url;
 }
 
 sub was_published {

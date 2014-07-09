@@ -336,6 +336,7 @@ sub parse_html_content {
 
 sub convert {
     my ($self, $markup) = @_;
+    return "" if !defined $markup;
     $markup =~ s/\r\n|\r|\n/\n/g;
     my $elem = $self->parse(\$markup);
     my $html = $self->display($elem);
