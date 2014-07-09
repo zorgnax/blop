@@ -35,21 +35,9 @@ Features
 
 - Rich text editing is more trouble than it's worth.
 
+- Unlike Wordpress, all links are based at /, not http://.
 
-Seven Unforgivable Sins of WordPress
-====================================
+- Tags can be anything, even ":)" and ":(".
 
-- All the links to media, posts, categories, etc are absolute
-  (http://example.com/category/foo)
-
-- Tags automatically are converted to slugs of just the alphanumerics
-  making it impossible to have tags like ":)" and ":(".
-
-- Posting format is html, which makes it hard to write by hand. Plugins
-  which add features to the editing format have no standard way of extending
-  so they use search and replaces and that can cause conflicts.
-
-- Written in PHP
-
-- Doesn't let you edit your own comments.
+- Lets you edit your own comments.
 

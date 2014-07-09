@@ -258,6 +258,22 @@ EOSQL
     return $count;
 }
 
+sub last_comment {
+    my ($self) = @_;
+    return $self->{last_comment} if exists $self->{last_comment};
+    $self->{last_comment} = undef;
+    my $cookie = $self->cgi->cookie("cmnt") or return;
+    my $sth = $self->dbh->prepare(<<EOSQL);
+select commentid, name, email from comments where cookie=?
+order by ifnull(edited, added) desc limit 1
+EOSQL
+    $sth->execute($cookie);
+    my $comment = $sth->fetchrow_hashref();
+    $comment = bless $comment, "Blop::Comment" if $comment;
+    $self->{last_comment} = $comment;
+    return $comment;
+}
+
 sub date_archives {
     my ($self) = @_;
     return $self->{date_archives} if $self->{date_archives};

@@ -49,10 +49,10 @@
 <input type="hidden" name="bake" value="1"/>
 
 <table><tr><td><label for="name">Name:</label></td>
-<td><input id="name" name="name" type="text" value=""/><span class="name-error pform-error"></span></td></tr>
+<td><input id="name" name="name" type="text" value="[% blop.last_comment.name | html %]"/><span class="name-error pform-error"></span></td></tr>
 
 <tr><td><label for="email">Email:</label></td>
-<td><input id="email" name="email" type="text" value=""/><span class="email-error pform-error"></span></td></tr>
+<td><input id="email" name="email" type="text" value="[% blop.last_comment.email %]"/><span class="email-error pform-error"></span></td></tr>
 
 <tr><td><label for="content">Comment:</label></td>
 <td><textarea id="content" name="content"></textarea></span></td></tr>

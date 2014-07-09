@@ -8,7 +8,6 @@ anything in admin/ is not available_url
 show uncategorized in categories list
 theme paths from a theme object
 option to disable comments on all pages/posts
-fill comment name and email with your prior comment's
 dont rely on config::tiny or test::more
 order pages
 javascript to pop up images in gallery and thumbs
