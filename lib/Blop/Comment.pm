@@ -43,7 +43,8 @@ sub editable {
 
 sub parsed_content {
     my ($self) = @_;
-    return "<p>" . $self->{content} . "</p>";
+    my $markup = Blop::Markup->new(entry => $self, comment => 1);
+    return $markup->convert($self->{content});
 }
 
 sub added_to {

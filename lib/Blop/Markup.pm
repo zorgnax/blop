@@ -249,11 +249,12 @@ sub parse_bbcode_element {
     my $attr = $2;
     my $slash = $3;
     my $settings = Blop::BBCode::settings($self, $tag);
-    return "[$tag$attr/]" if $slash && !$settings;
+    my $valid_bbcode = $settings && ($settings->{comment} || !$self->{comment});
+    return "[$tag$attr/]" if $slash && !$valid_bbcode;
     my $elem = {type => "bbcode", tag => $tag, attr => $attr};
     $elem->{settings} = $settings;
-    return $elem if $slash && $settings;
-    if ($settings && $settings->{norecurse}) {
+    return $elem if $slash && $valid_bbcode;
+    if ($valid_bbcode && $settings->{norecurse}) {
         $$str =~ m{\G (.*?) \[/\Q$tag\E\] }xmsgc;
         my $content = $1;
         $elem->{content} = $content;
@@ -265,7 +266,7 @@ sub parse_bbcode_element {
     if ($$str =~ m{\G (\[/\Q$tag\E\]) }xmsgc) {
         $close = $1;
     }
-    if (!$settings) {
+    if (!$valid_bbcode) {
         return ["[$tag$attr]", $content, $close];
     }
     if (!$close) {
@@ -444,16 +445,26 @@ sub display_code {
 
 sub display_html {
     my ($self, $elem) = @_;
+    my $pre = "";
+    my $content = "";
+    my $post = "";
     if ($elem->{tag} eq "!--") {
-        return "<!--$elem->{attr}-->";
+        $pre = "<!--$elem->{attr}-->";
     }
     elsif ($elem->{content}) {
-        return "<$elem->{tag}$elem->{attr}>" .
-               $self->display($elem->{content}) . "</$elem->{tag}>";
+        $pre = "<$elem->{tag}$elem->{attr}>";
+        $content = $self->display($elem->{content});
+        $post = "</$elem->{tag}>";
     }
     else {
-        return "<$elem->{tag}$elem->{attr}/>";
+        $pre = "<$elem->{tag}$elem->{attr}/>";
     }
+    if ($self->{comment}) {
+        my $blop = Blop::instance() or return "";
+        $pre = $blop->escape_html($pre);
+        $post = $blop->escape_html($post);
+    }
+    return "$pre$content$post";
 }
 
 sub display_bold {

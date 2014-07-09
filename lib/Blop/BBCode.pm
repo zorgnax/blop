@@ -7,7 +7,7 @@ use Image::Magick;
 my %bbcode = (
     hr => {block => 1, display => \&display_hr},
     link => {display => \&display_link},
-    code => {block => 1, norecurse => 1, display => \&display_code},
+    code => {block => 1, norecurse => 1, comment => 1, display => \&display_code},
     listing => {block => 1, norecurse => 1, display => \&display_listing},
     gallery => {block => 1, norecurse => 1, update => \&update_gallery,
                 display => \&display_gallery},
@@ -37,6 +37,9 @@ sub settings {
 
 sub display {
     my ($markup, $elem) = @_;
+    if ($markup->{comment} && !$elem->{settings}{comment}) {
+        return "";
+    }
     if ($elem->{settings}{update} || $elem->{settings}{display}) {
         parse_attr($markup, $elem);
     }
