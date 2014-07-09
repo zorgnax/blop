@@ -8,6 +8,7 @@
 
 <h2>[% post.title || "Post " _ post.postid | html %]</h2>
 <span class="published">[% post.published %]</span>
+[% IF blop.admin %]<a href="[% urlbase %]/admin/post/[% post.postid %]">edit</a>[% END %]
 <div class="content">
 [% post.parsed_content %]
 </div>

@@ -4,6 +4,7 @@
 
 <h2>[% page.title | html %]</h2>
 <span class="published">[% page.published %]</span>
+[% IF blop.admin %]<a href="[% urlbase %]/admin/page/[% page.pageid %]">edit</a>[% END %]
 <div class="content">
 [% page.parsed_content %]
 </div>

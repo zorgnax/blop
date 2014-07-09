@@ -6,15 +6,12 @@
 [% IF post.category %]
 <div class="category"><a href="[% urlbase %]/[% post.category.url | uri %]">[% post.category.name %]</a></div>
 [% END %]
-[% IF post.title %]
-<h2><a href="[% urlbase %]/[% post.url | uri %]">[% post.title | html %]</a></h2>
-[% ELSE %]
-<h2><a href="[% urlbase %]/[% post.url | uri %]">Post [% post.postid %]</a></h2>
-[% END %]
+<h2><a href="[% urlbase %]/[% post.url | uri %]">[% post.title || Post _ post.postid | html %]</a></h2>
 <span class="published"><a href="[% urlbase %]/[% post.url | uri %]">[% post.published %]</a></span>
 [% IF post.num_comments %]
 <span class="num_comments">[% post.num_comments %] comment[% IF post.num_comments != 1 %]s[% END %]</span>
 [% END %]
+[% IF blop.admin %]<a href="[% urlbase %]/admin/post/[% post.postid %]">edit</a>[% END %]
 <div class="content">
 [% post.parsed_content %]
 </div>
