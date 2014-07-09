@@ -81,7 +81,7 @@ my $file = {
 $file->{pageid} = $pageid if $pageid;
 $file->{postid} = $postid if $postid;
 
-$entry->update_content(file => $file);
+$entry->update_content(file => $name);
 
 print "Content-Type: application/json\n\n";
 print $blop->escape_json($file);

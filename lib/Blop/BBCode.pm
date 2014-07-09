@@ -138,7 +138,7 @@ sub update_gallery {
     my ($markup, $elem) = @_;
     my $entry = $markup->{entry} or return;
     if ($markup->{file}) {
-        create_thumb($entry, $markup->{file}{name}, $elem->{hash}{size}, "force");
+        create_thumb($entry, $markup->{file}, $elem->{hash}{size}, "force");
         return;
     }
     my $files = $entry->files;
@@ -152,7 +152,7 @@ sub update_thumb {
     my $entry = $markup->{entry} or return;
     my $name = $elem->{args}[0] or return;
     if ($markup->{file}) {
-        if ($markup->{file}{name} eq $name) {
+        if ($markup->{file} eq $name) {
             create_thumb($entry, $name, $elem->{hash}{size}, "force");
         }
         return;
