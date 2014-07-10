@@ -10,5 +10,6 @@ theme paths from a theme object
 option to disable comments on all pages/posts
 dont rely on config::tiny or test::more
 order pages
-javascript to pop up images in gallery and thumbs
 [link] relative to entry
+last edit by user not when admin approves it
+

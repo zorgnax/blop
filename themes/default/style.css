@@ -113,3 +113,25 @@ input, textarea {
     font-size: smaller;
 }
 
+.image-viewer {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.75);
+    text-align: center;
+    padding: 10px;
+}
+
+.image-viewer img {
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    margin: auto;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+

@@ -221,7 +221,9 @@ sub display_thumb {
     my $thumb = $entry->content_fullurl . "/thumb/$name";
     $thumb =~ s{(\.\w+)$}{.$size$1};
     my $url = $entry->content_fullurl . "/$name";
-    my $html = "<a href=\"$url\"><img src=\"$thumb\"/></a>\n";
+    my $html = "<span class=\"thumb\">";
+    $html .= "<a href=\"$url\"><img src=\"$thumb\"/></a>";
+    $html .= "</span>\n";
     return $html;
 }
 
@@ -230,7 +232,7 @@ sub display_image {
     my $entry = $markup->{entry} or return "";
     my $name = $elem->{args}[0] or return "";
     my $url = $entry->content_fullurl . "/$name";
-    my $html = "<img src=\"$url\"/>\n";
+    my $html = "<span class=\"image\"><img src=\"$url\"/></span>\n";
     return $html;
 }
 
