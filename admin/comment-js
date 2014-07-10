@@ -138,11 +138,14 @@ if ($blop->admin) {
 }
 
 if (%args) {
+    if (!$args{status}) {
+        $args{edited} = $now;
+    }
     my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
     my $sth = $blop->dbh->prepare(<<EOSQL);
-update comments set $sets, edited=? where commentid=?
+update comments set $sets where commentid=?
 EOSQL
-    $sth->execute($now, $commentid);
+    $sth->execute($commentid);
 }
 
 print "Content-Type: application/json\n\n";
