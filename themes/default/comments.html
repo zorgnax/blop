@@ -1,3 +1,6 @@
+[% RETURN IF entry.postid && !blop.conf.post_comments %]
+[% RETURN IF entry.pageid && !blop.conf.page_comments %]
+
 <br/>
 
 <h3>[% entry.num_comments %] Comment[% IF entry.num_comments != 1 %]s[% END %]</h3>

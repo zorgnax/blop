@@ -81,7 +81,14 @@ if (!$commentid) {
     die "Content must be defined.\n" if !defined $content;
     die "A postid or a pageid is required.\n" if !$postid && !$pageid;
 
-    my $status = "pending";
+    if ($postid && !$blop->{conf}{post_comments}) {
+        die "Post comments not enabled.\n";
+    }
+    if ($pageid && !$blop->{conf}{page_comments}) {
+        die "Page comments not enabled.\n";
+    }
+
+    my $status = $blop->{conf}{mod_comments} ? "pending" : "approved";
 
     my $sth = $blop->dbh->prepare(<<EOSQL);
 insert into comments set

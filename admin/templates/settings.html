@@ -17,6 +17,17 @@
 <label for="catlatest">Category Listing Pages Show Latest Post</label>
 <input id="catlatest" name="catlatest" type="checkbox"[% IF blop.conf.cat_latest %] checked="checked"[% END %]/><span class="catlatest-error aform-error"></span>
 
+<h3>Comments</h3>
+
+<label for="postcomments">Comments on Posts</label>
+<input id="postcomments" name="postcomments" type="checkbox"[% IF blop.conf.post_comments %] checked="checked"[% END %]/><span class="postcomments-error aform-error"></span>
+
+<label for="pagecomments">Comments on Pages</label>
+<input id="pagecomments" name="pagecomments" type="checkbox"[% IF blop.conf.page_comments %] checked="checked"[% END %]/><span class="pagecomments-error aform-error"></span>
+
+<label for="modcomments">Moderate Comments</label>
+<input id="modcomments" name="modcomments" type="checkbox"[% IF blop.conf.mod_comments %] checked="checked"[% END %]/><span class="modcomments-error aform-error"></span>
+
 <h3>Gallery Default Sizes</h3>
 
 <p class="muted">Thumbnail format uses ImageMagick's geometry argument: <a href="http://www.imagemagick.org/script/command-line-processing.php#geometry" target="_blank">http://www.imagemagick.org/script/command-line-processing.php#geometry</a>.</p>

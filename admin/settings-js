@@ -47,6 +47,30 @@ if (diff("catlatest", "cat_latest")) {
     $args{cat_latest} = $cgi->param("catlatest") || "";
 }
 
+if (diff("postcomments", "post_comments")) {
+    if ($cgi->param("postcomments") !~ /^(1|0|on|)$/) {
+        $out->{postcommentsError} = "Invalid.\n";
+        $out->{error} = 1;
+    }
+    $args{post_comments} = $cgi->param("postcomments") || "";
+}
+
+if (diff("pagecomments", "page_comments")) {
+    if ($cgi->param("pagecomments") !~ /^(1|0|on|)$/) {
+        $out->{pagecommentsError} = "Invalid.\n";
+        $out->{error} = 1;
+    }
+    $args{page_comments} = $cgi->param("pagecomments") || "";
+}
+
+if (diff("modcomments", "mod_comments")) {
+    if ($cgi->param("modcomments") !~ /^(1|0|on|)$/) {
+        $out->{modcommentsError} = "Invalid.\n";
+        $out->{error} = 1;
+    }
+    $args{mod_comments} = $cgi->param("modcomments") || "";
+}
+
 if (diff("gallerysmall", "gallery_small")) {
     if ($cgi->param("gallerysmall") =~ /\s+/) {
         $out->{gallerysmallError} = "Invalid.\n";
