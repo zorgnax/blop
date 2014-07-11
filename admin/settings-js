@@ -71,6 +71,18 @@ if (diff("gallerylarge", "gallery_large")) {
     $args{gallery_large} = $cgi->param("gallerylarge");
 }
 
+if (diff("metadesc", "meta_description")) {
+    $args{meta_description} = $cgi->param("metadesc");
+}
+
+if (diff("metatags", "meta_tags")) {
+    $args{meta_tags} = $cgi->param("metatags");
+}
+
+if (diff("metaauthor", "meta_author")) {
+    $args{meta_author} = $cgi->param("metaauthor");
+}
+
 if ($out->{error}) {
     print "Content-Type: application/json\n\n";
     print $blop->escape_json($out);
