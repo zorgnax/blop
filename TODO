@@ -11,5 +11,4 @@ option to disable comments on all pages/posts
 dont rely on config::tiny or test::more
 order pages
 [link] relative to entry
-last edit by user not when admin approves it
-
+sections and widgets (sidebar, footer, header)

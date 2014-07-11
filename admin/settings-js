@@ -1,0 +1,97 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my %args;
+my $out = {};
+
+if (diff("title")) {
+    if (!$cgi->param("title")) {
+        $out->{titleError} = "Please enter a title.\n";
+        $out->{error} = 1;
+    }
+    $args{title} = $cgi->param("title");
+}
+
+if (diff("slogan")) {
+    $args{slogan} = $cgi->param("slogan");
+}
+
+if (diff("email")) {
+    if ($cgi->param("email") !~ /\S+\@\S+\.\S+/) {
+        $out->{emailError} = "This email doesn't look right.\n";
+        $out->{error} = 1;
+    }
+    $args{email} = $cgi->param("email");
+}
+
+if (diff("ppp")) {
+    if ($cgi->param("ppp") !~ /^\d+$/) {
+        $out->{pppError} = "This should be a number.\n";
+        $out->{error} = 1;
+    }
+    $args{ppp} = $cgi->param("ppp");
+}
+
+if (diff("catlatest", "cat_latest")) {
+    if ($cgi->param("catlatest") !~ /^(1|0|on|)$/) {
+        $out->{catlatestError} = "Invalid.\n";
+        $out->{error} = 1;
+    }
+    $args{cat_latest} = $cgi->param("catlatest") || "";
+}
+
+if (diff("gallerysmall", "gallery_small")) {
+    if ($cgi->param("gallerysmall") =~ /\s+/) {
+        $out->{gallerysmallError} = "Invalid.\n";
+        $out->{error} = 1;
+    }
+    $args{gallery_small} = $cgi->param("gallerysmall");
+}
+
+if (diff("gallerymedium", "gallery_medium")) {
+    if ($cgi->param("gallerymedium") =~ /\s+/) {
+        $out->{gallerymediumError} = "Invalid.\n";
+        $out->{error} = 1;
+    }
+    $args{gallery_medium} = $cgi->param("gallerymedium");
+}
+
+if (diff("gallerylarge", "gallery_large")) {
+    if ($cgi->param("gallerylarge") =~ /\s+/) {
+        $out->{gallerylargeError} = "Invalid.\n";
+        $out->{error} = 1;
+    }
+    $args{gallery_large} = $cgi->param("gallerylarge");
+}
+
+if ($out->{error}) {
+    print "Content-Type: application/json\n\n";
+    print $blop->escape_json($out);
+    exit;
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+insert into config set name=?, value=? on duplicate key update value=?
+EOSQL
+for my $field (keys %args) {
+    $sth->execute($field, $args{$field}, $args{$field});
+}
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1, mesg => "Settings have been updated!"});
+
+sub diff {
+    my ($field, $conf_field) = @_;
+    $conf_field ||= $field;
+    my $conf_value = $blop->{conf}{$conf_field} || "";
+    my $cgi_value = $cgi->param($field) || "";
+    return $cgi_value ne $conf_value;
+}
+

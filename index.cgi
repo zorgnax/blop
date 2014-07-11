@@ -50,12 +50,13 @@ if ($page) {
 not_found();
 
 sub listing {
-    if ($blop->{conf}{catlatest} && $category) {
+    if ($blop->{conf}{cat_latest} && $category) {
         $post = $category->latest_post() or die "No posts.\n";
         post();
     }
 
     my $limit = $cgi->param("limit");
+    $limit = $blop->{conf}{ppp} if !defined $limit;
     $limit = 3 if !defined $limit;
     if ($limit !~ /^\d+$/) {
         die "Invalid limit param.\n";

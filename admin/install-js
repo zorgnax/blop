@@ -16,8 +16,15 @@ if ($cgi->param("email") && $cgi->param("email") !~ /\S+\@\S+\.\S+/) {
     $out->{error} = 1;
 }
 
-if (!$cgi->param("pass")) {
+my $pass = $cgi->param("pass") || "";
+if (!$pass) {
     $out->{passError} = "Please enter a password.";
+    $out->{error} = 1;
+}
+
+my $confirm = $cgi->param("confirm") || "";
+if ($confirm ne $pass) {
+    $out->{confirmError} = "Password confirmation didn't match.";
     $out->{error} = 1;
 }
 
@@ -117,7 +124,11 @@ $sth->execute(title => $cgi->param("title"));
 $sth->execute(slogan => $cgi->param("slogan"));
 $sth->execute(email => $cgi->param("email"));
 $sth->execute(pass => $cgi->param("pass"));
+$sth->execute(ppp => 4);
 $sth->execute(theme => "default");
+$sth->execute(gallery_small => "x125>");
+$sth->execute(gallery_medium => "x250>");
+$sth->execute(gallery_large => "700>");
 
 $sth = $dbh->prepare("insert into categories set special=?, name=?, url=?");
 $sth->execute(allcat => "All", "");

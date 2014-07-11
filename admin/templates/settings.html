@@ -1,0 +1,47 @@
+[% PROCESS header.html title="Settings" x1="Settings" x2="General" %]
+
+<form id="settings" name="settings" method="post" class="aform">
+
+<label for="title">Blog Title</label>
+<input id="title" name="title" type="text" value="[% blop.conf.title | html %]"/><span class="title-error aform-error"></span>
+
+<label for="slogan">Blog Slogan</label>
+<input id="slogan" name="slogan" type="text" value="[% blop.conf.slogan | html %]"/><span class="slogan-error aform-error"></span>
+
+<label for="email">Admin Email</label>
+<input id="email" name="email" type="text" value="[% blop.conf.email %]"/><span class="email-error aform-error"></span>
+
+<label for="ppp">Posts Per Page (PPP)</label>
+<input id="ppp" name="ppp" type="text" value="[% blop.conf.ppp %]"/><span class="ppp-error aform-error"></span>
+
+<label for="catlatest">Category Listing Pages Show Latest Post</label>
+<input id="catlatest" name="catlatest" type="checkbox"[% IF blop.conf.cat_latest %] checked="checked"[% END %]/><span class="catlatest-error aform-error"></span>
+
+<h3>Gallery Default Sizes</h3>
+
+<p class="muted">Thumbnail format uses ImageMagick's geometry argument: <a href="http://www.imagemagick.org/script/command-line-processing.php#geometry" target="_blank">http://www.imagemagick.org/script/command-line-processing.php#geometry</a>.</p>
+
+<label for="gallerysmall">Small Thumbnails</label>
+<input id="gallerysmall" name="gallerysmall" type="text" value="[% blop.conf.gallery_small %]"/><span class="gallerysmall-error aform-error"></span>
+
+<label for="gallerymedium">Medium Thumbnails</label>
+<input id="gallerymedium" name="gallerymedium" type="text" value="[% blop.conf.gallery_medium %]"/><span class="gallerymedium-error aform-error"></span>
+
+<label for="gallerylarge">Large Thumbnails</label>
+<input id="gallerylarge" name="gallerylarge" type="text" value="[% blop.conf.gallery_large %]"/><span class="gallerylarge-error aform-error"></span>
+
+<br/>
+
+<input type="submit" value="Update Settings"/>
+<span class="aform-mesg aform-error"></span>
+
+</form>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#settings", processUrl: "[% urlbase %]/admin/settings-js"});
+</script>
+
+[% PROCESS footer.html %]
+

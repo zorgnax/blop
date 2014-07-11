@@ -22,7 +22,7 @@ AForm.prototype.onSubmit = function (event) {
 AForm.prototype.onDone = function (data, textStatus, jqXHR) {
     var self = this;
     this.form.find(":input[name]").each(function () {
-        var errorDiv = self.form.find("." + this.name + "Error");
+        var errorDiv = self.form.find("." + this.name + "-error");
         if (this.name + "Error" in data) {
             errorDiv.text(data[this.name + "Error"]);
             $(this).css("backgroundColor", "lightpink");

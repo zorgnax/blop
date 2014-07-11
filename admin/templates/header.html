@@ -33,4 +33,9 @@
 <a href="[% urlbase %]/admin/comments"[% IF x2 == "All" %] class="selected"[% END %]>All</a>
 <a href="[% urlbase %]/admin/comments/pending"[% IF x2 == "Pending" %] class="selected"[% END %]>Pending</a>
 </div>
+[% ELSIF x1 == "Settings" %]
+<div class="alinks">
+<a href="[% urlbase %]/admin/settings"[% IF x2 == "General" %] class="selected"[% END %]>General</a>
+<a href="[% urlbase %]/admin/change-password"[% IF x2 == "Change Password" %] class="selected"[% END %]>Change Password</a>
+</div>
 [% END %]
