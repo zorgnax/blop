@@ -29,12 +29,8 @@ elsif (!$category || $category->{name} ne $name) {
     }
 }
 
-my $url = $cgi->param("url");
-if (!defined $url || !length($url)) {
-    $out->{urlError} = "URL cannot be empty.";
-    $out->{error} = 1;
-}
-elsif (!$category || $category->{url} ne $url) {
+my $url = $cgi->param("url") || "";
+if (!$category || $category->{url} ne $url) {
     if (!$blop->url_available($url)) {
         $out->{urlError} = "Unavailable.";
         $out->{error} = 1;

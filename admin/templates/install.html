@@ -5,22 +5,33 @@
 
 <form id="install" name="install" class="aform" method="post" autocomplete="off">
 
-<label for="title">Blog Title</label>
+<div class="aentry">
+<label for="title">Blog Title</label><br/>
 <input id="title" name="title" type="text"/><span class="title-error aform-error"></span>
+</div>
 
-<label for="slogan">Blog Slogan</label>
+<div class="aentry">
+<label for="slogan">Blog Slogan</label><br/>
 <input id="slogan" name="slogan" type="text"/><span class="slogan-error aform-error"></span>
+</div>
 
-<label for="email">Admin Email</label>
+<div class="aentry">
+<label for="email">Admin Email</label><br/>
 <input id="email" name="email" type="text"/><span class="email-error aform-error"></span>
+</div>
 
-<label for="pass">Admin Password</label>
+<div class="aentry">
+<label for="pass">Admin Password</label><br/>
 <input id="pass" name="pass" type="password"/><span class="pass-error aform-error"></span>
+</div>
 
-<label for="confirm">Confirm Password</label>
+<div class="aentry">
+<label for="confirm">Confirm Password</label><br/>
 <input id="confirm" name="confirm" type="password"/><span class="confirm-error aform-error"></span>
+</div>
 
-<label for="timezone">Timezone</label>
+<div class="aentry">
+<label for="timezone">Timezone</label><br/>
 <select id="timezone" name="timezone">
 [% FOREACH region IN time_zones %]
 [% IF !region.region %]
@@ -34,18 +45,27 @@
 [% END %]
 [% END %]
 </select>
+</div>
 
-<label for="dbhost">Database Host</label>
+<div class="aentry">
+<label for="dbhost">Database Host</label><br/>
 <input id="dbhost" name="dbhost" type="text"/><span class="dbhost-error aform-error"></span>
+</div>
 
-<label for="dbuser">Database Username</label>
+<div class="aentry">
+<label for="dbuser">Database Username</label><br/>
 <input id="dbuser" name="dbuser" type="text"/><span class="dbuser-error aform-error"></span>
+</div>
 
-<label for="dbpass">Database Password</label>
+<div class="aentry">
+<label for="dbpass">Database Password</label><br/>
 <input id="dbpass" name="dbpass" type="password"/><span class="dbpass-error aform-error"></span>
+</div>
 
-<label for="dbtable">Database Table</label>
+<div class="aentry">
+<label for="dbtable">Database Table</label><br/>
 <input id="dbtable" name="dbtable" type="text"/><span class="dbtable-error aform-error"></span>
+</div>
 
 <br/>
 

@@ -2,22 +2,33 @@
 
 <form id="settings" name="settings" method="post" class="aform">
 
-<label for="title">Blog Title</label>
+<div class="aentry">
+<label for="title">Blog Title</label><br/>
 <input id="title" name="title" type="text" value="[% blop.conf.title | html %]"/><span class="title-error aform-error"></span>
+</div>
 
-<label for="slogan">Blog Slogan</label>
+<div class="aentry">
+<label for="slogan">Blog Slogan</label><br/>
 <input id="slogan" name="slogan" type="text" value="[% blop.conf.slogan | html %]"/><span class="slogan-error aform-error"></span>
+</div>
 
-<label for="email">Admin Email</label>
+<div class="aentry">
+<label for="email">Admin Email</label><br/>
 <input id="email" name="email" type="text" value="[% blop.conf.email %]"/><span class="email-error aform-error"></span>
+</div>
 
-<label for="ppp">Posts Per Page (PPP)</label>
+<div class="aentry">
+<label for="ppp">Posts Per Page (PPP)</label><br/>
 <input id="ppp" name="ppp" type="text" value="[% blop.conf.ppp %]"/><span class="ppp-error aform-error"></span>
+</div>
 
-<label for="catlatest">Category Listing Pages Show Latest Post</label>
+<div class="aentry">
+<label for="catlatest">Category Listing Pages Show Latest Post</label><br/>
 <input id="catlatest" name="catlatest" type="checkbox"[% IF blop.conf.cat_latest %] checked="checked"[% END %]/><span class="catlatest-error aform-error"></span>
+</div>
 
-<label for="timezone">Timezone</label>
+<div class="aentry">
+<label for="timezone">Timezone</label><br/>
 <select id="timezone" name="timezone">
 [% FOREACH region IN time_zones %]
 [% IF !region.region %]
@@ -32,45 +43,66 @@
 [% END %]
 </select>
 [% blop.now.str %]
+</div>
 
 <h3>Comments</h3>
 
-<label for="postcomments">Comments on Posts</label>
+<div class="aentry">
+<label for="postcomments">Comments on Posts</label><br/>
 <input id="postcomments" name="postcomments" type="checkbox"[% IF blop.conf.post_comments %] checked="checked"[% END %]/><span class="postcomments-error aform-error"></span>
+</div>
 
-<label for="pagecomments">Comments on Pages</label>
+<div class="aentry">
+<label for="pagecomments">Comments on Pages</label><br/>
 <input id="pagecomments" name="pagecomments" type="checkbox"[% IF blop.conf.page_comments %] checked="checked"[% END %]/><span class="pagecomments-error aform-error"></span>
+</div>
 
-<label for="modcomments">Moderate Comments</label>
+<div class="aentry">
+<label for="modcomments">Moderate Comments</label><br/>
 <input id="modcomments" name="modcomments" type="checkbox"[% IF blop.conf.mod_comments %] checked="checked"[% END %]/><span class="modcomments-error aform-error"></span>
+</div>
 
 <h3>Gallery Default Sizes</h3>
 
 <p class="muted">Thumbnail format uses ImageMagick's geometry argument: <a href="http://www.imagemagick.org/script/command-line-processing.php#geometry" target="_blank">http://www.imagemagick.org/script/command-line-processing.php#geometry</a>.</p>
 
-<label for="gallerysmall">Small Thumbnails</label>
+<div class="aentry">
+<label for="gallerysmall">Small Thumbnails</label><br/>
 <input id="gallerysmall" name="gallerysmall" type="text" value="[% blop.conf.gallery_small %]"/><span class="gallerysmall-error aform-error"></span>
+</div>
 
-<label for="gallerymedium">Medium Thumbnails</label>
+<div class="aentry">
+<label for="gallerymedium">Medium Thumbnails</label><br/>
 <input id="gallerymedium" name="gallerymedium" type="text" value="[% blop.conf.gallery_medium %]"/><span class="gallerymedium-error aform-error"></span>
+</div>
 
-<label for="gallerylarge">Large Thumbnails</label>
+<div class="aentry">
+<label for="gallerylarge">Large Thumbnails</label><br/>
 <input id="gallerylarge" name="gallerylarge" type="text" value="[% blop.conf.gallery_large %]"/><span class="gallerylarge-error aform-error"></span>
+</div>
 
 <h3>Search Engine Meta Tags</h3>
 
-<label for="metadesc">Description</label>
+<div class="aentry">
+<label for="metadesc">Description</label><br/>
 <input id="metadesc" name="metadesc" type="text" value="[% blop.conf.meta_description %]"/><span class="metadesc-error aform-error"></span>
+</div>
 
-<label for="metatags">Keywords <span class="input-info">comma separated</span></label>
+<div class="aentry">
+<label for="metatags">Keywords <span class="input-info">comma separated</span></label><br/>
 <input id="metatags" name="metatags" type="text" value="[% blop.conf.meta_tags %]"/><span class="metatags-error aform-error"></span>
+</div>
 
-<label for="metaauthor">Author</label>
+<div class="aentry">
+<label for="metaauthor">Author</label><br/>
 <input id="metaauthor" name="metaauthor" type="text" value="[% blop.conf.meta_author %]"/><span class="metaauthor-error aform-error"></span>
 <br/>
+</div>
 
-<input type="submit" value="Update Settings"/>
+<div class="aentry">
+<input type="submit" value="Update Settings"/><br/>
 <span class="aform-mesg aform-error"></span>
+</div>
 
 </form>
 

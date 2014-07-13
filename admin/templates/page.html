@@ -5,31 +5,39 @@
 
 <input type="hidden" id="pageid" name="pageid" value="[% page.pageid %]"/>
 
-<label for="title">Title <span class="input-info">Required.</span></label>
+<div class="aentry">
+<label for="title">Title <span class="input-info">Required.</span></label><br/>
 <input id="title" name="title" type="text" value="[% page.title | html %]"/><span class="title-error aform-error"></span>
+</div>
 
-<label for="url">Url <span class="input-info">Required.</span></label>
+<div class="aentry">
+<label for="url">Url <span class="input-info">Required.</span></label><br/>
 <input id="url" name="url" type="text" value="[% page.url | html %]"/><span class="url-error aform-error"></span>
+</div>
 
-<br/><br/>
-
+<div class="aentry">
 [% PROCESS editor.html entry=page %]
+</div>
 
-<input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/>
+<div class="aentry">
+<input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/><br/>
 <span class="aform-mesg aform-error"></span>
+</div>
 
+<div class="aentry">
 [% PROCESS upload.html entry=page %]
+</div>
 
-<label for="published">Publish Date <span class="input-info">YYYY-MM-DD or leave empty to publish immediately.</span></label>
+<div class="aentry">
+<label for="published">Publish Date <span class="input-info">YYYY-MM-DD or leave empty to publish immediately.</span></label><br/>
 <input id="published" name="published" type="text" value="[% page.published | html %]"/><span class="published-error aform-error"></span>
+</div>
 
-<br/>
-
+<div class="aentry">
 <input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/>
-
-<hr/>
-
 <input type="button" id="delete" value="[% IF page %]Delete[% ELSE %]Cancel[% END %]"/>
+</div>
+
 </form>
 
 <script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>

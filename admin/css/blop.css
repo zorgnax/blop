@@ -3,8 +3,7 @@ code {
     font-size: 12px;
 }
 
-.aform label {
-    display: block;
+.aentry {
     margin-top: 1em;
 }
 
@@ -12,10 +11,6 @@ code {
     width: 300px;
     padding: 5px;
     font-family: Monaco, Consolas, ProFont, monospace;
-}
-
-.aform input[type="submit"] {
-    margin-top: 1em;
 }
 
 .aform .input-info {

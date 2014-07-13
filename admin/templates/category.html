@@ -5,20 +5,22 @@
 
 <input type="hidden" id="categoryid" name="categoryid" value="[% category.categoryid %]"/>
 
-<label for="name">Name</label>
+<div class="aentry">
+<label for="name">Name</label><br/>
 <input id="name" name="name" type="text" value="[% category.name | html %]"/><span class="name-error aform-error"></span>
+</div>
 
-<label for="url">Url</label>
+<div class="aentry">
+<label for="url">Url</label><br/>
 <input id="url" name="url" type="text" value="[% category.url | html %]"/><span class="url-error aform-error"></span>
+</div>
 
-<br/>
-
+<div class="aentry">
 <input type="submit" value="[% IF category %]Edit Category[% ELSE %]Add Category[% END %]"/>
-<span class="aform-mesg aform-error"></span>
-
-<hr/>
-
 <input type="button" id="delete" value="[% IF category %]Delete[% ELSE %]Cancel[% END %]"/>
+<br/><span class="aform-mesg bform-error"></span>
+</div>
+
 </form>
 
 <script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
