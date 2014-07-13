@@ -47,6 +47,10 @@ if (diff("catlatest", "cat_latest")) {
     $args{cat_latest} = $cgi->param("catlatest") || "";
 }
 
+if (diff("timezone")) {
+    $args{timezone} = $cgi->param("timezone") || "";
+}
+
 if (diff("postcomments", "post_comments")) {
     if ($cgi->param("postcomments") !~ /^(1|0|on|)$/) {
         $out->{postcommentsError} = "Invalid.\n";

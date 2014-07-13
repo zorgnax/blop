@@ -4,6 +4,10 @@ use blopcgi js => 1;
 use DBI;
 use Config::Tiny;
 
+if ($cgi->param("timezone")) {
+    $ENV{TZ} = $cgi->param("timezone");
+}
+
 my $out = {};
 
 if (!$cgi->param("title")) {
@@ -124,6 +128,7 @@ $sth->execute(title => $cgi->param("title"));
 $sth->execute(slogan => $cgi->param("slogan"));
 $sth->execute(email => $cgi->param("email"));
 $sth->execute(pass => $cgi->param("pass"));
+$sth->execute(timezone => $cgi->param("timezone"));
 $sth->execute(ppp => 4);
 $sth->execute(post_comments => 1);
 $sth->execute(page_comments => 1);

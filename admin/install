@@ -9,5 +9,7 @@ out issues with the database or login.
 EOERROR
 }
 
+my $time_zones = Blop::Date::time_zones();
+
 print "Content-Type: text/html; charset=utf-8\n\n";
-print $blop->template("install.html");
+print $blop->template("install.html", time_zones => $time_zones);

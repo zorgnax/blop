@@ -20,9 +20,10 @@ sub new {
 sub list {
     my ($class, %args) = @_;
     my $blop = Blop::instance();
+    my $now = $blop->dbh->quote($blop->now->str);
     my $sth = $blop->dbh->prepare(<<EOSQL);
 select pageid, title, url, added, published
-from pages where published <= now() order by pageid
+from pages where published <= $now order by pageid
 EOSQL
     $sth->execute();
     my @pages;

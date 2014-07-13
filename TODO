@@ -2,7 +2,6 @@ better tags/category/published widgets
 color widget
 csrf tokens
 backup plugin
-set time zone as config option
 log postid pageid categoryid etc.
 anything in admin/ is not available_url
 show uncategorized in categories list
@@ -12,3 +11,5 @@ dont rely on config::tiny or test::more
 order pages
 [link] relative to entry
 sections and widgets (sidebar, footer, header)
+theme componenets background image and logo
+separate ajax page for updating comment status approve/pending/spam

@@ -101,6 +101,9 @@ EOHEADER
     while (my $data = $sth->fetchrow_hashref()) {
         $self->{conf}{$data->{name}} = $data->{value};
     }
+    if ($self->{conf}{timezone}) {
+        $ENV{TZ} = $self->{conf}{timezone};
+    }
 }
 
 sub dbh {
@@ -192,9 +195,10 @@ sub escape_json {
 sub log {
     my ($self, $content) = @_;
     my $sth = $self->dbh->prepare(<<EOSQL);
-insert into log set date=now(), content=?, ipaddr=?, uri=?
+insert into log set date=?, content=?, ipaddr=?, uri=?
 EOSQL
-    $sth->execute($content, $ENV{REMOTE_ADDR}, $ENV{REQUEST_URI});
+    $sth->execute($self->now->str, $content, $ENV{REMOTE_ADDR},
+                  $ENV{REQUEST_URI});
 }
 
 sub session {
@@ -277,13 +281,14 @@ EOSQL
 sub date_archives {
     my ($self) = @_;
     return $self->{date_archives} if $self->{date_archives};
+    my $now = $self->dbh->quote($self->now->str);
     my $sth = $self->dbh->prepare(<<EOSQL);
 select
     date_format(published, "%b %Y") name,
     date_format(published, "%Y/%m") url,
     count(*) posts
 from posts
-where published <= now()
+where published <= $now
 group by year(published), month(published)
 order by published desc;
 EOSQL
@@ -355,6 +360,11 @@ sub token {
     $chars ||= 22;
     $set ||= "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return join "", map substr($set, rand(length($set)), 1), 1 .. $chars;
+}
+
+sub now {
+    my ($self) = @_;
+    return Blop::Date->now;
 }
 
 1;

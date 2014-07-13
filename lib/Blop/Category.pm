@@ -22,11 +22,12 @@ EOSQL
 sub nsp_list {
     my ($class) = @_;
     my $blop = Blop::instance();
+    my $now = $blop->dbh->quote($blop->now->str);
     my $sth = $blop->dbh->prepare(<<EOSQL);
 select c.*, count(p.postid) posts
 from categories c
 left join posts p on p.categoryid=c.categoryid
-where c.special is null and (p.postid is null or p.published <= now())
+where c.special is null and (p.postid is null or p.published <= $now)
 group by c.categoryid
 order by c.categoryid
 EOSQL
@@ -122,8 +123,9 @@ sub latest_post {
     elsif ($self->{special} eq "uncat") {
         $where = " and categoryid=0"
     }
+    my $now = $blop->dbh->quote($blop->now->str);
     my $sth = $blop->dbh->prepare(<<EOSQL);
-select * from posts where published <= now()$where order by published desc limit 1
+select * from posts where published <= $now$where order by published desc limit 1
 EOSQL
     $sth->execute();
     my $post = $sth->fetchrow_hashref();

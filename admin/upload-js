@@ -8,6 +8,8 @@ if (!$blop->admin) {
     die "Admin privilege required!\n";
 }
 
+my $now = $blop->dbh->quote($blop->now->str);
+
 my $postid = $cgi->param("postid");
 my $pageid = $cgi->param("pageid");
 my $entry;
@@ -18,13 +20,13 @@ elsif ($pageid) {
     $entry = $blop->page(pageid => $pageid) or die "Invalid pageid.\n";
 }
 elsif (defined $postid) {
-    my $sth = $blop->dbh->prepare("insert into posts set added=now()");
+    my $sth = $blop->dbh->prepare("insert into posts set added=$now");
     $sth->execute();
     $postid = $sth->{mysql_insertid};
     $entry = bless {postid => $postid}, "Blop::Post";
 }
 elsif (defined $pageid) {
-    my $sth = $blop->dbh->prepare("insert into pages set added=now()");
+    my $sth = $blop->dbh->prepare("insert into pages set added=$now");
     $sth->execute();
     $pageid = $sth->{mysql_insertid};
     $entry = bless {pageid => $pageid}, "Blop::Post";

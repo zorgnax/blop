@@ -106,6 +106,8 @@ sub listing {
                   "c.name regexp $s or t.name regexp $s)\n";
     }
 
+    my $now = $blop->dbh->quote($blop->now->str);
+
     my $query = <<EOSQL;
 select sql_calc_found_rows
     p.*,
@@ -116,7 +118,7 @@ from
     left join categories c on c.categoryid=p.categoryid
     $join
 where
-    p.published <= now()
+    p.published <= $now
     $where
 group by p.postid
 order by p.published desc

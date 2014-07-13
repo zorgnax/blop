@@ -17,6 +17,22 @@
 <label for="catlatest">Category Listing Pages Show Latest Post</label>
 <input id="catlatest" name="catlatest" type="checkbox"[% IF blop.conf.cat_latest %] checked="checked"[% END %]/><span class="catlatest-error aform-error"></span>
 
+<label for="timezone">Timezone</label>
+<select id="timezone" name="timezone">
+[% FOREACH region IN time_zones %]
+[% IF !region.region %]
+<option value="[% region.zone %]"[% IF region.zone == blop.conf.timezone %] selected="selected"[% END %]>[% region.name %]</option>
+[% ELSE %]
+<optgroup label="[% region.region %]">
+[% FOREACH zone IN region.zones %]
+<option value="[% zone.zone %]"[% IF zone.zone == blop.conf.timezone %] selected="selected"[% END %]>[% zone.name %]</option>
+[% END %]
+</optgroup>
+[% END %]
+[% END %]
+</select>
+[% blop.now.str %]
+
 <h3>Comments</h3>
 
 <label for="postcomments">Comments on Posts</label>

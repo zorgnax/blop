@@ -5,6 +5,8 @@ use blopcgi;
 $blop->read_conf();
 $blop->require_admin();
 
+my $time_zones = Blop::Date::time_zones();
+
 print "Content-Type: text/html; charset=utf-8\n\n";
-print $blop->template("settings.html");
+print $blop->template("settings.html", time_zones => $time_zones);
 

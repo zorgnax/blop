@@ -48,20 +48,21 @@ elsif ($pageid) {
     undef $postid;
 }
 
+my $now = Blop::Date->now->str;
 my $commentid = $cgi->param("commentid");
 
 if (!$blop->admin && !$commentid) {
     my $sth = $blop->dbh->prepare(<<EOSQL);
-select commentid from comments where ipaddr=? and added > now() - interval 1 minute
+select commentid from comments where ipaddr=? and added > ? - interval 1 minute
 EOSQL
-    my $rows = int $sth->execute($ENV{REMOTE_ADDR});
+    my $rows = int $sth->execute($ENV{REMOTE_ADDR}, $now);
     if ($rows) {
         die "Please wait before submitting another comment.\n";
     }
     $sth = $blop->dbh->prepare(<<EOSQL);
-select commentid from comments where ipaddr=? and added > now() - interval 1 hour
+select commentid from comments where ipaddr=? and added > ? - interval 1 hour
 EOSQL
-    $rows = int $sth->execute($ENV{REMOTE_ADDR});
+    $rows = int $sth->execute($ENV{REMOTE_ADDR}, $now);
     if ($rows > 9) {
         die "Please wait before submitting another comment.\n";
     }
@@ -72,8 +73,6 @@ if ($cgi->param("bake")) {
     $cookie = $cgi->cookie("cmnt");
     $cookie = $blop->token(22) if !$cookie;
 }
-
-my $now = Blop::Date->now->str;
 
 if (!$commentid) {
     die "Name must be defined.\n" if !defined $name;
@@ -114,9 +113,9 @@ EOSQL
 
 if (!$blop->admin) {
     my $sth = $blop->dbh->prepare(<<EOSQL);
-select commentid from comments where ipaddr=? and edited > now() - interval 1 hour
+select commentid from comments where ipaddr=? and edited > ? - interval 1 hour
 EOSQL
-    my $rows = int $sth->execute($ENV{REMOTE_ADDR});
+    my $rows = int $sth->execute($ENV{REMOTE_ADDR}, $now);
     if ($rows > 9) {
         die "Please wait before editing another comment.\n";
     }
