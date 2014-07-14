@@ -12,8 +12,12 @@ my $now = $blop->dbh->quote($blop->now->str);
 
 my $postid = $cgi->param("postid");
 my $pageid = $cgi->param("pageid");
+my $section = $cgi->param("section");
 my $entry;
-if ($postid) {
+if ($section) {
+    $entry = $blop->section($section) or die "Invalid section.\n";
+}
+elsif ($postid) {
     $entry = $blop->post(postid => $postid) or die "Invalid postid.\n";
 }
 elsif ($pageid) {

@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $sidebar = $blop->section("sidebar");
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("sidebar-edited.html", sidebar => $sidebar);
+

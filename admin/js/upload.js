@@ -1,25 +1,24 @@
 function Upload (args) {
     this.args = args;
-    var id = this.args.divId;
-    this.div = $(id);
-    this.mesg = $(id + "-mesg");
-    this.files = $(id + " input[type=file]");
-    this.filesList = $(id + " table.files-list");
-    this.abortLink = $(id + " .abort");
+    this.div = $(this.args.divId);
+    this.mesg = this.div.find(".bform-mesg");
+    this.files = this.div.find("input[type=file]");
+    this.filesList = this.div.find("table.files-list");
+    this.abortLink = this.div.find(".abort");
     this.xhr = null;
     var self = this;
 
     this.setGalleryInserts();
-    
+
     this.filesList.find("tr").each(function () {
         self.setFileRow($(this))
     });
-    
+
     this.abortLink.on("click", function (event) {
         event.preventDefault();
         self.abort();
     });
-    
+
     this.files.on("change", function () {
         self.uploadFileChain(0);
     });
@@ -84,7 +83,7 @@ Upload.prototype.load = function (event, file, i) {
         return;
     }
     if (data.error) {
-        this.mesg.text(data.mesg ? data.mesg : "");
+        this.end(data.mesg ? data.mesg : "");
         return;
     }
     this.div.find(".gallery-inserts").show();

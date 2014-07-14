@@ -11,6 +11,14 @@
     <a href="#" class="editor-ol" title="Ordered List"><img src="[% urlbase %]/admin/img/icomoon/16px/numbered-list.png"/></a>
     <a href="#" class="editor-header" title="Heading"><img src="[% urlbase %]/admin/img/icomoon/16px/newspaper.png"/></a>
     <a href="#" class="editor-hr" title="Horizontal Rule"><img src="[% urlbase %]/admin/img/icomoon/16px/minus.png"/></a>
+    [% IF widgets %]
+<select class="widgets">
+<option value="">Widgets</option>
+[% FOREACH widget IN blop.widgets %]
+<option value="[% widget.example | html %]">[% widget.name %]</option>
+[% END %]
+</select>
+    [% END %]
     </div>
     <div class="edit-help">
     <a href="[% urlbase %]/admin/edit-help" target="_blank">Help</a>

@@ -137,6 +137,7 @@ $sth->execute(theme => "default");
 $sth->execute(gallery_small => "x125>");
 $sth->execute(gallery_medium => "x250>");
 $sth->execute(gallery_large => "700>");
+$sth->execute(sidebar => "[search /]\n[categories /]\n[archives /]\n[admin-links /]\n");
 
 $sth = $dbh->prepare("insert into categories set special=?, name=?, url=?");
 $sth->execute(allcat => "All", "");

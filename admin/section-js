@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $content = $cgi->param("content");
+my $name = $cgi->param("section");
+my $section = $blop->section($name) or die "Invalid section.\n";
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+insert into config set name=?, value=?
+on duplicate key update value=?
+EOSQL
+$sth->execute($name, $content, $content);
+
+$section->{content} = $content;
+$section->update_content;
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1});
+

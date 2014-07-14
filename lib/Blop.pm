@@ -13,6 +13,8 @@ use Blop::Post;
 use Blop::Page;
 use Blop::Comment;
 use Blop::Navigation;
+use Blop::Section;
+use Blop::Widget;
 
 my $blop;
 my $template;
@@ -126,6 +128,7 @@ EOHEADER
     if ($self->{conf}{timezone}) {
         $ENV{TZ} = $self->{conf}{timezone};
     }
+    return $self;
 }
 
 sub dbh {
@@ -334,6 +337,24 @@ sub pages {
     return $self->{pages} if $self->{pages};
     $self->{pages} = Blop::Page->list(%args);
     return $self->{pages};
+}
+
+sub section {
+    my ($self, $name) = @_;
+    return $self->{$name} if exists $self->{$name};
+    my $section = Blop::Section->new($name);
+    $self->{$name} = $section;
+    return $section;
+}
+
+sub sidebar {
+    my ($self) = @_;
+    return $self->section("sidebar");
+}
+
+sub widgets {
+    my ($self) = @_;
+    return sort {$a->{name} cmp $b->{name}} values %Blop::Widget::widgets;
 }
 
 sub url_available {

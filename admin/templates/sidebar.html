@@ -1,0 +1,46 @@
+[% PROCESS header.html title="Sidebar" x1="Settings" x2="Sidebar" %]
+
+<form id="sidebar" name="sidebar" method="post" class="aform">
+
+<input type="hidden" id="section" name="section" value="sidebar"/>
+
+<div class="aentry">
+[% PROCESS editor.html entry=sidebar widgets=1 %]
+</div>
+
+<div class="aentry">
+[% PROCESS upload.html entry=sidebar %]
+</div>
+
+<div class="aentry">
+<input type="submit" value="Edit Sidebar"/>
+<span class="aform-mesg aform-error"></span>
+
+</div>
+
+</form>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/editor.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/upload.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#sidebar",
+    processUrl: "[% urlbase %]/admin/section-js",
+    successUrl: "[% urlbase %]/admin/sidebar-edited"
+});
+
+var editor = new Editor({divId: "#editor"});
+
+var upload = new Upload({
+    divId: "#upload",
+    processUrl: "[% urlbase %]/admin/upload-js",
+    deleteUrl: "[% urlbase %]/admin/delete-file-js",
+    editor: editor
+});
+upload.extraParams = function () {
+    return {section: "sidebar"};
+}
+</script>
+[% PROCESS footer.html %]
+

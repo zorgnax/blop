@@ -2,9 +2,10 @@ package Blop::BBCode;
 use strict;
 use warnings;
 use Blop;
+use Blop::Widget;
 use Image::Magick;
 
-my %bbcode = (
+our %bbcode = (
     hr => {block => 1, display => \&display_hr},
     link => {display => \&display_link},
     code => {block => 1, norecurse => 1, comment => 1, display => \&display_code},
@@ -13,9 +14,10 @@ my %bbcode = (
                 display => \&display_gallery},
     thumb => {norecurse => 1, update => \&update_thumb, display => \&display_thumb},
     image => {norecurse => 1, display => \&display_image},
+    %Blop::Widget::widgets,
 );
 
-my @bbcode_rx = (
+our @bbcode_rx = (
     {rx => qr{code-\S+}, settings => "code"},
 );
 
@@ -43,8 +45,11 @@ sub display {
     if ($elem->{settings}{update} || $elem->{settings}{display}) {
         parse_attr($markup, $elem);
     }
-    if ($markup->{update} && $elem->{settings}{update}) {
-        $elem->{settings}{update}($markup, $elem);
+    if ($markup->{update}) {
+        if ($elem->{settings}{update}) {
+            $elem->{settings}{update}($markup, $elem);
+        }
+        return "";
     }
     if ($elem->{settings}{display}) {
         return $elem->{settings}{display}($markup, $elem);

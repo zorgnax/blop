@@ -1,27 +1,37 @@
 function Editor (args) {
     this.args = args;
-    var id = this.args.divId;
-    this.div = $(id);
+    this.div = $(this.args.divId);
     this.ta = this.div.find("textarea")[0];
     if (!"selectionStart" in this.ta) {
         throw "Cannot insert text into textarea.";
     }
-    this.addButton(id + " .editor-bold", this.bold);
-    this.addButton(id + " .editor-italics", this.italics);
-    this.addButton(id + " .editor-link", this.link);
-    this.addButton(id + " .editor-quote", this.quote);
-    this.addButton(id + " .editor-indent", this.indent);
-    this.addButton(id + " .editor-outdent", this.outdent);
-    this.addButton(id + " .editor-image", this.image);
-    this.addButton(id + " .editor-ul", this.ul);
-    this.addButton(id + " .editor-ol", this.ol);
-    this.addButton(id + " .editor-header", this.header);
-    this.addButton(id + " .editor-hr", this.hr);
+    this.addButton(".editor-bold", this.bold);
+    this.addButton(".editor-italics", this.italics);
+    this.addButton(".editor-link", this.link);
+    this.addButton(".editor-quote", this.quote);
+    this.addButton(".editor-indent", this.indent);
+    this.addButton(".editor-outdent", this.outdent);
+    this.addButton(".editor-image", this.image);
+    this.addButton(".editor-ul", this.ul);
+    this.addButton(".editor-ol", this.ol);
+    this.addButton(".editor-header", this.header);
+    this.addButton(".editor-hr", this.hr);
+    this.widgets = this.div.find("select.widgets");
+    var self = this;
+    this.widgets.on("change", function () {
+        self.insertWidget();
+    });
+}
+
+Editor.prototype.insertWidget = function () {
+    var val = this.widgets.val();
+    this.widgets.val("");
+    this.insert(val);
 }
 
 Editor.prototype.addButton = function (elem, textAction) {
     var self = this;
-    $(elem).on("click", function (event) {
+    this.div.find(elem).on("click", function (event) {
         event.preventDefault();
         textAction.call(self);
     });
