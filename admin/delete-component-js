@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $component = $cgi->param("component") || "";
+if ($component !~ /^(logo|background)$/) {
+    die "Invalid component.\n";
+}
+
+for my $crud (glob "$blop->{base}content/main/$component.*") {
+    unlink $crud;
+}
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json({ok => 1});
+

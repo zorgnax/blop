@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf();
+
+if (!$blop->admin) {
+    die "Admin privilege required!\n";
+}
+
+my $component = $cgi->param("component") || "";
+if ($component !~ /^(logo|background)$/) {
+    die "Invalid component.\n";
+}
+
+my $upload_name = $cgi->param("file") or die "No file name given.\n";
+if ($upload_name =~ m{(^|/)\.\.($|/)}) {
+    die "File name can't include \"..\".\n";
+}
+if ($upload_name =~ m{/}) {
+    die "File name can't include \"/\".\n";
+}
+if ($upload_name !~ m{\.(jpe?g|gif|png)$}i) {
+    die "File must be an image.\n";
+}
+my $name = lc "$component.$1";
+
+my $dir = "$blop->{base}content/main";
+if (!-e $dir) {
+    mkdir $dir or die "Unable to mkdir $dir: $!\n";
+}
+
+my $path = "$dir/$name";
+
+my $uploadfh = $cgi->upload("file") or die "Couldn't find upload filehandle.\n";
+my $uploadfh2 = $uploadfh->handle;
+
+open my $fh, ">", $path or die "Unable to open $path: $!\n";
+binmode $fh;
+my $buffer;
+while ($uploadfh2->read($buffer, 1024)) {
+    print $fh $buffer;
+}
+close $fh;
+
+# if you upload logo.jpg, delete the old logo.png
+for my $crud (glob "$blop->{base}content/main/$component.*") {
+    next if $crud eq $path;
+    unlink $crud;
+}
+
+my $url = "/content/main/$name";
+my $file = {
+    name => $name,
+    path => $path,
+    url => $url,
+    fullurl => "$blop->{urlbase}$url",
+    size => $blop->human_readable(-s $path),
+};
+
+print "Content-Type: application/json\n\n";
+print $blop->escape_json($file);
+

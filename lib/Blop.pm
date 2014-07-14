@@ -50,7 +50,7 @@ sub template {
     my %vars = (blop => $self, urlbase => $self->{urlbase}, %extra_vars);
     $vars{ENV} = \%ENV;
     $vars{dump} = sub {return "<pre>" . $self->dump(@_ ? @_ : \%vars) . "</pre>"};
-    $vars{url} = sub {$self->theme_url(@_)};
+    $vars{theme_url} = sub {$self->theme_url(@_)};
     $vars{cgi} = $self->cgi;
     $template->process($file, \%vars, \my $out) or die $template->error;
     return $out;
@@ -77,6 +77,28 @@ sub theme_url {
         return "$self->{urlbase}/themes/default/$file";
     }
     return undef;
+}
+
+sub logo {
+    my ($self) = @_;
+    return $self->{logo} if exists $self->{logo};
+    my ($logo) = glob "$self->{base}content/main/logo.*";
+    return "" if !$logo;
+    $logo =~ m{([^/]+)$};
+    my $name = $1;
+    $self->{logo} = "$self->{urlbase}/content/main/$name";
+    return $self->{logo};
+}
+
+sub background {
+    my ($self) = @_;
+    return $self->{background} if exists $self->{background};
+    my ($background) = glob "$self->{base}content/main/background.*";
+    return "" if !$background;
+    $background =~ m{([^/]+)$};
+    my $name = $1;
+    $self->{background} = "$self->{urlbase}/content/main/$name";
+    return $self->{background};
 }
 
 sub read_conf {

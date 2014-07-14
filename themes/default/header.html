@@ -5,19 +5,34 @@
     <meta name="description" content="[% blop.conf.meta_description | html %]"/>
     <meta name="keywords" content="[% blop.conf.meta_tags | html %]"/>
     <meta name="author" content="[% blop.conf.meta_author | html %]"/>
-    <link rel="stylesheet" type="text/css" href="[% url('style.css') %]"/>
-    <script type="text/javascript" src="[% url('jquery-1.11.0.js') %]"></script>
-    <script type="text/javascript" src="[% url('pform.js') %]"></script>
+    <link rel="stylesheet" type="text/css" href="[% theme_url('style.css') %]"/>
+    <script type="text/javascript" src="[% theme_url('jquery-1.11.0.js') %]"></script>
+    <script type="text/javascript" src="[% theme_url('pform.js') %]"></script>
+    [% IF blop.background %]
+    <style type="text/css">
+    body {
+        background-image: url("[% blop.background %]");
+        background-repeat: repeat;
+        background-position: top left;
+        background-attachment: fixed;
+        background-size: 100%;
+    }
+    </style>
+    [% END %]
 </head>
 
 <body>
 <div class="page-wrap">
 
+[% IF blop.logo %]
+<h1 class="site-title"><a href="[% urlbase %]/"><img src="[% blop.logo %]"></img></a></h1>
+[% ELSE %]
 <h1 class="site-title"><a href="[% urlbase %]/">[% blop.conf.title %]</a>
 [% IF blop.conf.slogan %]
 <span class="site-slogan">[% blop.conf.slogan %]</span>
 [% END %]
 </h1>
+[% END %]
 
 <div class="sidebar">
 <form name="search" method="get" action="[% urlbase %]/[% blop.allcat.url | uri %]">
