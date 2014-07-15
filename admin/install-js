@@ -146,6 +146,12 @@ $sth->execute(uncat => "Uncategorized", "uncategorized");
 $blop->{dbh} = $dbh;
 $blop->log("Installed");
 
+my $sesh = $blop->create_session();
+my $cookie_header = $cgi->cookie(
+    -name => "sesh", -value => $sesh, -expires => "+100d",
+    -path => "$blop->{urlbase}/");
+
+print "Set-Cookie: $cookie_header\n";
 print "Content-Type: application/json\n\n";
 print $blop->escape_json({ok => 1});
 

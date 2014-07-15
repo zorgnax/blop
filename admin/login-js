@@ -13,12 +13,7 @@ if ($pass ne $blop->{conf}{pass}) {
     die "Incorrect!\n";
 }
 
-my $sesh = $blop->token(22);
-my $sth = $blop->dbh->prepare(<<EOSQL);
-insert into sessions set sessionid=?, admin=1, ipaddr=?, added=?
-EOSQL
-$sth->execute($sesh, $ENV{REMOTE_ADDR}, $blop->now->str);
-
+my $sesh = $blop->create_session();
 my $cookie_header = $cgi->cookie(
     -name => "sesh", -value => $sesh, -expires => "+100d",
     -path => "$blop->{urlbase}/");

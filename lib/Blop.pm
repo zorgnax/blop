@@ -237,6 +237,16 @@ EOSQL
     return $self->{session};
 }
 
+sub create_session {
+    my ($self) = @_;
+    my $sesh = $self->token(22);
+    my $sth = $self->dbh->prepare(<<EOSQL);
+insert into sessions set sessionid=?, admin=1, ipaddr=?, added=?
+EOSQL
+    $sth->execute($sesh, $ENV{REMOTE_ADDR}, $self->now->str);
+    return $sesh;
+}
+
 sub category {
     my ($self, %args) = @_;
     my $category = Blop::Category->new(%args);

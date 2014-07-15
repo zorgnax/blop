@@ -1,6 +1,5 @@
-<link rel="stylesheet" type="text/css" href="[% urlbase %]/admin/css/blop.css">
+[% PROCESS header2.html title="Installation" %]
 
-<div id="acontainer">
 <h1>Installation</h1>
 
 <form id="install" name="install" class="aform" method="post" autocomplete="off">
@@ -83,4 +82,6 @@ var aform = new AForm({
     successUrl: "[% urlbase %]/admin/install-completed"
 });
 </script>
-</div>
+
+[% PROCESS footer2.html %]
+
