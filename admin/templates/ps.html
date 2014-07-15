@@ -1,0 +1,46 @@
+[% PROCESS header.html title="P.S." x1="Settings" x2="P.S." %]
+
+<form id="ps" name="ps" method="post" class="aform">
+
+<input type="hidden" id="section" name="section" value="ps"/>
+
+<div class="aentry">
+[% PROCESS editor.html entry=ps widgets=1 %]
+</div>
+
+<div class="aentry">
+[% PROCESS upload.html entry=ps %]
+</div>
+
+<div class="aentry">
+<input type="submit" value="Edit Footer"/>
+<span class="aform-mesg aform-error"></span>
+
+</div>
+
+</form>
+
+<script type="text/javascript" src="[% urlbase %]/admin/js/aform.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/editor.js"></script>
+<script type="text/javascript" src="[% urlbase %]/admin/js/upload.js"></script>
+<script type="text/javascript">
+var aform = new AForm({
+    formId: "#ps",
+    processUrl: "[% urlbase %]/admin/section-js",
+    successUrl: "[% urlbase %]/admin/ps-edited"
+});
+
+var editor = new Editor({divId: "#editor"});
+
+var upload = new Upload({
+    divId: "#upload",
+    processUrl: "[% urlbase %]/admin/upload-js",
+    deleteUrl: "[% urlbase %]/admin/delete-file-js",
+    editor: editor
+});
+upload.extraParams = function () {
+    return {section: "ps"};
+}
+</script>
+[% PROCESS footer.html %]
+

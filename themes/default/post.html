@@ -11,6 +11,9 @@
 [% IF blop.admin %]<a href="[% urlbase %]/admin/post/[% post.postid %]">edit</a>[% END %]
 <div class="content">
 [% post.parsed_content %]
+[% IF blop.ps.content %]
+[% blop.ps.parsed_content %]
+[% END %]
 </div>
 
 [% IF post.tags.size %]

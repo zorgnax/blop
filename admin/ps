@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $ps = $blop->section("ps");
+
+print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->template("ps.html", ps => $ps);
+

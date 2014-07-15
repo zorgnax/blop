@@ -357,6 +357,11 @@ sub footer {
     return $self->section("footer");
 }
 
+sub ps {
+    my ($self) = @_;
+    return $self->section("ps");
+}
+
 sub widgets {
     my ($self) = @_;
     return sort {$a->{name} cmp $b->{name}} values %Blop::Widget::widgets;

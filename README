@@ -31,7 +31,7 @@ Features
 
 - Files are organized by post, not date uploaded.
 
-- html / markdown / bbcode hybrid input.
+- HTML / Markdown / BBcode hybrid input.
 
 - Rich text editing is more trouble than it's worth.
 
@@ -40,4 +40,8 @@ Features
 - Tags can be anything, even ":)" and ":(".
 
 - Lets you edit your own comments.
+
+- If top to bottom is newest to oldest, left to right is newest to oldest.
+
+- Fully configurable sidebar and footer widgets.
 

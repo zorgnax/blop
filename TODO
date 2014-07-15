@@ -11,8 +11,6 @@ dont rely on config::tiny or test::more
 order pages
 [link] relative to entry
 sections and widgets (sidebar, footer, header)
-theme componenets background image and logo
-separate ajax page for updating comment status approve/pending/spam
 dates as yesterday, thursday, 5 minutes ago, in 5 minutes, etc.
 login choose to remember session checkbox
 <title> on admin pages
