@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use lib "../lib";
-use blopcgi; 
+use blopcgi;
 
 $blop->read_conf();
 $blop->require_admin();
@@ -16,6 +16,6 @@ elsif ($path_info) {
     die "Unrecognized path info.\n";
 }
 
-print "Content-Type: text/html; charset=utf8\n\n";
+print $blop->http_header();
 print $blop->template("page.html", page => $page);
 

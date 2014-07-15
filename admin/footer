@@ -7,6 +7,6 @@ $blop->require_admin();
 
 my $footer = $blop->section("footer");
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("footer-section.html", footer => $footer);
 

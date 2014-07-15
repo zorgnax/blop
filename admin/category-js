@@ -38,20 +38,20 @@ if (!$category || $category->{url} ne $url) {
 }
 
 if ($out->{error}) {
-    print "Content-Type: application/json\n\n";
+    print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json($out);
     exit;
 }
 
 if (!$category) {
     $category = $blop->add_category(name => $name, url => $url);
-    print "Content-Type: application/json\n\n";
+    print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json({ok => 1, categoryid => $category->{categoryid}});
     exit;
 }
 
 $category->edit(name => $name, url => $url);
 
-print "Content-Type: application/json\n\n";
+print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({ok => 1, categoryid => $category->{categoryid}});
 

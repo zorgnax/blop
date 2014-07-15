@@ -11,4 +11,3 @@ dont rely on config::tiny or test::more
 order pages
 [link] relative to entry
 dates as yesterday, thursday, 5 minutes ago, in 5 minutes, etc.
-cookie expires 15 days but is refreshed every page fetch

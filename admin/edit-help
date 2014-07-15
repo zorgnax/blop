@@ -2,6 +2,6 @@
 use lib "../lib";
 use blopcgi;
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("edit-help.html");
 

@@ -49,7 +49,7 @@ for my $path (glob $entry->content_path . "/thumb/*") {
     }
 }
 
-print "Content-Type: application/json\n\n";
+print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({
     ok => 1,
     mesg => "Deleted $name\n",

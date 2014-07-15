@@ -10,6 +10,6 @@ if ($blop->session) {
 
 my $redirect = $blop->escape_json_str($cgi->param("redirect") || "/admin");
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("login.html", redirect => $redirect);
 

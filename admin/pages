@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use lib "../lib";
-use blopcgi; 
+use blopcgi;
 
 $blop->read_conf();
 $blop->require_admin();
@@ -36,6 +36,6 @@ $sth->execute();
 my ($found_rows) = $sth->fetchrow_array();
 my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "page");
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("pages.html", pages => \@pages, navigation => $navigation);
 

@@ -38,6 +38,6 @@ $sth->execute();
 my ($found_rows) = $sth->fetchrow_array();
 my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "category", "categories");
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("categories.html", categories => \@categories, navigation => $navigation);
 

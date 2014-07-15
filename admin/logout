@@ -13,10 +13,10 @@ delete from sessions where sessionid=?
 EOSQL
 $sth->execute($cgi->cookie("sesh"));
 
+$blop->{session} = undef;
 my $cookie = $cgi->cookie(-name => "sesh", -value => "",
                           -expires => "-100d", -path => "$blop->{urlbase}/");
 
-print "Set-Cookie: $cookie\n";
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header("Set-Cookie" => $cookie);
 print $blop->template("logout.html");
 

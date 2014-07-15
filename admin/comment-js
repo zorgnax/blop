@@ -29,7 +29,7 @@ if (defined $content && $content =~ /^\s*$/) {
 }
 
 if ($out->{error}) {
-    print "Content-Type: application/json\n\n";
+    print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json($out);
     exit;
 }
@@ -68,8 +68,7 @@ EOSQL
     }
 }
 
-my $cookie = $cgi->cookie("cmnt");
-$cookie = $blop->token(22) if !$cookie;
+my $cmnt = $cgi->cookie("cmnt");
 
 if (!$commentid) {
     die "Name must be defined.\n" if !defined $name;
@@ -86,22 +85,22 @@ if (!$commentid) {
 
     my $status = $blop->{conf}{mod_comments} ? "pending" : "approved";
 
+    if (!$cmnt) {
+        $cmnt = $blop->token(22);
+        $blop->{new_cmnt} = $cmnt;
+    }
+
     my $sth = $blop->dbh->prepare(<<EOSQL);
 insert into comments set
     postid=?, pageid=?, name=?, email=?, ipaddr=?, cookie=?, added=?,
     status=?, content=?
 EOSQL
     $sth->execute(
-        $postid, $pageid, $name, $email, $ENV{REMOTE_ADDR}, $cookie, $now,
+        $postid, $pageid, $name, $email, $ENV{REMOTE_ADDR}, $cmnt, $now,
         $status, $content);
     $commentid = $sth->{mysql_insertid};
 
-    my $cookie_header = $cgi->cookie(
-        -name => "cmnt", -value => $cookie, -expires => "+100d",
-        -path => "$blop->{urlbase}/");
-
-    print "Set-Cookie: $cookie_header\n";
-    print "Content-Type: application/json\n\n";
+    print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json({ok => 1, commentid => $commentid});
     exit;
 }
@@ -118,6 +117,10 @@ EOSQL
 
 my $comment = $blop->comment(commentid => $commentid)
     or die "Invalid commentid.\n";
+
+if (!$cmnt || $cmnt ne $comment->{cookie}) {
+    die "Unauthorized.\n";
+}
 
 my %args;
 
@@ -140,6 +143,6 @@ EOSQL
     $sth->execute($commentid);
 }
 
-print "Content-Type: application/json\n\n";
+print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({ok => 1, commentid => $commentid});
 

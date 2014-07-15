@@ -10,6 +10,7 @@ EOERROR
 }
 
 my $time_zones = Blop::Date::time_zones();
+$blop->{session} = undef;
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("install.html", time_zones => $time_zones);

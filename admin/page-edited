@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use lib "../lib";
-use blopcgi; 
+use blopcgi;
 
 $blop->read_conf();
 $blop->require_admin();
@@ -9,6 +9,6 @@ my $path_info = $ENV{PATH_INFO} || "";
 my ($pageid) = $path_info =~ m{^/(\d+)};
 my $page = $blop->page(pageid => $pageid) or die "Cannot find page $pageid.\n";
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("page-edited.html", page => $page);
 

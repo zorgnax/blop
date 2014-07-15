@@ -229,22 +229,59 @@ EOSQL
 sub session {
     my ($self) = @_;
     return $self->{session} if exists $self->{session};
+    if (!$self->cgi->cookie("sesh")) {
+        $self->{session} = undef;
+        return undef;
+    }
     my $sth = $self->dbh->prepare(<<EOSQL);
 select * from sessions where sessionid=?
 EOSQL
-    $sth->execute($self->cgi->cookie("sesh") || "");
+    $sth->execute($self->cgi->cookie("sesh"));
     $self->{session} = $sth->fetchrow_hashref();
     return $self->{session};
 }
 
 sub create_session {
     my ($self) = @_;
-    my $sesh = $self->token(22);
+    my $sessionid = $self->token(22);
     my $sth = $self->dbh->prepare(<<EOSQL);
 insert into sessions set sessionid=?, admin=1, ipaddr=?, added=?
 EOSQL
-    $sth->execute($sesh, $ENV{REMOTE_ADDR}, $self->now->str);
-    return $sesh;
+    $sth->execute($sessionid, $ENV{REMOTE_ADDR}, $self->now->str);
+    $self->{new_sesh} = $sessionid;
+    return $sessionid;
+}
+
+sub http_header {
+    my ($self, @headers) = @_;
+    my $out = "";
+    my %headers;
+    while (my $name = shift @headers) {
+        my $value = shift @headers;
+        $headers{$name} = $value;
+        $out .= "$name: $value\n";
+    }
+    my $sesh;
+    $sesh = $self->session->{sessionid} if $self->session;
+    $sesh = $self->{new_sesh} if $self->{new_sesh};
+    if ($sesh) {
+        my $cookie = $cgi->cookie(
+            -name => "sesh", -value => $sesh,
+            -expires => "+25d", -path => "$self->{urlbase}/");
+        $out .= "Set-Cookie: $cookie\n";
+    }
+    my $cmnt = $self->{new_cmnt} || $self->cgi->cookie("cmnt");
+    if ($cmnt) {
+        my $cookie = $cgi->cookie(
+            -name => "cmnt", -value => $cmnt,
+            -expires => "+25d", -path => "$self->{urlbase}/");
+        $out .= "Set-Cookie: $cookie\n";
+    }
+    if (!$headers{"Content-Type"}) {
+        $out .= "Content-Type: text/html; charset=utf-8\n";
+    }
+    $out .= "\n";
+    return $out;
 }
 
 sub category {
@@ -409,12 +446,7 @@ sub require_admin {
     return if $self->admin;
     my $location = URI->new("$self->{urlbase}/admin/login");
     $location->query_form(redirect => $ENV{REQUEST_URI});
-    print <<EOHEADER;
-Status: 303 See Other
-Location: $location
-Content-Type: text/html; charset=utf-8
-
-EOHEADER
+    print $self->http_header(Status => "303 See Other", Location => $location);
     exit;
 }
 

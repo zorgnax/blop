@@ -58,6 +58,6 @@ my $file = {
     size => $blop->human_readable(-s $path),
 };
 
-print "Content-Type: application/json\n\n";
+print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json($file);
 

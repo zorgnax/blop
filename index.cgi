@@ -138,7 +138,7 @@ EOSQL
     my ($found_rows) = $sth->fetchrow_array();
     my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "post");
 
-    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->http_header();
     print $blop->template(
         "listing.html", category => $category, tags => \@tags, posts => \@posts,
         navigation => $navigation);
@@ -151,20 +151,19 @@ sub post {
         $category = $blop->category(categoryid => $categoryid)
             or die "Invalid categoryid.\n";
     }
-    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->http_header();
     print $blop->template("post.html", post => $post, category => $category);
     exit;
 }
 
 sub page {
-    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->http_header();
     print $blop->template("page.html", page => $page);
     exit;
 }
 
 sub not_found {
-    print "Status: 404 Not Found\n";
-    print "Content-Type: text/html; charset=utf-8\n\n";
+    print $blop->http_header("Status" => "404 Not Found");
     print $blop->template("not-found.html", path => $path);
     exit;
 }

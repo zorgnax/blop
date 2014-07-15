@@ -7,6 +7,6 @@ $blop->require_admin();
 
 my $ps = $blop->section("ps");
 
-print "Content-Type: text/html; charset=utf-8\n\n";
+print $blop->http_header();
 print $blop->template("ps.html", ps => $ps);
 

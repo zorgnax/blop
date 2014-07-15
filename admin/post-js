@@ -71,7 +71,7 @@ if (defined $tags && length($tags)) {
 }
 
 if ($out->{error}) {
-    print "Content-Type: application/json\n\n";
+    print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json($out);
     exit;
 }
@@ -105,7 +105,7 @@ EOSQL
 
     $blop->log("Added post $postid");
 
-    print "Content-Type: application/json\n\n";
+    print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json({ok => 1, postid => $postid});
     exit;
 }
@@ -155,6 +155,6 @@ $post->update_content;
 
 $blop->log("Edited post $postid");
 
-print "Content-Type: application/json\n\n";
+print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({ok => 1, postid => $postid});
 
