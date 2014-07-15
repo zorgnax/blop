@@ -10,7 +10,6 @@ option to disable comments on all pages/posts
 dont rely on config::tiny or test::more
 order pages
 [link] relative to entry
-sections and widgets (sidebar, footer, header)
 dates as yesterday, thursday, 5 minutes ago, in 5 minutes, etc.
 login choose to remember session checkbox
 <title> on admin pages

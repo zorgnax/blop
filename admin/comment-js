@@ -68,11 +68,8 @@ EOSQL
     }
 }
 
-my $cookie;
-if ($cgi->param("bake")) {
-    $cookie = $cgi->cookie("cmnt");
-    $cookie = $blop->token(22) if !$cookie;
-}
+my $cookie = $cgi->cookie("cmnt");
+$cookie = $blop->token(22) if !$cookie;
 
 if (!$commentid) {
     die "Name must be defined.\n" if !defined $name;
@@ -99,13 +96,11 @@ EOSQL
         $status, $content);
     $commentid = $sth->{mysql_insertid};
 
-    if ($cgi->param("bake")) {
-        my $cookie_header = $cgi->cookie(
-            -name => "cmnt", -value => $cookie, -expires => "+100d",
-            -path => "$blop->{urlbase}/");
-        print "Set-Cookie: $cookie_header\n";
-    }
+    my $cookie_header = $cgi->cookie(
+        -name => "cmnt", -value => $cookie, -expires => "+100d",
+        -path => "$blop->{urlbase}/");
 
+    print "Set-Cookie: $cookie_header\n";
     print "Content-Type: application/json\n\n";
     print $blop->escape_json({ok => 1, commentid => $commentid});
     exit;
@@ -136,17 +131,8 @@ if (defined $content && $content ne $comment->{content}) {
     $args{content} = $content;
 }
 
-if ($blop->admin) {
-    my $status = $cgi->param("status");
-    if (defined $status && $status ne $comment->{status}) {
-        $args{status} = $status;
-    }
-}
-
 if (%args) {
-    if (!$args{status}) {
-        $args{edited} = $now;
-    }
+    $args{edited} = $now;
     my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
     my $sth = $blop->dbh->prepare(<<EOSQL);
 update comments set $sets where commentid=?
@@ -156,5 +142,4 @@ EOSQL
 
 print "Content-Type: application/json\n\n";
 print $blop->escape_json({ok => 1, commentid => $commentid});
-exit;
 

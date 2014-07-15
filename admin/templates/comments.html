@@ -54,7 +54,7 @@ function approveComment (event) {
     var tr = $(this).closest("tr");
     var commentId = tr.data("commentid");
     var requestData = {commentid: commentId, status: "approved"};
-    ajaxCall("[% urlbase %]/admin/comment-js", requestData, function (data) {
+    ajaxCall("[% urlbase %]/admin/comment-status-js", requestData, function (data) {
         tr.attr("class", "comment-approved");
         tr.find("td:nth-child(2)").text("approved");
         var unapprove = $("<a href='#' class='unapprove-comment'>Unapprove</a>");
@@ -68,7 +68,7 @@ function unapproveComment (event) {
     var tr = $(this).closest("tr");
     var commentId = tr.data("commentid");
     var requestData = {commentid: commentId, status: "pending"};
-    ajaxCall("[% urlbase %]/admin/comment-js", requestData, function (data) {
+    ajaxCall("[% urlbase %]/admin/comment-status-js", requestData, function (data) {
         tr.attr("class", "comment-pending");
         tr.find("td:nth-child(2)").text("pending");
         var approve = $("<a href='#' class='approve-comment'>Approve</a>");
