@@ -352,6 +352,11 @@ sub sidebar {
     return $self->section("sidebar");
 }
 
+sub footer {
+    my ($self) = @_;
+    return $self->section("footer");
+}
+
 sub widgets {
     my ($self) = @_;
     return sort {$a->{name} cmp $b->{name}} values %Blop::Widget::widgets;
