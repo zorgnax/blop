@@ -22,8 +22,8 @@ sub list {
     my $blop = Blop::instance();
     my $now = $blop->dbh->quote($blop->now->str);
     my $sth = $blop->dbh->prepare(<<EOSQL);
-select pageid, title, url, added, published
-from pages where published <= $now order by pageid
+select pageid, title, url, added, published, sequence
+from pages where published <= $now order by sequence, title
 EOSQL
     $sth->execute();
     my @pages;

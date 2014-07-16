@@ -50,6 +50,8 @@ else {
     $published = $now;
 }
 
+my $sequence = $cgi->param("sequence");
+
 if ($out->{error}) {
     print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json($out);
@@ -59,9 +61,9 @@ if ($out->{error}) {
 if (!$pageid) {
     my $sth = $blop->dbh->prepare(<<EOSQL);
 insert into pages set
-    title=?, url=?, added=?, published=?, content=?
+    title=?, url=?, added=?, published=?, content=?, sequence=?
 EOSQL
-    $sth->execute($title, $url, $now, $published, $content);
+    $sth->execute($title, $url, $now, $published, $content, $sequence);
     $pageid = $sth->{mysql_insertid};
 
     $page = $blop->page(pageid => $pageid);
@@ -88,6 +90,9 @@ if ($page->{published} ne $published) {
 if ($page->{content} ne $content) {
     $args{content} = $content;
     $page->{content} = $content;
+}
+if ($page->{sequence} ne $sequence) {
+    $args{sequence} = $sequence;
 }
 
 if (%args) {

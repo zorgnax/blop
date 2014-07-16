@@ -90,7 +90,8 @@ create table pages (
     url varchar(128) unique,
     added datetime,
     published datetime,
-    content text);
+    content text,
+    sequence float not null);
 
 create table comments (
     commentid int unsigned primary key auto_increment,
