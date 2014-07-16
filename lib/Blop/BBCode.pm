@@ -116,14 +116,26 @@ sub display_link {
 
 sub display_code {
     my ($markup, $elem) = @_;
-    my $code = $elem->{content} || "";
-    $code =~ s/&/&amp;/g;
-    $code =~ s/>/&gt;/g;
-    $code =~ s/</&lt;/g;
-    $code =~ s/"/&quot;/g;
+    my $code = syntax_highlight($markup, $elem);
+    if (!defined $code) {
+        $code = $elem->{content} || "";
+        $code =~ s/&/&amp;/g;
+        $code =~ s/>/&gt;/g;
+        $code =~ s/</&lt;/g;
+        $code =~ s/"/&quot;/g;
+    }
     my $html = "<code>$code</code>";
     $html = "<pre>$html</pre>" if $elem->{paragraph};
     return $html;
+}
+
+sub syntax_highlight {
+    my ($markup, $elem) = @_;
+    return undef if !$elem->{hash}{lang};
+    return undef if !eval {require Text::VimColor};
+    my $code = $elem->{content} || "";
+    my $vimcolor = Text::VimColor->new(string => $code, filetype => $elem->{hash}{lang});
+    return $vimcolor->html;
 }
 
 sub display_listing {

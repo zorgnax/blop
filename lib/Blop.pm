@@ -1,6 +1,7 @@
 package Blop;
 use strict;
 use warnings;
+BEGIN {eval {require cPanelUserConfig}}
 use CGI;
 use Template;
 use Config::Tiny;
