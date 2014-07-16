@@ -107,9 +107,9 @@ sub display_link {
         $title = " title=\"$title\"";
     }
     my $url = $elem->{args}[0] || "";
-    my $blop = Blop::instance();
-    if ($blop && $url =~ m{^/}) {
-        $url = "$blop->{urlbase}$url";
+    my $entry = $markup->{entry};
+    if ($entry && $url !~ m{^(/|\w+://)}) {
+        $url = $entry->content_fullurl . "/$url";
     }
     return "<a href=\"$url\"$title>$elem->{str}</a>";
 }

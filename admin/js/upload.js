@@ -207,7 +207,7 @@ Upload.prototype.setFileRow = function (tr) {
             editor.insert("[image \"" + tr.data("name") + "\" /]");
         }
         else if (val == "link") {
-            editor.insert("[link \"" + tr.data("url") + "\"]" + tr.data("name") + "[/link]");
+            editor.insert("[link \"" + tr.data("name") + "\"]" + tr.data("name") + "[/link]");
         }
     });
 }

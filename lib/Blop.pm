@@ -229,7 +229,7 @@ EOSQL
 sub session {
     my ($self) = @_;
     return $self->{session} if exists $self->{session};
-    if (!$self->cgi->cookie("sesh")) {
+    if (!$self->cgi->cookie("sesh") || !$self->dbh) {
         $self->{session} = undef;
         return undef;
     }
