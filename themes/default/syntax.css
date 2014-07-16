@@ -1,11 +1,11 @@
-.synComment    { color: #0000FF }
-.synConstant   { color: #FF00FF }
-.synIdentifier { color: #008B8B }
-.synStatement  { color: #A52A2A ; font-weight: bold }
-.synPreProc    { color: #A020F0 }
-.synType       { color: #2E8B57 ; font-weight: bold }
-.synSpecial    { color: #6A5ACD }
-.synUnderlined { color: #000000 ; text-decoration: underline }
-.synError      { color: #FFFFFF ; background: #FF0000 none }
-.synTodo       { color: #0000FF ; background: #FFFF00 none }
+.synComment    {color: #586e75}
+.synConstant   {color: #2aa198}
+.synIdentifier {color: #268bd2}
+.synStatement  {color: #859900; font-weight: bold}
+.synPreProc    {color: #cb4b16}
+.synType       {color: #b58900; font-weight: bold}
+.synSpecial    {color: #dc322f}
+.synUnderlined {color: #6c71c4}
+.synError      {color: #dc322f; font-weight: bold}
+.synTodo       {color: #d33682; font-weight: bold}
 
