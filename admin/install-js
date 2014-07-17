@@ -2,7 +2,6 @@
 use lib "../lib";
 use blopcgi js => 1;
 use DBI;
-use Config::Tiny;
 
 if ($cgi->param("timezone")) {
     $ENV{TZ} = $cgi->param("timezone");
@@ -53,12 +52,12 @@ if ($out->{error}) {
     exit;
 }
 
-my $conf = Config::Tiny->new();
-$conf->{_}{dbuser} = $cgi->param("dbuser");
-$conf->{_}{dbpass} = $cgi->param("dbpass");
-$conf->{_}{dbhost} = $cgi->param("dbhost");
-$conf->{_}{dbtable} = $cgi->param("dbtable");
-$conf->write("$blop->{base}blop.conf") or die $Config::Tiny::errstr;
+my %conf;
+$conf{dbuser} = $cgi->param("dbuser");
+$conf{dbpass} = $cgi->param("dbpass");
+$conf{dbhost} = $cgi->param("dbhost");
+$conf{dbtable} = $cgi->param("dbtable");
+Blop::Config::write("$blop->{base}blop.conf", \%conf);
 
 $dbh->{RaiseError} = 1;
 

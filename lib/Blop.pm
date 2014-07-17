@@ -4,7 +4,6 @@ use warnings;
 BEGIN {eval {require cPanelUserConfig}}
 use CGI;
 use Template;
-use Config::Tiny;
 use DBI;
 use URI;
 use Data::Dumper;
@@ -16,6 +15,7 @@ use Blop::Comment;
 use Blop::Navigation;
 use Blop::Section;
 use Blop::Widget;
+use Blop::Config;
 
 my $blop;
 my $template;
@@ -115,12 +115,11 @@ Content-Type: text/html; charset=utf-8
 EOHEADER
         exit;
     }
-    my $conf = Config::Tiny->read("$self->{base}blop.conf")
-        or die "$Config::Tiny::errstr\n";
-    my $dsn = "dbi:mysql:host=$conf->{_}{dbhost};database=$conf->{_}{dbtable};";
+    my $conf = Blop::Config::read("$self->{base}blop.conf");
+    my $dsn = "dbi:mysql:host=$conf->{dbhost};database=$conf->{dbtable};";
     $dsn .= "mysql_multi_statements=1";
     my %vars = (PrintError => 0, RaiseError => 1);
-    $self->{dbh} = DBI->connect($dsn, $conf->{_}{dbuser}, $conf->{_}{dbpass}, \%vars);
+    $self->{dbh} = DBI->connect($dsn, $conf->{dbuser}, $conf->{dbpass}, \%vars);
     my $sth = $self->{dbh}->prepare("select * from config");
     $sth->execute();
     while (my $data = $sth->fetchrow_hashref()) {
