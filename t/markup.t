@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use lib "lib";
 use Blop::Markup;
-use Test::More;
+use Blop::Test;
 use Data::Dumper;
 $Data::Dumper::Sortkeys = 1;
 

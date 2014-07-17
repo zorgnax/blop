@@ -4,11 +4,9 @@
 
 <p>An inline <code>code</code> example.</p>
 
-<pre><code>
-    This should work
+<pre><code>    This should work
     [code]yup[/code]
-    Heck Ya!
-</code></pre>
+    Heck Ya!</code></pre>
 
 <p>Hr is a block level bbcode:</p>
 

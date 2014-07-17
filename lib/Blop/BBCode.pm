@@ -119,7 +119,7 @@ sub display_code {
     my $code = syntax_highlight($markup, $elem);
     if (!defined $code) {
         $code = $elem->{content} || "";
-        $code =~ s/^\s+|\s+$//g;
+        $code =~ s/^[ \t]*\n|\s+$//g;
         $code =~ s/&/&amp;/g;
         $code =~ s/>/&gt;/g;
         $code =~ s/</&lt;/g;
@@ -135,9 +135,10 @@ sub syntax_highlight {
     return undef if !$elem->{hash}{lang};
     return undef if !eval {require Text::VimColor};
     my $code = $elem->{content} || "";
-    $code =~ s/^\s+|\s+$//g;
     my $vimcolor = Text::VimColor->new(string => $code, filetype => $elem->{hash}{lang});
-    return $vimcolor->html;
+    my $html = $vimcolor->html;
+    $html =~ s/^[ \t]*\n|\s+$//g;
+    return $html;
 }
 
 sub display_listing {
