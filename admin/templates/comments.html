@@ -9,7 +9,7 @@
     <td>[% comment.name | html %]<br/>[% comment.email | html %]<br/>[% comment.ipaddr | html %]</td>
     <td>[% comment.status %]</td>
     <td>
-        <p>Added on [% comment.added %]</p>
+        <p>Added [% comment.added.natural %]</p>
         <pre><code>[% comment.content | html %]</code></pre>
         <div class="entry-actions">
             [% IF comment.status == "approved" %]

@@ -95,6 +95,14 @@ sub content_fullurl {
     return $blop->{urlbase} . $self->content_url;
 }
 
+sub published {
+    my ($self) = @_;
+    return $self->{published} if ref $self->{published};
+    return undef if !$self->{published};
+    $self->{published} = Blop::Date->new($self->{published});
+    return $self->{published};
+}
+
 sub was_published {
     my ($self) = @_;
     return 0 if !$self->{published};

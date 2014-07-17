@@ -215,6 +215,14 @@ sub update_content {
     return $markup->convert($self->{content});
 }
 
+sub published {
+    my ($self) = @_;
+    return $self->{published} if ref $self->{published};
+    return undef if !$self->{published};
+    $self->{published} = Blop::Date->new($self->{published});
+    return $self->{published};
+}
+
 sub was_published {
     my ($self) = @_;
     return 0 if !$self->{published};

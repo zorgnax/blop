@@ -21,7 +21,7 @@
         <a href="[% urlbase %]/admin/posts/tag/[% tag.name | uri %]">[% tag.name | html %]</a>[% ", " IF !loop.last %]
     [% END %]
     </td>
-    <td>[% post.published | html %]</td>
+    <td>[% post.published.natural | html %]</td>
     [% END %]
     <td>[% post.num_files %]</td>
     <td class="entry-actions">

@@ -33,6 +33,22 @@ EOSQL
     return \@comments;
 }
 
+sub added {
+    my ($self) = @_;
+    return $self->{added} if ref $self->{added};
+    return undef if !$self->{added};
+    $self->{added} = Blop::Date->new($self->{added});
+    return $self->{added};
+}
+
+sub edited {
+    my ($self) = @_;
+    return $self->{edited} if ref $self->{edited};
+    return undef if !$self->{edited};
+    $self->{edited} = Blop::Date->new($self->{edited});
+    return $self->{edited};
+}
+
 sub editable {
     my ($self) = @_;
     my $blop = Blop::instance();

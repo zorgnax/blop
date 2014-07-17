@@ -6,7 +6,5 @@ log postid pageid categoryid etc.
 anything in admin/ is not available_url
 show uncategorized in categories list
 theme paths from a theme object
-option to disable comments on all pages/posts
 dont rely on config::tiny or test::more
 dates as yesterday, thursday, 5 minutes ago, in 5 minutes, etc.
-syntax highlight code bbcode

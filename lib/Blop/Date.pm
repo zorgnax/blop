@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use POSIX ();
 
+use overload '""' => \&str;
+
 sub new {
     my ($class, $str) = @_;
     $str =~ /^(\d{4})(-(\d+)(-(\d+)((\s+|T)(\d+)(:(\d+)(:(\d+)(\.(\d+))?)?)?)?)?)?(.*)$/;
@@ -42,6 +44,70 @@ sub str {
     my ($self) = @_;
     my $str = POSIX::strftime("%Y-%m-%d %H:%M:%S", localtime($self->{epoch}));
     return $str;
+}
+
+my $now;
+sub natural {
+    my ($self) = @_;
+    $now = time if !$now;
+    my $delta = $now - $self->{epoch};
+    if ($delta < -32 * 24 * 60 * 60) {
+        return POSIX::strftime("%b %Y", localtime($self->{epoch}));
+    }
+    elsif ($delta < -2 * 24 * 60 * 60) {
+        return "in " . int(-$delta / (24 * 60 * 60)) . " days";
+    }
+    elsif ($delta < -24 * 60 * 60) {
+        return "in 1 day";
+    }
+    elsif ($delta < -2 * 60 * 60) {
+        return "in " . int(-$delta / (60 * 60)) . " hours";
+    }
+    elsif ($delta < -60 * 60) {
+        return "in 1 hour";
+    }
+    elsif ($delta < -2 * 60) {
+        return "in " . int(-$delta / 60) . " minutes";
+    }
+    elsif ($delta < -60) {
+        return "in 1 minute";
+    }
+    elsif ($delta < -1) {
+        return "in $delta seconds";
+    }
+    elsif ($delta < 0) {
+        return "in 1 second";
+    }
+    elsif ($delta < 1) {
+        return "right now";
+    }
+    elsif ($delta < 2) {
+        return "1 second ago";
+    }
+    if ($delta < 60) {
+        return "$delta seconds ago";
+    }
+    elsif ($delta < 2 * 60) {
+        return "1 minute ago";
+    }
+    elsif ($delta < 60 * 60) {
+        return int($delta / 60) . " minutes ago";
+    }
+    elsif ($delta < 2 * 60 * 60) {
+        return "1 hour ago";
+    }
+    elsif ($delta < 24 * 60 * 60) {
+        return int($delta / (60 * 60)) . " hours ago";
+    }
+    elsif ($delta < 2 * 24 * 60 * 60) {
+        return "1 day ago";
+    }
+    elsif ($delta < 32 * 24 * 60 * 60) {
+        return int($delta / (24 * 60 * 60)) . " days ago";
+    }
+    else {
+        return POSIX::strftime("%b %Y", localtime($self->{epoch}));
+    }
 }
 
 sub time_zones {

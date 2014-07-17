@@ -3,7 +3,7 @@
 [% IF !page.was_published %]<div class="note">Note: This page has not been published.</div>[% END %]
 
 <h2>[% page.title | html %]</h2>
-<span class="published">[% page.published %]</span>
+<span class="published">[% page.published.natural %]</span>
 [% IF blop.admin %]<a href="[% urlbase %]/admin/page/[% page.pageid %]">edit</a>[% END %]
 <div class="content">
 [% page.parsed_content %]

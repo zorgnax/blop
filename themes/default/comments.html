@@ -8,7 +8,7 @@
 [% FOREACH comment IN entry.comments %]
 <div class="comment[% IF comment.editable %] editable-comment[% END %]" data-commentid="[% comment.commentid %]">
 <div class="comment-heading">
-<b>[% comment.name | html %]</b> on [% comment.added | html %]
+<b>[% comment.name | html %]</b> [% comment.added.natural | html %]
 [% IF comment.status != "approved" %] <span class="awaiting-moderation">Awaiting moderation</span>[% END %]
 [% IF comment.editable %]
 <a href="#" class="edit-comment">edit</a>
@@ -39,7 +39,7 @@
 
 </form>
 
-[% IF comment.edited %]Last edited: [% comment.edited %][% END %]
+[% IF comment.edited %]Last edited: [% comment.edited.natural %][% END %]
 
 </div>
 [% END %]

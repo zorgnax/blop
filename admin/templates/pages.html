@@ -11,7 +11,7 @@
     [% ELSE %]
     <td>[% page.title | html %]</td>
     <td>[% IF page.url.defined %]<a href="[% urlbase %]/[% page.url | uri %]">/[% page.url | html %]</a>[% END %]</td>
-    <td>[% page.published | html %]</td>
+    <td>[% page.published.natural | html %]</td>
     [% END %]
     <td>[% page.num_files %]</td>
     <td class="entry-actions">
