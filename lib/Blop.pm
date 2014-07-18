@@ -300,7 +300,7 @@ sub allcat {
 sub categories {
     my ($self, %args) = @_;
     return $self->{categories} if $self->{categories};
-    $self->{categories} = Blop::Category->nsp_list(%args);
+    $self->{categories} = Blop::Category->list(%args);
     return $self->{categories};
 }
 

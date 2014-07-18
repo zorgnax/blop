@@ -18,8 +18,7 @@ EOSQL
     return $category;
 }
 
-# non-special published list
-sub nsp_list {
+sub list {
     my ($class) = @_;
     my $blop = Blop::instance();
     my $now = $blop->dbh->quote($blop->now->str);
@@ -27,7 +26,7 @@ sub nsp_list {
 select c.*, count(p.postid) posts
 from categories c
 left join posts p on p.categoryid=c.categoryid
-where c.special is null and (p.postid is null or p.published <= $now)
+where special="uncat" or (special is null and (p.published <= $now))
 group by c.categoryid
 order by c.categoryid
 EOSQL
@@ -92,17 +91,22 @@ sub get_available_url {
 }
 
 sub num_posts {
-    my ($self) = @_;
+    my ($self, $published) = @_;
     return $self->{num_posts} if exists $self->{num_posts};
     if (!$self->{special}) {
         $self->{num_posts} = $self->{posts};
         return $self->{num_posts};
     }
+    my $blop = Blop::instance();
     my $where = "";
     if ($self->{special} eq "uncat") {
         $where = " where categoryid=0";
     }
-    my $blop = Blop::instance();
+    if ($published) {
+        my $now = $blop->dbh->quote($blop->now->str);
+        $where .= $where ? " and " : " where ";
+        $where .= "published <= $now";
+    }
     my $sth = $blop->dbh->prepare(<<EOSQL);
 select count(*) from posts$where
 EOSQL

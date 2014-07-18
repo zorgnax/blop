@@ -2,7 +2,7 @@
 <h3>Categories</h3>
 <ul class="categories">
 [% FOREACH category_ IN blop.categories %]
-<li><a href="[% urlbase %]/[% category_.url %]">[% category_.name %] ([% category_.posts %])</a></li>
+<li><a href="[% urlbase %]/[% category_.url %]">[% category_.name %] ([% category_.num_posts("published") %])</a></li>
 [% END %]
 </ul>
 </div>
