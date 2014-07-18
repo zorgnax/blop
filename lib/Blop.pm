@@ -450,6 +450,11 @@ sub require_admin {
     exit;
 }
 
+sub assert_admin {
+    my ($self) = @_;
+    die "Admin privilege required!\n" if !$self->admin;
+}
+
 sub token {
     my ($self, $chars, $set) = @_;
     $chars ||= 22;

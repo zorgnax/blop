@@ -2,11 +2,8 @@
 use lib "../lib";
 use blopcgi js => 1;
 
-$blop->read_conf();
-
-if (!$blop->admin) {
-    die "Admin privilege required!\n";
-}
+$blop->read_conf;
+$blop->assert_admin;
 
 my $pageid = $cgi->param("pageid");
 if (!$pageid) {
