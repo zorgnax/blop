@@ -1,9 +1,6 @@
-better tags/category/published widgets
-color widget
 csrf tokens
 backup plugin
 log postid pageid categoryid etc.
 anything in admin/ is not available_url
 show uncategorized in categories list
 theme paths from a theme object
-dont rely on config::tiny or test::more

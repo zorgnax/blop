@@ -5,6 +5,7 @@ function Editor (args) {
     if (!"selectionStart" in this.ta) {
         throw "Cannot insert text into textarea.";
     }
+    var self = this;
     this.addButton(".editor-bold", this.bold);
     this.addButton(".editor-italics", this.italics);
     this.addButton(".editor-link", this.link);
@@ -16,8 +17,12 @@ function Editor (args) {
     this.addButton(".editor-ol", this.ol);
     this.addButton(".editor-header", this.header);
     this.addButton(".editor-hr", this.hr);
+    this.div.find(".editor-color").on("change", function (event) {
+        event.preventDefault();
+        var color = $(this).val();
+        self.color(color);
+    });
     this.widgets = this.div.find("select.widgets");
-    var self = this;
     this.widgets.on("change", function () {
         self.insertWidget();
     });
@@ -109,6 +114,30 @@ Editor.prototype.italics = function () {
         this.ta.value = sel.pre + "*" + text + "*" + sel.post;
         this.ta.selectionStart = sel.start + 1;
         this.ta.selectionEnd = sel.start + text.length + 1;
+    }
+}
+
+Editor.prototype.color = function (color) {
+    var sel = this.sel();
+    var prematch = sel.pre.match(/<font\s+color=".*?">$/);
+    var postmatch = sel.post.match(/^<\/font>/);
+    var pretext = "<font color=\"" + color + "\">";
+    var posttext = "</font>";
+    if (prematch && postmatch) {
+        this.ta.value =
+            sel.pre.substr(0, sel.pre.length - prematch[0].length) +
+            pretext +
+            sel.text +
+            posttext +
+            sel.post.substr(postmatch[0].length, sel.post.length);
+        this.ta.selectionStart = sel.start - prematch[0].length + pretext.length;
+        this.ta.selectionEnd = sel.start - prematch[0].length + pretext.length + sel.text.length;
+    }
+    else {
+        var text = sel.text ? sel.text : "color text";
+        this.ta.value = sel.pre + pretext + text + posttext + sel.post;
+        this.ta.selectionStart = sel.start + pretext.length;
+        this.ta.selectionEnd = sel.start + pretext.length + text.length;
     }
 }
 
