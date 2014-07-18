@@ -419,7 +419,7 @@ sub url_available {
     if (length($url) && -e "$self->{base}$url") {
         return 0;
     }
-    return 0 if $url =~ m{^(tag|themes|\d{4})(/|$)};
+    return 0 if $url =~ m{^(admin|tag|themes|\d{4})(/|$)};
     return 0 if $self->post(url => $url);
     return 0 if $self->page(url => $url);
     return 0 if $self->category(url => $url);
