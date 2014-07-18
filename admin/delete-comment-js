@@ -2,7 +2,10 @@
 use lib "../lib";
 use blopcgi js => 1;
 
-$blop->read_conf();
+$blop->read_conf;
+if ($blop->session) {
+    $blop->assert_csrf;
+}
 
 my $commentid = $cgi->param("commentid");
 if (!$commentid) {

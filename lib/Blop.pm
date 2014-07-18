@@ -244,10 +244,11 @@ EOSQL
 sub create_session {
     my ($self) = @_;
     my $sessionid = $self->token(22);
+    my $csrf = $self->token(22);
     my $sth = $self->dbh->prepare(<<EOSQL);
-insert into sessions set sessionid=?, admin=1, ipaddr=?, added=?
+insert into sessions set sessionid=?, admin=1, ipaddr=?, added=?, csrf=?
 EOSQL
-    $sth->execute($sessionid, $ENV{REMOTE_ADDR}, $self->now->str);
+    $sth->execute($sessionid, $ENV{REMOTE_ADDR}, $self->now->str, $csrf);
     $self->{new_sesh} = $sessionid;
     return $sessionid;
 }
@@ -453,6 +454,18 @@ sub require_admin {
 sub assert_admin {
     my ($self) = @_;
     die "Admin privilege required!\n" if !$self->admin;
+}
+
+sub assert_csrf {
+    my ($self) = @_;
+    my $csrf = $cgi->param("csrf") || "";
+    die "CSRF token doesn't match!\n" if $csrf ne $self->csrf;
+}
+
+sub csrf {
+    my ($self) = @_;
+    return "" if !$self->session;
+    return $self->session->{csrf} || "";
 }
 
 sub token {

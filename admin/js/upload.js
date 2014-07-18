@@ -41,6 +41,7 @@ Upload.prototype.uploadFileChain = function (i) {
     this.mesg.text("Uploading " + file.name + ".");
     var fd = new FormData();
     fd.append("file", file);
+    fd.append("csrf", this.args.csrf);
     if (this.extraParams) {
         var extra = this.extraParams();
         $.each(extra, function (key, value) {
@@ -125,7 +126,6 @@ Upload.prototype.end = function (text) {
     if (text != null)
         this.mesg.text(text);
     this.files[0].disabled = false;
-    this.files.val("");
     this.abortLink.hide();
 }
 
@@ -155,7 +155,7 @@ Upload.prototype.setGalleryInserts = function () {
 Upload.prototype.delete = function (name, tr) {
     this.mesg.text("Processing...");
     var self = this;
-    var data = {name: name};
+    var data = {name: name, csrf: this.args.csrf};
     if (this.extraParams) {
         var extra = this.extraParams();
         $.each(extra, function (key, value) {

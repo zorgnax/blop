@@ -4,6 +4,7 @@
 <form id="post" name="post" method="post" class="aform">
 
 <input type="hidden" id="postid" name="postid" value="[% post.postid %]"/>
+<input type="hidden" name="csrf" value="[% blop.csrf %]"/>
 
 <div class="aentry">
 <label for="title">Title</label><br/>
@@ -72,6 +73,7 @@ var editor = new Editor({divId: "#editor"});
 
 var upload = new Upload({
     divId: "#upload",
+    csrf: "[% blop.csrf %]",
     processUrl: "[% urlbase %]/admin/upload-js",
     deleteUrl: "[% urlbase %]/admin/delete-file-js",
     editor: editor
@@ -92,7 +94,7 @@ $("#delete").on("click", function () {
     var ajax = $.ajax({
         url: "[% urlbase %]/admin/delete-post-js",
         type: "POST",
-        data: {postid: postid}
+        data: {postid: postid, csrf: "[% blop.csrf %]"}
     });
     ajax.done(function (data, textStatus, jqXHR) {
         if (data.error) {

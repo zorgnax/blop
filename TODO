@@ -1,4 +1,6 @@
-csrf tokens
 backup plugin
 log postid pageid categoryid etc.
 theme paths from a theme object
+q closes gallery
+<- and -> on gallery pictures
+httponly cookies

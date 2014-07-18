@@ -1,6 +1,7 @@
 [% PROCESS header.html title="Settings" x1="Settings" x2="General" %]
 
 <form id="settings" name="settings" method="post" class="aform">
+<input type="hidden" name="csrf" value="[% blop.csrf %]"/>
 
 <h3>Main</h3>
 
@@ -144,6 +145,7 @@ var aform = new AForm({
 new Component({
     divId: "#logo-component",
     component: "logo",
+    csrf: "[% blop.csrf %]",
     processUrl: "[% urlbase %]/admin/component-js",
     deleteUrl: "[% urlbase %]/admin/delete-component-js"
 });
@@ -151,6 +153,7 @@ new Component({
 new Component({
     divId: "#background-component",
     component: "background",
+    csrf: "[% blop.csrf %]",
     processUrl: "[% urlbase %]/admin/component-js",
     deleteUrl: "[% urlbase %]/admin/delete-component-js",
     link: 1

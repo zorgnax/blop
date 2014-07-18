@@ -109,7 +109,8 @@ create table sessions (
     sessionid varchar(32) not null primary key,
     admin int unsigned,
     ipaddr varchar(16),
-    added datetime);
+    added datetime,
+    csrf varchar(32) not null);
 
 create table config (
     name varchar(64) not null primary key,

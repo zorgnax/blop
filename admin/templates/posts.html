@@ -44,11 +44,11 @@ $(".delete-post").on("click", function (event) {
     var ajax = $.ajax({
         url: "[% urlbase %]/admin/delete-post-js",
         type: "POST",
-        data: {postid: postid}
+        data: {postid: postid, csrf: "[% blop.csrf %]"}
     });
     ajax.done(function (data, textStatus, jqXHR) {
         if (data.error) {
-            td.text(data.mesg ? data.mesg : "Okay!");
+            alert(data.mesg ? data.mesg : "Okay!");
         }
         else {
             tr.css("background", "lightpink");
@@ -57,7 +57,7 @@ $(".delete-post").on("click", function (event) {
         }
     });
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
-        td.text(errorThrown);
+        alert(errorThrown);
     });
 });
 </script>

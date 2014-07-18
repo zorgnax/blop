@@ -3,6 +3,7 @@
 <form id="footer" name="footer" method="post" class="aform">
 
 <input type="hidden" id="section" name="section" value="footer"/>
+<input type="hidden" name="csrf" value="[% blop.csrf %]"/>
 
 <div class="aentry">
 [% PROCESS editor.html entry=footer widgets=1 %]
@@ -34,6 +35,7 @@ var editor = new Editor({divId: "#editor"});
 
 var upload = new Upload({
     divId: "#upload",
+    csrf: "[% blop.csrf %]",
     processUrl: "[% urlbase %]/admin/upload-js",
     deleteUrl: "[% urlbase %]/admin/delete-file-js",
     editor: editor

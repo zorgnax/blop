@@ -34,11 +34,11 @@ $(".delete-page").on("click", function (event) {
     var ajax = $.ajax({
         url: "[% urlbase %]/admin/delete-page-js",
         type: "POST",
-        data: {pageid: pageid}
+        data: {pageid: pageid, csrf: "[% blop.csrf %]"}
     });
     ajax.done(function (data, textStatus, jqXHR) {
         if (data.error) {
-            td.text(data.mesg ? data.mesg : "Okay!");
+            alert(data.mesg ? data.mesg : "Okay!");
         }
         else {
             tr.css("background", "lightpink");
@@ -47,7 +47,7 @@ $(".delete-page").on("click", function (event) {
         }
     });
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
-        td.text(errorThrown);
+        alert(errorThrown);
     });
 });
 </script>

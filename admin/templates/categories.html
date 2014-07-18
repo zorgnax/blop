@@ -29,11 +29,11 @@ $(".delete-category").on("click", function (event) {
     var ajax = $.ajax({
         url: "[% urlbase %]/admin/delete-category-js",
         type: "POST",
-        data: {categoryid: categoryid}
+        data: {categoryid: categoryid, csrf: "[% blop.csrf %]"}
     });
     ajax.done(function (data, textStatus, jqXHR) {
         if (data.error) {
-            td.text(data.mesg ? data.mesg : "Failed!");
+            alert(data.mesg ? data.mesg : "Failed!");
         }
         else {
             tr.css("background", "lightpink");
@@ -42,7 +42,7 @@ $(".delete-category").on("click", function (event) {
         }
     });
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
-        td.text(errorThrown);
+        alert(errorThrown);
     });
 });
 </script>

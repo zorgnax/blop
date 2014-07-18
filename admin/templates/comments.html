@@ -53,7 +53,7 @@ function approveComment (event) {
     event.preventDefault();
     var tr = $(this).closest("tr");
     var commentId = tr.data("commentid");
-    var requestData = {commentid: commentId, status: "approved"};
+    var requestData = {commentid: commentId, status: "approved", csrf: "[% blop.csrf %]"};
     ajaxCall("[% urlbase %]/admin/comment-status-js", requestData, function (data) {
         tr.attr("class", "comment-approved");
         tr.find("td:nth-child(2)").text("approved");
@@ -67,7 +67,7 @@ function unapproveComment (event) {
     event.preventDefault();
     var tr = $(this).closest("tr");
     var commentId = tr.data("commentid");
-    var requestData = {commentid: commentId, status: "pending"};
+    var requestData = {commentid: commentId, status: "pending", csrf: "[% blop.csrf %]"};
     ajaxCall("[% urlbase %]/admin/comment-status-js", requestData, function (data) {
         tr.attr("class", "comment-pending");
         tr.find("td:nth-child(2)").text("pending");
@@ -81,7 +81,7 @@ function deleteComment (event) {
     event.preventDefault();
     var tr = $(this).closest("tr");
     var commentId = tr.data("commentid");
-    var requestData = {commentid: commentId};
+    var requestData = {commentid: commentId, csrf: "[% blop.csrf %]"};
     ajaxCall("[% urlbase %]/admin/delete-comment-js", requestData, function (data) {
         tr.attr("class", "comment-deleted");
         tr.find("td:nth-child(2)").text("deleted");

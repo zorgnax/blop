@@ -44,6 +44,7 @@ Component.prototype.uploadFile = function () {
     var fd = new FormData();
     fd.append("file", file);
     fd.append("component", this.args.component);
+    fd.append("csrf", this.args.csrf);
     this.xhr = new XMLHttpRequest();
     var self = this;
     this.xhr.upload.onprogress = function (event) {
@@ -112,7 +113,7 @@ Component.prototype.humanReadable = function (size) {
 Component.prototype.delete = function () {
     this.mesg.text("Processing...");
     var self = this;
-    var data = {component: this.args.component};
+    var data = {component: this.args.component, csrf: this.args.csrf};
     var ajax = $.ajax({url: this.args.deleteUrl, type: "POST", data: data});
     ajax.done(function (data, textStatus, jqXHR) {
         if (!data.error) {
@@ -120,7 +121,6 @@ Component.prototype.delete = function () {
             self.div.find(".component-view").hide();
             return;
         }
-        this.div.find(".component-view").hide();
         self.mesg.text(data.mesg ? data.mesg : "");
     });
     ajax.fail(function (jqXHR, textStatus, errorThrown) {

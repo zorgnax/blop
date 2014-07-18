@@ -50,7 +50,7 @@ Comments.prototype.delete = function (div) {
     var ajax = $.ajax({
         url: this.args.deleteUrl,
         type: "POST",
-        data: {commentid: commentId}
+        data: {commentid: commentId, csrf: this.args.csrf}
     });
     ajax.done(function (data, textStatus, jqXHR) {
         if (data.error) {

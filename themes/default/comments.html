@@ -24,6 +24,9 @@
 <form method="post" class="pform">
 <input type="hidden" name="[% entryid %]" value="[% entry.$entryid %]"/>
 <input type="hidden" name="commentid" value="[% comment.commentid %]"/>
+[% IF blop.session %]
+<input type="hidden" name="csrf" value="[% blop.csrf %]"/>
+[% END %]
 
 <table><tr><td><label for="name-[% comment.commentid %]">Name:</label></td>
 <td><input id="name-[% comment.commentid %]" name="name" type="text" value="[% comment.name | html %]"/><span class="name-error pform-error"></span></td></tr>
@@ -49,6 +52,9 @@
 
 <form id="comment" method="post" class="pform">
 <input type="hidden" name="[% entryid %]" value="[% entry.$entryid %]"/>
+[% IF blop.session %]
+<input type="hidden" name="csrf" value="[% blop.csrf %]"/>
+[% END %]
 
 <table><tr><td><label for="name">Name:</label></td>
 <td><input id="name" name="name" type="text" value="[% blop.last_comment.name | html %]"/><span class="name-error pform-error"></span></td></tr>
@@ -68,6 +74,7 @@
 <script type="text/javascript">
 var comments = new Comments({
     formId: "#comment",
+    csrf: "[% blop.csrf %]",
     editableComments: ".editable-comment",
     processUrl: "[% urlbase %]/admin/comment-js",
     deleteUrl: "[% urlbase %]/admin/delete-comment-js"});

@@ -4,6 +4,7 @@ use blopcgi js => 1;
 
 $blop->read_conf;
 $blop->assert_admin;
+$blop->assert_csrf;
 
 my $now = $blop->dbh->quote($blop->now->str);
 
