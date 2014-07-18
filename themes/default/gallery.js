@@ -35,7 +35,7 @@ function createImageViewer () {
         if (!imageViewer || imageViewer.is(":hidden"))
             return;
         event.preventDefault();
-        if (event.which == 27) {
+        if (event.which == 27 || event.which == 81) {
             imageViewer.hide();
         }
         else if (event.which == 37) {
