@@ -268,14 +268,14 @@ sub http_header {
     if ($sesh) {
         my $cookie = $cgi->cookie(
             -name => "sesh", -value => $sesh,
-            -expires => "+25d", -path => "$self->{urlbase}/");
+            -expires => "+25d", -path => "$self->{urlbase}/", -httponly => 1);
         $out .= "Set-Cookie: $cookie\n";
     }
     my $cmnt = $self->{new_cmnt} || $self->cgi->cookie("cmnt");
     if ($cmnt) {
         my $cookie = $cgi->cookie(
             -name => "cmnt", -value => $cmnt,
-            -expires => "+25d", -path => "$self->{urlbase}/");
+            -expires => "+25d", -path => "$self->{urlbase}/", -httponly => 1);
         $out .= "Set-Cookie: $cookie\n";
     }
     if (!$headers{"Content-Type"}) {
