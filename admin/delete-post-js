@@ -11,6 +11,8 @@ if (!$postid) {
     die "A postid is required.\n";
 }
 
+my $post = $blop->post(postid => $postid) or die "Invalid postid.\n";
+
 system "rm", "-rf", "$blop->{base}/content/post/$postid";
 
 my $sth = $blop->dbh->prepare(<<EOSQL);
@@ -22,6 +24,8 @@ $sth = $blop->dbh->prepare(<<EOSQL);
 delete from posts where postid=?
 EOSQL
 $sth->execute($postid);
+
+$blop->log(content => "Deleted post \"" . $post->label . "\"", postid => $postid);
 
 print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({

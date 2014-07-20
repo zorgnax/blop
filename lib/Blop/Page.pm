@@ -151,5 +151,10 @@ sub update_content {
     return $markup->convert($self->{content});
 }
 
+sub label {
+    my ($self) = @_;
+    return $self->{title} ? $self->{title} : "Page $self->{pageid}";
+}
+
 1;
 

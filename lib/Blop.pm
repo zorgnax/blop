@@ -16,6 +16,7 @@ use Blop::Navigation;
 use Blop::Section;
 use Blop::Widget;
 use Blop::Config;
+use Blop::Log;
 
 my $blop;
 my $template;
@@ -218,12 +219,12 @@ sub escape_json {
 }
 
 sub log {
-    my ($self, $content) = @_;
+    my ($self, %args) = @_;
+    my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
     my $sth = $self->dbh->prepare(<<EOSQL);
-insert into log set date=?, content=?, ipaddr=?, uri=?
+insert into log set date=?, ipaddr=?, uri=?, $sets
 EOSQL
-    $sth->execute($self->now->str, $content, $ENV{REMOTE_ADDR},
-                  $ENV{REQUEST_URI});
+    $sth->execute($self->now->str, $ENV{REMOTE_ADDR}, $ENV{REQUEST_URI});
 }
 
 sub session {

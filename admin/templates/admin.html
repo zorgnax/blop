@@ -1,4 +1,11 @@
 [% PROCESS header.html title="Admin Dashboard" %]
 
+<h3>Current Events</h3>
+<ul class="logs">
+[% FOREACH log IN logs %]
+    <li><div>[% log.content %]</div><div class="muted">[% log.date.natural %]</div></li>
+[% END %]
+</ul>
+
 [% PROCESS footer.html %]
 

@@ -11,6 +11,8 @@ if (!$categoryid) {
     die "A categoryid is required.\n";
 }
 
+my $category = $blop->category(categoryid => $categoryid) or die "Invalid categoryid.\n";
+
 my $sth = $blop->dbh->prepare(<<EOSQL);
 update posts set categoryid=0 where categoryid=?
 EOSQL
@@ -20,6 +22,8 @@ $sth = $blop->dbh->prepare(<<EOSQL);
 delete from categories where categoryid=?
 EOSQL
 $sth->execute($categoryid);
+
+$blop->log(content => "Deleted category \"" . $category->{name} . "\"", categoryid => $categoryid);
 
 print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({

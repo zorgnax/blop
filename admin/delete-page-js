@@ -11,12 +11,16 @@ if (!$pageid) {
     die "A pageid is required.\n";
 }
 
+my $page = $blop->page(pageid => $pageid) or die "Invalid pageid.\n";
+
 system "rm", "-rf", "$blop->{base}/content/page/$pageid";
 
 my $sth = $blop->dbh->prepare(<<EOSQL);
 delete from pages where pageid=?
 EOSQL
 $sth->execute($pageid);
+
+$blop->log(content => "Deleted page \"" . $page->label . "\"", pageid => $pageid);
 
 print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({

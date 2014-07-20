@@ -119,9 +119,12 @@ create table config (
 create table log (
     logid int unsigned primary key auto_increment,
     date datetime not null,
-    content text,
     ipaddr varchar(16),
-    uri varchar(128));
+    uri varchar(128),
+    content text,
+    postid int unsigned,
+    pageid int unsigned,
+    categoryid int unsigned);
 EOSQL
 
 my $sth = $dbh->prepare("insert into config set name=?, value=?");
@@ -145,7 +148,7 @@ $sth->execute(allcat => "All", "");
 $sth->execute(uncat => "Uncategorized", "uncategorized");
 
 $blop->{dbh} = $dbh;
-$blop->log("Installed");
+$blop->log(content => "Installed");
 
 $blop->create_session();
 

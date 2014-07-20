@@ -49,16 +49,19 @@ insert into categories set name=?, url=?
 EOSQL
     $sth->execute($self->{name}, $self->{url});
     $self->{categoryid} = $sth->{mysql_insertid};
+    $blop->log(content => "Added category \"$self->{name}\"", categoryid => $self->{categoryid});
     return $self;
 }
 
 sub edit {
     my ($self, %args) = @_;
     my $blop = Blop::instance();
+    my $to_name = "";
     my %sets;
     for my $key (keys %args) {
         if ($self->{$key} ne $args{$key}) {
             $sets{$key} = $args{$key};
+            $to_name = " to $sets{$key}" if $key eq "name";
         }
     }
     if (%sets) {
@@ -67,6 +70,7 @@ sub edit {
 update categories set $sets where categoryid=?
 EOSQL
         $sth->execute($self->{categoryid});
+        $blop->log(content => "Edited category $self->{name}$to_name", categoryid => $self->{categoryid});
     }
 }
 

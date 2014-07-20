@@ -101,7 +101,8 @@ EOSQL
     $post = $blop->post(postid => $postid);
     $post->update_content;
 
-    $blop->log("Added post $postid");
+    my $label = $title ? $title : "Post $postid";
+    $blop->log(content => "Added post \"$label\"", postid => $postid);
 
     print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json({ok => 1, postid => $postid});
@@ -112,6 +113,7 @@ my %args;
 
 if ($post->{title} ne $title) {
     $args{title} = $title;
+    $post->{title} = $title;
 }
 if ($post->{url} ne $url) {
     $args{url} = $url;
@@ -136,9 +138,11 @@ EOSQL
 }
 
 my %tag_hash;
+my $tags_edited = 0;
 for my $tag (@tags) {
     if (!$post->has_tag($tag)) {
         $post->add_tag($tag);
+        $tags_edited = 1;
     }
     $tag_hash{$tag} = $tag;
 }
@@ -146,12 +150,17 @@ for my $tag (@tags) {
 for my $tag (@{$post->tags}) {
     if (!$tag_hash{$tag}) {
         $post->rm_tag($tag);
+        $tags_edited = 1;
     }
 }
 
 $post->update_content;
 
-$blop->log("Edited post $postid");
+my @parts = keys %args;
+push @parts, "tags" if $tags_edited;
+my $parts = join ", ", @parts;
+$parts .= " of " if $parts;
+$blop->log(content => "Edited ${parts}post \"" . $post->label . "\"", postid => $postid);
 
 print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({ok => 1, postid => $postid});

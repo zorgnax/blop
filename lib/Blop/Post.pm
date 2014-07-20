@@ -259,5 +259,10 @@ EOSQL
     return $count;
 }
 
+sub label {
+    my ($self) = @_;
+    return $self->{title} ? $self->{title} : "Post $self->{postid}";
+}
+
 1;
 
