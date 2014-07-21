@@ -526,5 +526,14 @@ sub now {
     return Blop::Date->now;
 }
 
+sub comma_and {
+    my ($self, @a) = @_;
+    return "" if !@a;
+    return $a[0] if @a == 1;
+    return "$a[0] and $a[1]" if @a == 2;
+    my $last = pop @a;
+    return join(", ", @a) . ", and " . $last;
+}
+
 1;
 

@@ -67,9 +67,8 @@ EOSQL
     $page = $blop->page(pageid => $pageid);
     $page->update_content;
 
-    my $label = $title ? $title : "Page $postid";
+    my $label = $title ? $title : "Page $pageid";
     $blop->log(content => "Added page \"$label\"", pageid => $pageid);
-
 
     print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json({ok => 1, pageid => $pageid});
@@ -78,8 +77,10 @@ EOSQL
 
 my %args;
 
+my $to_title = "";
 if ($page->{title} ne $title) {
     $args{title} = $title;
+    $to_title = " to \"" . ($title ? $title : "Page $pageid") . "\"";
 }
 if ($page->{url} ne $url) {
     $args{url} = $url;
@@ -105,9 +106,9 @@ EOSQL
 
 $page->update_content;
 
-my $parts = join ", ", keys %args;
+my $parts = $blop->comma_and(keys %args);
 $parts .= " of " if $parts;
-$blop->log(content => "Edited ${parts}page \"" . $page->label . "\"", pageid => $pageid);
+$blop->log(content => "Edited ${parts}page \"" . $page->label . "\"$to_title", pageid => $pageid);
 
 print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({ok => 1, pageid => $pageid});
