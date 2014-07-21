@@ -1,9 +1,19 @@
 [% PROCESS header.html title="Admin Dashboard" %]
 
-<h3>Current Events</h3>
+<h3>[% blop.conf.title %]</h3>
+
+<ul>
+<li>[% blop.num_posts.published %] posts[% IF blop.num_posts.unpublished %] ([% blop.num_posts.unpublished %] unpublished)[% END %]</li>
+<li>[% blop.num_pages.published %] pages[% IF blop.num_pages.unpublished %] ([% blop.num_pages.unpublished %] unpublished)[% END %]</li>
+<li>[% blop.num_categories %] categories</li>
+<li>[% blop.num_tags %] tags</li>
+<li>[% blop.num_comments.approved %] comments[% IF blop.num_comments.pending %] ([% blop.num_comments.pending %] pending)[% END %]</li>
+</ul>
+
+<h3>Log</h3>
 <ul class="logs">
 [% FOREACH log IN logs %]
-    <li><div>[% log.content %]</div><div class="muted">[% log.date.natural %]</div></li>
+    <li><div>[% log.content %]</div><div class="muted">[% log.date.natural %] from [% log.ipaddr %]</div></li>
 [% END %]
 </ul>
 

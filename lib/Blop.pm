@@ -324,18 +324,6 @@ sub comment {
     return $comment;
 }
 
-sub pending_comments {
-    my ($self) = @_;
-    return $self->{pending_comments} if exists $self->{pending_comments};
-    my $sth = $self->dbh->prepare(<<EOSQL);
-select count(*) from comments where status="pending"
-EOSQL
-    $sth->execute();
-    my ($count) = $sth->fetchrow_array();
-    $self->{pending_comments} = $count;
-    return $count;
-}
-
 sub last_comment {
     my ($self) = @_;
     return $self->{last_comment} if exists $self->{last_comment};
@@ -373,6 +361,63 @@ EOSQL
     }
     $self->{date_archives} = \@archives;
     return \@archives;
+}
+
+sub num_posts {
+    my ($self) = @_;
+    return $self->{num_posts} if $self->{num_posts};
+    my $now = $self->dbh->quote($self->now->str);
+    my $sth = $self->dbh->prepare(<<EOSQL);
+select count(*) count, sum(published < $now) published, sum(published is null or published >= $now) unpublished from posts
+EOSQL
+    $sth->execute();
+    $self->{num_posts} = $sth->fetchrow_hashref();
+    return $self->{num_posts};
+}
+
+sub num_pages {
+    my ($self) = @_;
+    return $self->{num_pages} if $self->{num_pages};
+    my $now = $self->dbh->quote($self->now->str);
+    my $sth = $self->dbh->prepare(<<EOSQL);
+select count(*) count, sum(published < $now) published, sum(published is null or published >= $now) unpublished from pages
+EOSQL
+    $sth->execute();
+    $self->{num_pages} = $sth->fetchrow_hashref();
+    return $self->{num_pages};
+}
+
+sub num_categories {
+    my ($self) = @_;
+    return $self->{num_categories} if exists $self->{num_categories};
+    my $sth = $self->dbh->prepare(<<EOSQL);
+select count(*) from categories where special is null
+EOSQL
+    $sth->execute();
+    ($self->{num_categories}) = $sth->fetchrow_array();
+    return $self->{num_categories};
+}
+
+sub num_tags {
+    my ($self) = @_;
+    return $self->{num_tags} if exists $self->{num_tags};
+    my $sth = $self->dbh->prepare(<<EOSQL);
+select count(distinct name) from tags
+EOSQL
+    $sth->execute();
+    ($self->{num_tags}) = $sth->fetchrow_array();
+    return $self->{num_tags};
+}
+
+sub num_comments {
+    my ($self) = @_;
+    return $self->{num_comments} if $self->{num_comments};
+    my $sth = $self->dbh->prepare(<<EOSQL);
+select sum(status="approved") approved, sum(status="pending") pending from comments
+EOSQL
+    $sth->execute();
+    $self->{num_comments} = $sth->fetchrow_hashref();
+    return $self->{num_comments};
 }
 
 sub page {
