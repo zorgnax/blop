@@ -6,7 +6,7 @@
 [% IF post.category %]
 <div class="category"><a href="[% urlbase %]/[% post.category.url | uri %]">[% post.category.name %]</a></div>
 [% END %]
-<h2><a href="[% urlbase %]/[% post.url | uri %]">[% post.title || "Post " _ post.postid | html %]</a></h2>
+<h2><a href="[% urlbase %]/[% post.url | uri %]">[% post.label | html %]</a></h2>
 <span class="published">[% post.published.natural %]</span>
 [% IF post.num_comments %]
 <span class="num_comments">[% post.num_comments %] comment[% IF post.num_comments != 1 %]s[% END %]</span>

@@ -161,12 +161,12 @@ sub update_gallery {
     my ($markup, $elem) = @_;
     my $entry = $markup->{entry} or return;
     if ($markup->{file}) {
-        create_thumb($entry, $markup->{file}, $elem->{hash}{size}, "force");
+        create_thumb($entry, $markup->{file}, $elem, "force");
         return;
     }
     my $files = $entry->files;
     for my $file (@$files) {
-        create_thumb($entry, $file->{name}, $elem->{hash}{size});
+        create_thumb($entry, $file->{name}, $elem);
     }
 }
 
@@ -176,20 +176,37 @@ sub update_thumb {
     my $name = $elem->{args}[0] or return;
     if ($markup->{file}) {
         if ($markup->{file} eq $name) {
-            create_thumb($entry, $name, $elem->{hash}{size}, "force");
+            create_thumb($entry, $name, $elem, "force");
         }
         return;
     }
-    create_thumb($entry, $name, $elem->{hash}{size});
+    create_thumb($entry, $name, $elem);
 }
 
 sub create_thumb {
-    my ($entry, $file_name, $size, $force) = @_;
+    my ($entry, $file_name, $elem, $force) = @_;
     return if $file_name !~ /\.(jpe?g|gif|png)$/i;
     my $blop = Blop::instance() or return;
     my %default = (small => "x125>", medium => "x250>", large => "700>");
-    $size ||= "medium";
-    my $geometry = $blop->{conf}{"gallery_$size"} || $default{$size} || $size;
+    my $size = $elem->{hash}{size} || "medium";
+    my $spec;
+    if ($blop->{conf}{"gallery_$size"}) {
+        $spec = $blop->{conf}{"gallery_$size"};
+    }
+    elsif ($default{$size}) {
+        $spec = $default{$size};
+    }
+    else {
+        $spec = $size;
+    }
+    my ($geometry, $extent);
+    if ($spec =~ m{^e(.+)}) {
+        $geometry = "$1^";
+        $extent = $1;
+    }
+    else {
+        $geometry = $spec;
+    }
     my $dir = create_thumb_dir($entry);
     my $thumb = "$dir/$file_name";
     $thumb =~ s{(\.\w+)$}{.$size$1};
@@ -198,6 +215,7 @@ sub create_thumb {
     my $path = $entry->content_path . "/$file_name";
     $magick->Read($path);
     $magick->Resize(geometry => $geometry);
+    $magick->Extent(geometry => $extent, gravity => "Center") if $extent;
     $magick->Write($thumb);
 }
 
