@@ -18,20 +18,58 @@ sub new {
 }
 
 sub list {
-    my ($class, %args) = @_;
+    my ($class) = @_;
     my $blop = Blop::instance();
     my $now = $blop->dbh->quote($blop->now->str);
     my $sth = $blop->dbh->prepare(<<EOSQL);
-select pageid, title, url, added, published, sequence
+select pageid, title, url, added, published, sequence, parentid
 from pages where published <= $now order by sequence, title
 EOSQL
     $sth->execute();
-    my @pages;
+    my (@pages, %pages);
     while (my $page = $sth->fetchrow_hashref()) {
         $page = bless $page, $class;
         push @pages, $page;
+        $pages{$page->{pageid}} = $page;
     }
-    return \@pages;
+    my @top;
+    for my $page (@pages) {
+        my $parent = $pages{$page->{parentid}};
+        if ($parent) {
+            push @{$parent->{children}}, $page;
+        }
+        else {
+            push @top, $page;
+        }
+    }
+    return \@top;
+}
+
+sub parent_pages {
+    my ($class, $child) = @_;
+    my $blop = Blop::instance();
+    my $sth = $blop->dbh->prepare(<<EOSQL);
+select pageid, title, url, added, published, sequence, parentid
+from pages order by sequence, title
+EOSQL
+    $sth->execute();
+    my (@pages, %pages);
+    while (my $page = $sth->fetchrow_hashref()) {
+        $page = bless $page, $class;
+        push @pages, $page;
+        $pages{$page->{pageid}} = $page;
+    }
+    return \@pages if !$child;
+    my @parents;
+    PAGE: for my $page (@pages) {
+        my $page_ = $page;
+        while ($page_) {
+            next PAGE if $page_->{pageid} == $child->{pageid};
+            $page_ = $pages{$page_->{parentid}};
+        }
+        push @parents, $page;
+    }
+    return \@parents;
 }
 
 sub fullurl {

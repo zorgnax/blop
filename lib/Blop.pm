@@ -427,10 +427,17 @@ sub page {
 }
 
 sub pages {
-    my ($self, %args) = @_;
+    my ($self) = @_;
     return $self->{pages} if $self->{pages};
-    $self->{pages} = Blop::Page->list(%args);
+    $self->{pages} = Blop::Page->list();
     return $self->{pages};
+}
+
+sub parent_pages {
+    my ($self, $child) = @_;
+    return $self->{parent_pages} if $self->{parent_pages};
+    $self->{parent_pages} = Blop::Page->parent_pages($child);
+    return $self->{parent_pages};
 }
 
 sub section {

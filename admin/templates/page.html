@@ -40,6 +40,16 @@
 </div>
 
 <div class="aentry">
+<label for="parentid">Parent</label><br/>
+<select id="parentid" name="parentid">
+<option value="0"></option>
+[% FOREACH page_ IN blop.parent_pages(page) %]
+<option value="[% page_.pageid %]"[% IF page.parentid == page_.pageid %] selected="selected"[% END %]>[% page_.label %]</option>
+[% END %]
+</select>
+</div>
+
+<div class="aentry">
 <input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/>
 <input type="button" id="delete" value="[% IF page %]Delete[% ELSE %]Cancel[% END %]"/>
 </div>
