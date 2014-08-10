@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8">
+<![endif]-->
+<!--[if !(IE 7) | !(IE 8) ]><!-->
+<html>
+<!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>[% title | html %]</title>
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <!--[if lt IE 9]>
+    <script src="[% theme.url('html5.js') %]"></script>
+    <![endif]-->
+    <meta name="generator" content="Blop [% blop.version %]"/>
+    <meta name="description" content="[% blop.conf.meta_description | html %]"/>
+    <meta name="keywords" content="[% blop.conf.meta_tags | html %]"/>
+    <meta name="author" content="[% blop.conf.meta_author | html %]"/>
+    <link rel="stylesheet" id="twentyfourteen-lato-css" href="//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C900%2C300italic%2C400italic%2C700italic" type="text/css" media="all" />
+    <link rel="stylesheet" id="genericons-css" href="[% theme.url('genericons/genericons.css') %]" type="text/css" media="all" />
+    <link rel="stylesheet" id="twentyfourteen-style-css" type="text/css" href="[% theme.url('style.css') %]" media="all" />
+    <link rel="stylesheet" type="text/css" href="[% theme.url('gallery.css') %]" />
+    <link rel="stylesheet" type="text/css" href="[% theme.url('syntax.css') %]"/>
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" id="twentyfourteen-ie-css" href="[% theme.url('ie.css') %]" type="text/css" media="all" />
+    <![endif]-->
+    <script type="text/javascript" src="[% theme.url('jquery-1.11.0.js') %]"></script>
+    <script type="text/javascript" src="[% theme.url('jquery-migrate.min.js') %]"></script>
+</head>
+
+<body class="[% theme.body_classes %][% IF blop.logo %] header-image[% ELSE %] masthead-fixed[% END %] full-width[% IF blop.footer.content %] footer-widgets[% END %]">
+<div id="page" class="hfeed site">
+
+    [% IF blop.logo %]
+    <div id="site-header">
+        <a href="[% urlbase %]/" rel="home">
+            <img src="[% blop.logo %]" alt="">
+        </a>
+    </div>
+    [% END %]
+
+    <header id="masthead" class="site-header" role="banner">
+        <div class="header-main">
+            <h1 class="site-title"><a href="[% urlbase %]/" rel="home">[% blop.conf.title %]</a></h1>
+
+            <div class="search-toggle">
+                <a href="#search-container" class="screen-reader-text">Search</a>
+            </div>
+
+            <nav id="primary-navigation" class="site-navigation primary-navigation" role="navigation">
+                <button class="menu-toggle">Primary Menu</button>
+                <a class="screen-reader-text skip-link" href="#content">Skip to content</a>
+                <div class="nav-menu">[% theme.page_menu %]</div>
+            </nav>
+        </div>
+
+        <div id="search-container" class="search-box-wrapper hide">
+            <div class="search-box">
+                <form role="search" method="get" class="search-form" action="[% blop.allcat.fullurl %]">
+                    <label>
+                        <span class="screen-reader-text">Search for:</span>
+                        <input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" title="Search for:" />
+                    </label>
+                    <input type="submit" class="search-submit" value="Search" />
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div id="main" class="site-main">

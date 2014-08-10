@@ -34,6 +34,9 @@ EOSQL
     my @categories;
     while (my $category = $sth->fetchrow_hashref()) {
         $category = bless $category, $class;
+        if ($category->{special} && $category->{special} eq "uncat") {
+            next if !$category->num_posts("published");
+        }
         push @categories, $category;
     }
     return \@categories;
@@ -140,6 +143,12 @@ EOSQL
     $self->{latest_post} = $post;
     $post = bless $post, "Blop::Post" if $post;
     return $post;
+}
+
+sub fullurl {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return "$blop->{urlbase}/$self->{url}";
 }
 
 1;

@@ -298,7 +298,7 @@ sub parse_html_element {
     }
     if ($elem && $elem->{tag} =~ m{^ (p|div|h[1-6]|blockquote|pre|table|
                                       dl|ol|ul|script|noscript|form|fieldset|
-                                      iframe|math|ins|del|hr|!--) $}ix) {
+                                      iframe|math|hr|!--) $}ix) {
         $elem->{block} = 1;
     }
     if ($elem && $elem->{content} && !$elem->{block}) {

@@ -1,9 +1,9 @@
-<div class="widget">
-<h3>Categories</h3>
-<ul class="categories">
-[% FOREACH category_ IN blop.categories %]
-<li><a href="[% urlbase %]/[% category_.url %]">[% category_.name %] ([% category_.num_posts("published") %])</a></li>
-[% END %]
-</ul>
+<div class="widget widget-categories">
+    <h1 class="widget-title">Categories</h1>
+    <ul>
+        [% FOREACH category_ IN blop.categories %]
+        <li class="cat-item"><a href="[% category_.fullurl %]">[% category_.name %] ([% category_.num_posts("published") %])</a></li>
+        [% END %]
+    </ul>
 </div>
 

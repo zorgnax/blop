@@ -150,6 +150,22 @@ sub was_published {
     return 1;
 }
 
+sub comments_enabled {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return $blop->{conf}{page_comments};
+}
+
+sub id_name {
+    my ($self) = @_;
+    return "pageid";
+}
+
+sub id_value {
+    my ($self) = @_;
+    return $self->{pageid};
+}
+
 sub comments {
     my ($self) = @_;
     return $self->{comments} if $self->{comments};

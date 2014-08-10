@@ -1,17 +1,18 @@
 function Comments (args) {
     this.args = args;
-    this.initCommentForm(this.args.formId);
+    this.initCommentForm($(this.args.formId));
     var self = this;
     $(this.args.editableComments).each(function () {
         self.initEditCommentForm($(this));
     });
 }
 
-Comments.prototype.initCommentForm = function (formId) {
-    var form = new PForm({
-        formId: formId,
-        processUrl: this.args.processUrl,
-        onSuccess: function () {location.reload();}});
+Comments.prototype.initCommentForm = function (form) {
+    var self = this;
+    form.on("submit", function (event) {
+        event.preventDefault();
+        self.submit(form)
+    });
 }
 
 Comments.prototype.initEditCommentForm = function (div) {
@@ -58,7 +59,7 @@ Comments.prototype.delete = function (div) {
         }
         else {
             var heading = div.find(".comment-heading");
-            heading.find(".awaiting-moderation").remove();
+            heading.find(".comment-awaiting-moderation").remove();
             heading.find("a").remove();
             heading.append(" <span class='comment-deleted'>Deleted</span>");
         }
@@ -66,5 +67,46 @@ Comments.prototype.delete = function (div) {
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
     });
+}
+
+Comments.prototype.submit = function (form) {
+    form.find(".comment-main-mesg").text("Processing...");
+    var self = this;
+    var ajax = $.ajax({
+        url: this.args.processUrl,
+        type: "POST",
+        data: form.serialize()
+    });
+    ajax.done(function (data, textStatus, jqXHR) {
+        self.done(form, data, textStatus, jqXHR);
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        self.fail(form, jqXHR, textStatus, errorThrown);
+    });
+}
+
+Comments.prototype.done = function (form, data, textStatus, jqXHR) {
+    var self = this;
+    form.find(":input[name]").each(function () {
+        var errorDiv = form.find("." + this.name + "-error");
+        if (this.name + "Error" in data) {
+            errorDiv.text(data[this.name + "Error"]);
+            $(this).css("backgroundColor", "lightpink");
+        }
+        else {
+            errorDiv.text("");
+            $(this).css("backgroundColor", "");
+        }
+    });
+    if (!data.error) {
+        form.find(".comment-main-mesg").text(data.mesg ? data.mesg : "Okay!");
+        location.reload();
+        return;
+    }
+    form.find(".comment-main-mesg").text(data.mesg ? data.mesg : "");
+}
+
+Comments.prototype.fail = function (form, jqXHR, textStatus, errorThrown) {
+    form.find(".comment-main-mesg").text(errorThrown);
 }
 

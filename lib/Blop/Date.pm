@@ -7,6 +7,7 @@ use overload '""' => \&str;
 
 sub new {
     my ($class, $str) = @_;
+    return undef if !$str;
     $str =~ /^(\d{4})(-(\d+)(-(\d+)((\s+|T)(\d+)(:(\d+)(:(\d+)(\.(\d+))?)?)?)?)?)?(.*)$/;
     my $year = $1;
     my $month = $3 || 1;

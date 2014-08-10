@@ -36,34 +36,65 @@ sub links {
     my ($self) = @_;
     return "" if !$self->{rows};
     my $out = "";
-    if ($self->{page} != 1) {
-        my $url = $self->url(0);        
-        $out .= "<a href=\"$url\">First</a>\n";
-        $url = $self->url($self->{offset} - $self->{limit});        
-        $out .= "<a href=\"$url\">Previous</a>\n";
+    $out .= "<a href=\"" . $self->first . "\">First</a>\n" if $self->first;
+    $out .= "<a href=\"" . $self->prev . "\">Previous</a>\n" if $self->prev;
+    my $links = $self->window(7);
+    for my $link (@$links) {
+        if ($link->{selected}) {
+            $out .= "<b>$link->{page}</b>\n";
+        }
+        else {
+            $out .= "<a href=\"$link->{url}\">$link->{page}</a>\n";
+        }
     }
-    my @links;
-    my $win = 7;
-    my $min = $self->{page} - int $win / 2;
+    $out .= "<a href=\"" . $self->next . "\">Next</a>\n" if $self->next;
+    $out .= "<a href=\"" . $self->last . "\">Last</a>\n" if $self->last;
+    return $out;
+}
+
+sub first {
+    my ($self) = @_;
+    return "" if $self->{page} == 1;
+    return $self->url(0);
+}
+
+sub prev {
+    my ($self) = @_;
+    return "" if $self->{page} == 1;
+    return $self->url($self->{offset} - $self->{limit});
+}
+
+sub window {
+    my ($self, $window) = @_;
+    my $min = $self->{page} - int $window / 2;
     $min = 1 if $min < 1;
-    my $max = $min + $win - 1;
+    my $max = $min + $window - 1;
     $max = $self->{pages} if $max > $self->{pages};
+    if ($max == $self->{pages}) {
+        $min = $max - $window + 1;
+        $min = 1 if $min < 1;
+    }
+    return [] if $max - $min < 1;
+    my @links;
     for ($min .. $max) {
         my $offset = ($_ - 1) * $self->{limit};
         my $url = $self->url($offset);
-        my $link = $_ == $self->{page} ? "<b>$_</b>\n" : "<a href=\"$url\">$_</a>\n";
-        push @links, $link;
+        my $selected = $_ == $self->{page};
+        push @links, {page => $_, url => $url, selected => $selected};
     }
-    if (@links > 1) {
-        $out .= "@links";
-    }
-    if ($self->{page} != $self->{pages}) {
-        my $url = $self->url($self->{offset} + $self->{limit});
-        $out .= "<a href=\"$url\">Next</a>\n";
-        $url = $self->url(int(($self->{pages} - 1) * $self->{limit}));
-        $out .= "<a href=\"$url\">Last</a>\n";
-    }
-    return $out;
+    return \@links;
+}
+
+sub next {
+    my ($self) = @_;
+    return "" if $self->{page} == $self->{pages};
+    return $self->url($self->{offset} + $self->{limit});
+}
+
+sub last {
+    my ($self) = @_;
+    return "" if $self->{page} == $self->{pages};
+    return $self->url(int(($self->{pages} - 1) * $self->{limit}));
 }
 
 sub url {

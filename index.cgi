@@ -50,10 +50,18 @@ if ($page) {
 not_found();
 
 sub listing {
+    $blop->{display_tags} = \@tags if @tags;
+    $blop->{display_category} = $category;
+    $blop->{display_year} = $year;
+    $blop->{display_month} = $month;
+    $blop->{display_day} = $day;
+
     if ($blop->{conf}{cat_latest} && $category) {
         $post = $category->latest_post() or die "No posts.\n";
         post();
     }
+
+    $blop->{listing} = 1;
 
     my $limit = $cgi->param("limit");
     $limit = $blop->{conf}{ppp} if !defined $limit;
@@ -151,18 +159,22 @@ sub post {
         $category = $blop->category(categoryid => $categoryid)
             or die "Invalid categoryid.\n";
     }
+    $blop->{display_post} = $post;
+    $blop->{display_category} = $category;
     print $blop->http_header();
     print $blop->template("post.html", post => $post, category => $category);
     exit;
 }
 
 sub page {
+    $blop->{display_page} = $page;
     print $blop->http_header();
     print $blop->template("page.html", page => $page);
     exit;
 }
 
 sub not_found {
+    $blop->{not_found} = 1;
     print $blop->http_header("Status" => "404 Not Found");
     print $blop->template("not-found.html", path => $path);
     exit;

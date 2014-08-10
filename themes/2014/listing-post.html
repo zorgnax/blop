@@ -1,0 +1,32 @@
+<article id="post-[% post.postid %]" class="post post-[% post.postid %] type-post hentry category-[% post.categoryid %]">
+    <header class="entry-header">
+        [% IF post.category %]
+        <div class="entry-meta">
+            <span class="cat-links"><a href="[% post.category.fullurl %]">[% post.category.name %]</a></span>
+        </div>
+        [% END %]
+        <h1 class="entry-title"><a href="[% post.fullurl %]" rel="bookmark">[% post.label %]</a></h1>
+        <div class="entry-meta">
+            <span class="entry-date"><a href="[% post.fullurl %]"><time class="entry-date" title="[% post.published %]">[% post.published.natural %]</time></a></span>
+            [% IF blop.conf.post_comments || post.num_comments %]
+            <span class="comments-link"><a href="[% post.fullurl %]#comment">[% IF !post.num_comments %]Leave a comment[% ELSIF post.num_comments == 1 %]1 Comment[% ELSE %][% post.num_comments %] Comments[% END %]</a></span>
+            [% END %]
+            [% IF blop.admin %]
+            <span class="edit-link"><a class="post-edit-link" href="[% post.editurl %]">Edit</a></span>
+            [% END %]
+        </div>
+    </header>
+    <div class="entry-content">
+        [% post.parsed_content %]
+        [% IF blop.ps.content %]
+        [% blop.ps.parsed_content %]
+        [% END %]
+    </div>
+    [% IF post.tags.size %]
+    <footer class="entry-meta"><span class="tag-links">
+        [% FOREACH tag IN post.tags %]
+            <a href="[% tag.fullurl %]">[% tag.name | html %]</a>
+        [% END %]
+    </span></footer>
+    [% END %]
+</article>

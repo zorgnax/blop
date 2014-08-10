@@ -2,14 +2,14 @@
 <html>
 <head>
     <title>[% title | html %]</title>
-    <meta name="generator" content="Blop 1.0"/>
+    <meta name="generator" content="Blop [% blop.version %]"/>
     <meta name="description" content="[% blop.conf.meta_description | html %]"/>
     <meta name="keywords" content="[% blop.conf.meta_tags | html %]"/>
     <meta name="author" content="[% blop.conf.meta_author | html %]"/>
-    <link rel="stylesheet" type="text/css" href="[% theme_url('style.css') %]"/>
-    <link rel="stylesheet" type="text/css" href="[% theme_url('syntax.css') %]"/>
-    <script type="text/javascript" src="[% theme_url('jquery-1.11.0.js') %]"></script>
-    <script type="text/javascript" src="[% theme_url('pform.js') %]"></script>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('style.css') %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('gallery.css') %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('syntax.css') %]"/>
+    <script type="text/javascript" src="[% theme.url('jquery-1.11.0.js') %]"></script>
     [% IF blop.background %]
     <style type="text/css">
     body {

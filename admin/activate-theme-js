@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf;
+$blop->assert_admin;
+$blop->assert_csrf;
+
+my $theme = $cgi->param("theme");
+if ($theme =~ m{(^|/)\.\.($|/)}) {
+    die "Theme cannot traverse up directories.\n";
+}
+if (!-e "$blop->{base}themes/$theme") {
+    die "Invalid theme.\n";
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+update config set value=? where name="theme"
+EOSQL
+$sth->execute($theme);
+
+print $blop->http_header("Content-Type" => "application/json");
+print $blop->escape_json({ok => 1});
+

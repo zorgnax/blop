@@ -6,14 +6,23 @@ sub read {
     my ($file) = @_;
     my %conf;
     open my $fh, "<", $file or die "Can't open $file: $!\n";
+    my $name = "";
     while (my $line = <$fh>) {
-        next if $line !~ /^\s*([\w_-]+)(\s*=\s*|\s+)(.+)$/;
-        my $name = $1;
-        my $value = $3;
-        $value =~ s/^\s+|\s+$//g;
-        $conf{$name} = $value;
+        if ($line =~ /^([\w_-]+)(\s*=\s*|\s+)(.*)$/) {
+            $name = $1;
+            $conf{$name} = $3;
+        }
+        elsif ($name && $line =~ /^[ \t]+(.*)$/) {
+            $conf{$name} .= "\n$1";
+        }
+        elsif ($name && $line =~ /^[ \t]*$/) {
+            $conf{$name} .= "\n";
+        }
     }
     close $fh;
+    for (values %conf) {
+        s/^\s+|\s+$//g;
+    }
     return \%conf;
 }
 

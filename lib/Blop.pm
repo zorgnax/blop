@@ -17,6 +17,9 @@ use Blop::Section;
 use Blop::Widget;
 use Blop::Config;
 use Blop::Log;
+use Blop::Theme;
+
+our $VERSION = "2014-08-04";
 
 my $blop;
 my $template;
@@ -54,7 +57,7 @@ sub template {
     my %vars = (blop => $self, urlbase => $self->{urlbase}, %extra_vars);
     $vars{ENV} = \%ENV;
     $vars{dump} = sub {return "<pre>" . $self->dump(@_ ? @_ : \%vars) . "</pre>"};
-    $vars{theme_url} = sub {$self->theme_url(@_)};
+    $vars{theme} = $self->{theme};
     $vars{cgi} = $self->cgi;
     $template->process($file, \%vars, \my $out) or die $template->error;
     return $out;
@@ -62,25 +65,9 @@ sub template {
 
 sub load_theme {
     my ($self) = @_;
-    my $path = "";
-    my $theme = $self->{conf}{theme} || "";
-    if ($theme && $theme ne "default") {
-        $path .= "$self->{base}themes/$theme:";
-    }
-    $path .= "$self->{base}themes/default";
-    $self->{template_include_path} = $path;
-}
-
-sub theme_url {
-    my ($self, $file) = @_;
-    my $theme = $self->{conf}{theme} || "";
-    if ($theme && $theme ne "default" && -e "$self->{base}themes/$theme/$file") {
-        return "$self->{urlbase}/themes/$theme/$file";
-    }
-    elsif (-e "$self->{base}themes/default/$file") {
-        return "$self->{urlbase}/themes/default/$file";
-    }
-    return undef;
+    my $theme = Blop::Theme->new($self->{conf}{theme});
+    $self->{theme} = $theme;
+    $self->{template_include_path} = $theme->template_include_path;
 }
 
 sub logo {
@@ -346,7 +333,7 @@ sub date_archives {
     my $now = $self->dbh->quote($self->now->str);
     my $sth = $self->dbh->prepare(<<EOSQL);
 select
-    date_format(published, "%b %Y") name,
+    date_format(published, "%M %Y") name,
     date_format(published, "%Y/%m") url,
     count(*) posts
 from posts
@@ -540,6 +527,15 @@ sub comma_and {
     return "$a[0] and $a[1]" if @a == 2;
     my $last = pop @a;
     return join(", ", @a) . ", and " . $last;
+}
+
+sub version {
+    return $VERSION;
+}
+
+sub search {
+    my ($self) = @_;
+    return $self->cgi->param("s");
 }
 
 1;

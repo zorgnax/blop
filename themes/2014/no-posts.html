@@ -1,0 +1,28 @@
+<header class="page-header">
+    <h1 class="page-title">Nothing Found</h1>
+</header>
+<div class="page-content">
+    [% IF category.special == "allcat" && !blop.search && blop.admin %]
+        <p>Ready to publish your first post? <a href="[% urlbase %]/admin/post">Get started here</a></p>
+    [% ELSIF blop.search %]
+        <p>Sorry, but nothing matched your search terms. Please try again with some different keywords.</p>
+        <form role="search" method="get" class="search-form"
+            action="[% blop.allcat.fullurl %]">
+        <label>
+            <span class="screen-reader-text">Search for:</span>
+            <input type="search" class="search-field" placeholder="Search &hellip;" value="[% blop.search | html %]" name="s" title="Search for:" />
+        </label>
+        <input type="submit" class="search-submit" value="Search" />
+        </form>
+    [% ELSE %]
+        <p>It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.</p>
+        <form role="search" method="get" class="search-form"
+            action="[% blop.allcat.fullurl %]">
+        <label>
+            <span class="screen-reader-text">Search for:</span>
+            <input type="search" class="search-field" placeholder="Search &hellip;" value="[% blop.search | html %]" name="s" title="Search for:" />
+        </label>
+        <input type="submit" class="search-submit" value="Search" />
+        </form>
+    [% END %]
+</div>

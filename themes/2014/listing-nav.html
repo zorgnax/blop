@@ -1,0 +1,15 @@
+[% RETURN IF navigation.pages < 2 %]
+<nav class="navigation paging-navigation" role="navigation">
+    <h1 class="screen-reader-text">Posts navigation</h1>
+    <div class="pagination loop-pagination">
+        [% IF navigation.prev %]<a class="prev page-numbers" href="[% navigation.prev %]">&larr; Previous</a>[% END %]
+        [% FOREACH link IN navigation.window(7) %]
+            [% IF link.selected %]
+                <span class="page-numbers current">[% link.page %]</span>
+            [% ELSE %]
+                <a class="page-numbers" href="[% link.url %]">[% link.page %]</a>
+            [% END %]
+        [% END %]
+        [% IF navigation.next %]<a class="next page-numbers" href="[% navigation.next %]">Next &rarr;</a>[% END %]
+    </div>
+</nav>

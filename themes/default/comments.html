@@ -1,5 +1,4 @@
-[% RETURN IF entry.postid && !blop.conf.post_comments %]
-[% RETURN IF entry.pageid && !blop.conf.page_comments %]
+[% RETURN IF !entry.comments_enabled %]
 
 <br/>
 
@@ -9,7 +8,7 @@
 <div class="comment[% IF comment.editable %] editable-comment[% END %]" data-commentid="[% comment.commentid %]">
 <div class="comment-heading">
 <b>[% comment.name | html %]</b> [% comment.added.natural | html %]
-[% IF comment.status != "approved" %] <span class="awaiting-moderation">Awaiting moderation</span>[% END %]
+[% IF comment.status != "approved" %] <span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
 [% IF comment.editable %]
 <a href="#" class="edit-comment">edit</a>
 <a href="#" class="delete-comment">delete</a>
@@ -19,30 +18,30 @@
 [% comment.parsed_content %]
 </div>
 [% IF comment.editable %]
-<div class="edit-comment-form" style="display:none">
+<div class="edit-comment-form comment-form" style="display:none">
 
-<form method="post" class="pform">
-<input type="hidden" name="[% entryid %]" value="[% entry.$entryid %]"/>
-<input type="hidden" name="commentid" value="[% comment.commentid %]"/>
-[% IF blop.session %]
-<input type="hidden" name="csrf" value="[% blop.csrf %]"/>
-[% END %]
+    <form method="post">
+    <input type="hidden" name="[% entry.id_name %]" value="[% entry.id_value %]"/>
+    <input type="hidden" name="commentid" value="[% comment.commentid %]"/>
+    [% IF blop.session %]
+    <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
+    [% END %]
 
-<table><tr><td><label for="name-[% comment.commentid %]">Name:</label></td>
-<td><input id="name-[% comment.commentid %]" name="name" type="text" value="[% comment.name | html %]"/><span class="name-error pform-error"></span></td></tr>
+    <table><tr><td><label for="name-[% comment.commentid %]">Name:</label></td>
+    <td><input id="name-[% comment.commentid %]" name="name" type="text" value="[% comment.name | html %]"/><span class="name-error comment-mesg"></span></td></tr>
 
-<tr><td><label for="email-[% comment.commentid %]">Email:</label></td>
-<td><input id="email-[% comment.commentid %]" name="email" type="text" value="[% comment.email %]"/><span class="email-error pform-error"></span></td></tr>
+    <tr><td><label for="email-[% comment.commentid %]">Email:</label></td>
+    <td><input id="email-[% comment.commentid %]" name="email" type="text" value="[% comment.email %]"/><span class="email-error comment-mesg"></span></td></tr>
 
-<tr><td><label for="content-[% comment.commentid %]">Comment:</label></td>
-<td><textarea id="content-[% comment.commentid %]" name="content">[% comment.content | html %]</textarea></span></td></tr>
+    <tr><td><label for="content-[% comment.commentid %]">Comment:</label></td>
+    <td><textarea id="content-[% comment.commentid %]" name="content">[% comment.content | html %]</textarea></span></td></tr>
 
-<tr><td></td>
-<td><input type="submit" value="Post Comment"/><span class="pform-mesg pform-error"></span></td></tr></table>
+    <tr><td></td>
+    <td><input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span></td></tr></table>
 
-</form>
+    </form>
 
-[% IF comment.edited %]Last edited: [% comment.edited.natural %][% END %]
+    [% IF comment.edited %]Last edited: [% comment.edited.natural %][% END %]
 
 </div>
 [% END %]
@@ -50,27 +49,29 @@
 <br/>
 [% END %]
 
-<form id="comment" method="post" class="pform">
-<input type="hidden" name="[% entryid %]" value="[% entry.$entryid %]"/>
-[% IF blop.session %]
-<input type="hidden" name="csrf" value="[% blop.csrf %]"/>
-[% END %]
+<div class="comment-form">
+    <form id="comment" method="post">
+    <input type="hidden" name="[% entry.id_name %]" value="[% entry.id_value %]"/>
+    [% IF blop.session %]
+    <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
+    [% END %]
 
-<table><tr><td><label for="name">Name:</label></td>
-<td><input id="name" name="name" type="text" value="[% blop.last_comment.name | html %]"/><span class="name-error pform-error"></span></td></tr>
+    <table><tr><td><label for="name">Name:</label></td>
+    <td><input id="name" name="name" type="text" value="[% blop.last_comment.name | html %]"/><span class="name-error comment-mesg"></span></td></tr>
 
-<tr><td><label for="email">Email:</label></td>
-<td><input id="email" name="email" type="text" value="[% blop.last_comment.email %]"/><span class="email-error pform-error"></span></td></tr>
+    <tr><td><label for="email">Email:</label></td>
+    <td><input id="email" name="email" type="text" value="[% blop.last_comment.email %]"/><span class="email-error comment-mesg"></span></td></tr>
 
-<tr><td><label for="content">Comment:</label></td>
-<td><textarea id="content" name="content"></textarea></span></td></tr>
+    <tr><td><label for="content">Comment:</label></td>
+    <td><textarea id="content" name="content"></textarea></span></td></tr>
 
-<tr><td></td>
-<td><input type="submit" value="Post Comment"/><span class="pform-mesg pform-error"></span></td></tr></table>
+    <tr><td></td>
+    <td><input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span></td></tr></table>
 
-</form>
+    </form>
+</div>
 
-<script type="text/javascript" src="[% theme_url('comments.js') %]"></script>
+<script type="text/javascript" src="[% theme.url('comments.js') %]"></script>
 <script type="text/javascript">
 var comments = new Comments({
     formId: "#comment",

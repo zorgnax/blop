@@ -1,0 +1,46 @@
+[% PROCESS header.html title="Themes" x1="Themes" %]
+
+[% FOREACH theme IN themes %]
+<div class="theme[% IF theme.selected %] selected-theme[% END %]" data-theme="[% theme.name %]">
+<table>
+<tr>
+<td>
+    <img src="[% theme.url %]/theme.png"/>
+</td>
+<td>
+    <h3>[% theme.conf.title || theme.name %][% IF theme.date %] <span class="muted">[% theme.date.natural %]</span>[% END %]</h3>
+    [% theme.desc %]
+    <p><a href="#" class="activate-theme">activate</a></p>
+</td>
+</tr>
+</table>
+</div>
+[% END %]
+
+<script type="text/javascript">
+function activateTheme (event) {
+    event.preventDefault();
+    var div = $(this).closest("div.theme");
+    var theme = div.data("theme");
+    var ajax = $.ajax({
+        url: "[% urlbase %]/admin/activate-theme-js",
+        type: "POST",
+        data: {theme: theme, csrf: "[% blop.csrf %]"}});
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (data.error) {
+            alert(data.mesg ? data.mesg : "Failed!");
+            return;
+        }
+        $(".selected-theme").removeClass("selected-theme");
+        div.addClass("selected-theme");
+    });
+    ajax.fail(function (jqXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+    });
+}
+
+$(".activate-theme").on("click", activateTheme);
+
+</script>
+
+[% PROCESS footer.html %]

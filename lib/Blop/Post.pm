@@ -33,13 +33,15 @@ sub next {
     elsif ($category && $category->{special} eq "uncat") {
         $where = " and categoryid=0";
     }
+    my $now = $blop->dbh->quote($blop->now->str);
+    my $published = $blop->dbh->quote($self->published->str);
     my $query = <<EOSQL;
 select postid, title, url
-from posts where published > ?$where
+from posts where published <= $now and published > ${published}$where
 order by published asc limit 1
 EOSQL
     my $sth = $blop->dbh->prepare($query);
-    $sth->execute($self->{published});
+    $sth->execute();
     my $next = $sth->fetchrow_hashref();
     if ($next) {
         $next = bless $next, "Blop::Post";
@@ -60,13 +62,15 @@ sub prev {
     elsif ($category && $category->{special} eq "uncat") {
         $where = " and categoryid=0";
     }
+    my $now = $blop->dbh->quote($blop->now->str);
+    my $published = $blop->dbh->quote($self->published->str);
     my $query = <<EOSQL;
 select postid, title, url
-from posts where published < ?$where
+from posts where published <= $now and published < ${published}$where
 order by published desc limit 1
 EOSQL
     my $sth = $blop->dbh->prepare($query);
-    $sth->execute($self->{published});
+    $sth->execute();
     my $prev = $sth->fetchrow_hashref();
     if ($prev) {
         $prev = bless $prev, "Blop::Post";
@@ -230,6 +234,22 @@ sub was_published {
     return 0 if !$published;
     return 0 if $published->{epoch} > time;
     return 1;
+}
+
+sub comments_enabled {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return $blop->{conf}{post_comments};
+}
+
+sub id_name {
+    my ($self) = @_;
+    return "postid";
+}
+
+sub id_value {
+    my ($self) = @_;
+    return $self->{postid};
 }
 
 sub comments {

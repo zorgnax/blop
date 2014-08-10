@@ -18,5 +18,11 @@ EOSQL
     return $tag;
 }
 
+sub fullurl {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return "$blop->{urlbase}/tag/" . $blop->escape_uri($self->{name});
+}
+
 1;
 

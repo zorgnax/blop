@@ -1,89 +1,100 @@
-var thumbLinks = $(".gallery a, .thumb a");
-var thumbIndex;
-var imageViewer;
+var gallery = new Gallery({thumbLinks: ".gallery a, .thumb a"});
 
-thumbLinks.each(function (index) {
-    $(this).on("click", function (event) {
-        event.preventDefault();
-        viewImage(index);
+function Gallery (args) {
+    this.args = args;
+    this.thumbLinks = $(this.args.thumbLinks);
+    this.thumbIndex = 0;
+    var self = this;
+    this.thumbLinks.each(function (index) {
+        $(this).on("click", function (event) {
+            event.preventDefault();
+            self.viewImage(index);
+        });
     });
-});
+}
 
-function viewImage (index) {
-    thumbIndex = index;
-    var thumbLink = thumbLinks.eq(index);
-    if (!imageViewer)
-        createImageViewer();
-    imageViewer.find(".image-viewer-main").empty();
-    imageViewer.find(".image-viewer-info").empty();
+Gallery.prototype.viewImage = function (index) {
+    this.thumbIndex = index;
+    var thumbLink = this.thumbLinks.eq(index);
+    if (!this.imageViewer)
+        this.createImageViewer();
+    this.imageViewer.find(".image-viewer-main").empty();
     var img = $("<img></img>");
     img.attr("src", thumbLink.attr("href"));
-    imageViewer.find(".image-viewer-main").append(img);
-    if (index > 0) {
-        var prev = $("<a href=\"#\">←</a>");
-        prev.on("click", function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            viewImage(index - 1);
-        });
-        imageViewer.find(".image-viewer-info").append(prev);
-    }
-    if (index < thumbLinks.length - 1) {
-        var next = $("<a href=\"#\">→</a>");
-        next.on("click", function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            viewImage(index + 1);
-        });
-        if (prev) {
-            imageViewer.find(".image-viewer-info").append("&nbsp;&nbsp;&nbsp;&nbsp;");
-        }
-        imageViewer.find(".image-viewer-info").append(next);
-    }
-    var span = $("<span></style>");
-    span.css("float", "right");
+    this.imageViewer.find(".image-viewer-main").append(img);
+    this.imageViewer.show();
+}
+
+Gallery.prototype.createImageViewer = function () {
+    this.imageViewer = $("<div></div>");
+    this.imageViewer.attr("class", "image-viewer");
+    this.imageViewer.append("<div class=\"image-viewer-main\"></div>");
+    this.imageViewer.append("<div class=\"image-viewer-info\"></div>");
+    var info = this.imageViewer.find(".image-viewer-info");
+    var self = this;
+
+    var prev = $("<a href=\"#\">prev</a>");
+    prev.on("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        self.prev();
+    });
+    info.append(prev);
+    info.append(" ");
+
+    var next = $("<a href=\"#\">next</a>");
+    next.on("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        self.next();
+    });
+    info.append(next);
+    info.append(" ");
+
     var close = $("<a href=\"#\">close</a>");
     close.on("click", function (event) {
         event.preventDefault();
         event.stopPropagation();
-        imageViewer.hide();
+        self.close();
     });
-    span.append(close);
-    imageViewer.find(".image-viewer-info").append(span);
-    imageViewer.show();
-}
-
-function createImageViewer () {
-    imageViewer = $("<div></div>");
-    imageViewer.attr("class", "image-viewer");
-    imageViewer.append("<table><tr><td></td></tr><tr><td></td></tr></table>");
-    imageViewer.find("td").eq(0).attr("class", "image-viewer-main");
-    imageViewer.find("td").eq(1).attr("class", "image-viewer-info");
-    imageViewer.hide();
-    imageViewer.appendTo("body");
-    imageViewer.click(function (event) {
+    info.append(close);
+    this.imageViewer.hide();
+    this.imageViewer.appendTo("body");
+    this.imageViewer.click(function (event) {
         event.preventDefault();
-        imageViewer.hide();
+        self.imageViewer.hide();
     });
     $(document).keydown(function(event) {
         if ($(event.target).is('input, textarea'))
             return;
-        if (!imageViewer || imageViewer.is(":hidden"))
+        if (!self.imageViewer || self.imageViewer.is(":hidden"))
             return;
         event.preventDefault();
         if (event.which == 27 || event.which == 81) {
-            imageViewer.hide();
+            self.imageViewer.hide();
         }
         else if (event.which == 37) {
-            if (thumbIndex > 0) {
-                viewImage(thumbIndex - 1);
-            }
+            self.prev();
         }
         else if (event.which == 39) {
-            if (thumbIndex < thumbLinks.length - 1) {
-                viewImage(thumbIndex + 1);
-            }
+            self.next();
         }
     });
+}
+
+Gallery.prototype.prev = function () {
+    if (this.thumbIndex > 0) {
+        this.viewImage(this.thumbIndex - 1);
+    }
+}
+
+Gallery.prototype.next = function () {
+    if (this.thumbIndex < this.thumbLinks.length - 1) {
+        this.viewImage(this.thumbIndex + 1);
+    }
+}
+
+Gallery.prototype.close = function () {
+    this.imageViewer.hide();
 }
 

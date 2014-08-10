@@ -78,5 +78,15 @@ sub added_to {
     return undef;
 }
 
+sub gravatar {
+    my ($self) = @_;
+    my $email = $self->{email};
+    $email =~ s/^\s+|\s+$//g;
+    $email = lc $email;
+    require Digest::MD5;
+    my $md5 = Digest::MD5::md5_hex($email);
+    return "http://www.gravatar.com/avatar/$md5";
+}
+
 1;
 

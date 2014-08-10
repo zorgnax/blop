@@ -1,0 +1,17 @@
+[% PROCESS header.html title=blop.conf.title %]
+<div id="main-content" class="main-content">
+    <div id="primary" class="content-area">
+        <div id="content" class="site-content" role="main">
+            [% IF navigation.rows %]
+                [% FOREACH post IN posts %]
+                [% PROCESS "listing-post.html" %]
+                [% END %]
+                [% PROCESS "listing-nav.html" %]
+            [% ELSE %]
+                [% PROCESS "no-posts.html" %]
+            [% END %]
+        </div>
+    </div>
+</div>
+[% PROCESS sidebar.html %]
+[% PROCESS footer.html %]

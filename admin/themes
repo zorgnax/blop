@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+use Blop::Theme;
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $themes = Blop::Theme->list;
+
+print $blop->http_header();
+print $blop->template("themes.html", themes => $themes);
+

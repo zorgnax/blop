@@ -1,9 +1,9 @@
-<div class="widget">
-<h3>Archives</h3>
-<ul class="archives">
-[% FOREACH archive IN blop.date_archives %]
-<li><a href="[% urlbase %]/[% archive.url %]">[% archive.name %] ([% archive.posts %])</a></li>
-[% END %]
-</ul>
+<div class="widget widget-archives">
+    <h1 class="widget-title">Archives</h1>
+    <ul>
+    [% FOREACH archive IN blop.date_archives %]
+        <li><a href="[% urlbase %]/[% archive.url %]">[% archive.name %] ([% archive.posts %])</a></li>
+    [% END %]
+    </ul>
 </div>
 

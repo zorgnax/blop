@@ -1,6 +1,8 @@
-<div class="widget">
-<form name="search" method="get" action="[% urlbase %]/[% blop.allcat.url | uri %]">
-<input type="search" name="s" value="[% cgi.param('s') | html %]"/>
-<input type="submit" value="Search"/>
-</form>
+<div class="widget widget-search">
+    <form role="search" method="get" class="search-form" action="[% blop.allcat.fullurl %]">
+    <label>
+        <input type="search" class="search-field" placeholder="Search &hellip;" value="[% blop.search | html %]" name="s" title="Search for:" />
+    </label>
+    <input type="submit" class="search-submit" value="Search" />
+    </form>
 </div>

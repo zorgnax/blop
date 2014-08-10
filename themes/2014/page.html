@@ -1,0 +1,31 @@
+[% PROCESS header.html title=page.title _ " | " _ blop.conf.title %]
+<div id="main-content" class="main-content">
+    <div id="primary" class="content-area">
+        <div id="content" class="site-content" role="main">
+
+            <article id="page-[% page.pageid %]" class="page page-[% page.pageid %] type-page hentry">
+                <header class="entry-header">
+                    <h1 class="entry-title">[% page.label %]</h1>
+                    <div class="entry-meta">
+                        <span class="entry-date"><a href="#"><time class="entry-date" title="[% page.published %]">[% page.published.natural %]</time></a></span>
+                        [% IF blop.conf.page_comments || page.num_comments %]
+                        <span class="comments-link"><a href="#comment">[% IF !page.num_comments %]Leave a comment[% ELSIF page.num_comments == 1 %]1 Comment[% ELSE %][% page.num_comments %] Comments[% END %]</a></span>
+                        [% END %]
+                        [% IF blop.admin %]
+                        <span class="edit-link"><a class="page-edit-link" href="[% page.editurl %]">Edit</a></span>
+                        [% END %]
+                    </div>
+                </header>
+                <div class="entry-content">
+                    [% page.parsed_content %]
+                </div>
+            </article>
+
+            [% PROCESS comments.html entry=page %]
+
+        </div>
+    </div>
+</div>
+[% PROCESS sidebar.html %]
+[% PROCESS footer.html %]
+

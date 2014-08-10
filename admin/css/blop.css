@@ -167,3 +167,12 @@ table.entry-list td.deleted {
     background-color: #ffccff;
 }
 
+.theme {
+    padding: 5px;
+}
+
+.selected-theme {
+    background-color: #ccffcc;
+    border: 1px solid #00cc00;
+}
+
