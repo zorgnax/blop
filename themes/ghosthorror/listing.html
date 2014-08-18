@@ -1,0 +1,26 @@
+[% PROCESS header.html title=blop.conf.title %]
+[% FOREACH post IN posts %]
+<article class="post">
+    <header class="post-header">
+        <span class="post-meta"><time datetime="[% post.published.str %]" title="[% post.published.str %]">[% post.published.natural %]</time></span>
+        <h2 class="post-title"><a href="[% post.fullurl %]">[% post.label | html %]</a></h2>
+    </header>
+    <section class="post-content">
+        [% post.parsed_content %]
+        [% IF blop.ps.content %]
+        [% blop.ps.parsed_content %]
+        [% END %]
+        <b><a href="[% post.fullurl %]#comments">Discussion[% IF post.num_comments == 1 %] (1 reply)[% ELSIF post.num_comments %] ([% post.num_comments %] replies)[% END %]</a></b>
+    </section>
+</article>
+[% END %]
+<nav class="pagination" role="navigation">
+    [% IF navigation.prev %]
+    <a class="newer-posts" href="[% navigation.prev %]">&larr; Newer Posts</a>
+    [% END %]
+    <span class="page-number">Page [% navigation.page %] of [% navigation.pages %]</span>
+    [% IF navigation.next %]
+    <a class="older-posts" href="[% navigation.next %]">Older Posts &rarr;</a>
+    [% END %]
+</nav>
+[% PROCESS footer.html %]

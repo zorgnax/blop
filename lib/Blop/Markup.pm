@@ -284,6 +284,9 @@ sub parse_html_element {
         my $attr = $2;
         $elem = {type => "html", tag => $tag, attr => $attr};
     }
+    elsif ($$str =~ m{\G <(script)\b ([^>]*)> (.*?) </script>}xmsgc) {
+        $elem = {type => "html", tag => $1, attr => $2, content => $3};
+    }
     elsif ($$str =~ m{\G < ([^/\s>=]+) ([^>]*) />}xmsgc) {
         my $tag = $1;
         my $attr = $2;
@@ -451,6 +454,11 @@ sub display_html {
     if ($elem->{tag} eq "!--") {
         $pre = "<!--$elem->{attr}-->";
     }
+    elsif ($elem->{tag} eq "script") {
+        $pre = "<$elem->{tag}$elem->{attr}>";
+        $content = $elem->{content};
+        $post = "</$elem->{tag}>";
+    }
     elsif ($elem->{content}) {
         $pre = "<$elem->{tag}$elem->{attr}>";
         $content = $self->display($elem->{content});
@@ -463,6 +471,9 @@ sub display_html {
         my $blop = Blop::instance() or return "";
         $pre = $blop->escape_html($pre);
         $post = $blop->escape_html($post);
+        if ($elem->{tag} eq "script") {
+            $content = $blop->escape_html($content);
+        }
     }
     return "$pre$content$post";
 }

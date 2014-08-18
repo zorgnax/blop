@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>[% title | html %]</title>
+    <meta name="description" content="[% blop.conf.meta_description | html %]"/>
+    <meta name="generator" content="Blop [% blop.version %]"/>
+    <meta name="keywords" content="[% blop.conf.meta_tags | html %]"/>
+    <meta name="author" content="[% blop.conf.meta_author | html %]"/>
+    <meta name="HandheldFriendly" content="True"/>
+    <meta name="MobileOptimized" content="320"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('style.css') %]" />
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('gallery.css') %]" />
+    <link rel="stylesheet" type="text/css" href="[% theme.url('syntax.css') %]"/>
+    <script type="text/javascript" src="[% theme.url('jquery-1.11.0.js') %]"></script>
+</head>
+<body class="home-template">
+    <header class="site-head">
+        <div class="site-head-content">
+            [% IF blop.logo %]
+            <a class="blog-logo" href="[% urlbase %]/"><img src="[% blop.logo %]"/></a>
+            [% END %]
+            <h1 class="blog-title"><a href="[% urlbase %]/">[% blop.conf.title %]</a></h1>
+            [% IF blop.conf.slogan %]
+            <h2 class="blog-description">[% blop.conf.slogan %]</h2>
+            [% END %]
+            <div class="site-search">
+                <form method="get" action="[% blop.allcat.fullurl %]">
+                <input type="search" placeholder="Search &hellip;" value="[% blop.search | html %]" name="s" />
+                </form>
+            </div>
+        </div>
+    </header>
+    <div class="wrap clearfix">
+        <div class="clearfix"></div>
+        <main class="content" role="main">
+

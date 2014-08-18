@@ -1,0 +1,23 @@
+[% PROCESS header.html title=post.title _ " | " _ blop.conf.title %]
+<article class="post">
+    <header class="post-header">
+        <span class="post-meta"><time datetime="[% post.published.str %]" title="[% post.published.str %]">[% post.published.natural %]</time></span>
+        <h1 class="post-title">[% post.label | html %]</h1>
+    </header>
+    <section class="post-content">
+        [% post.parsed_content %]
+        [% IF blop.ps.content %]
+        [% blop.ps.parsed_content %]
+        [% END %]
+    </section>
+</article>
+[% PROCESS comments.html entry=post %]
+<nav class="pagination" role="navigation">
+    [% IF post.newer(category) %]
+    <a class="newer-posts" href="[% post.newer.fullurl %]">&larr; Next Post</a>
+    [% END %]
+    [% IF post.older(category) %]
+    <a class="older-posts" href="[% post.older.fullurl %]">Older Post &rarr;</a>
+    [% END %]
+</nav>
+[% PROCESS footer.html %]

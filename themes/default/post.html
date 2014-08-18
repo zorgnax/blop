@@ -27,15 +27,15 @@ Tags:
 
 <br/>
 
-[% IF post.next(category) %]
+[% IF post.newer(category) %]
 <span class="next-link">
-← <a href="[% post.next.fullurl %]">[% post.next.title || "Next Post" | html %]</a>
+← <a href="[% post.newer.fullurl %]">[% post.newer.title || "Next Post" | html %]</a>
 </span>
 [% END %]
 
-[% IF post.prev(category) %]
+[% IF post.older(category) %]
 <span class="prev-link">
-<a href="[% post.prev.fullurl %]">[% post.prev.title || "Previous Post" | html %]</a> →
+<a href="[% post.older.fullurl %]">[% post.older.title || "Previous Post" | html %]</a> →
 </span>
 [% END %]
 

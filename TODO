@@ -1,4 +1,4 @@
 backup plugin
 theme paths from a theme object
 lock comment editing after approval
-
+allow email to be missing in comment form

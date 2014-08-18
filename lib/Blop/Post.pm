@@ -22,9 +22,9 @@ EOSQL
     return $post;
 }
 
-sub next {
+sub newer {
     my ($self, $category) = @_;
-    return $self->{next} if exists $self->{next};
+    return $self->{newer} if exists $self->{newer};
     my $blop = Blop::instance();
     my $where = "";
     if ($category && !$category->{special}) {
@@ -42,18 +42,18 @@ order by published asc limit 1
 EOSQL
     my $sth = $blop->dbh->prepare($query);
     $sth->execute();
-    my $next = $sth->fetchrow_hashref();
-    if ($next) {
-        $next = bless $next, "Blop::Post";
-        $next->{chain_category} = $category;
+    my $newer = $sth->fetchrow_hashref();
+    if ($newer) {
+        $newer = bless $newer, "Blop::Post";
+        $newer->{chain_category} = $category;
     }
-    $self->{next} = $next;
-    return $next;
+    $self->{newer} = $newer;
+    return $newer;
 }
 
-sub prev {
+sub older {
     my ($self, $category) = @_;
-    return $self->{prev} if exists $self->{prev};
+    return $self->{older} if exists $self->{older};
     my $blop = Blop::instance();
     my $where = "";
     if ($category && !$category->{special}) {
@@ -71,13 +71,13 @@ order by published desc limit 1
 EOSQL
     my $sth = $blop->dbh->prepare($query);
     $sth->execute();
-    my $prev = $sth->fetchrow_hashref();
-    if ($prev) {
-        $prev = bless $prev, "Blop::Post";
-        $prev->{chain_category} = $category;
+    my $older = $sth->fetchrow_hashref();
+    if ($older) {
+        $older = bless $older, "Blop::Post";
+        $older->{chain_category} = $category;
     }
-    $self->{prev} = $prev;
-    return $prev;
+    $self->{older} = $older;
+    return $older;
 }
 
 sub tags_str {

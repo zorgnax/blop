@@ -39,11 +39,11 @@
             <nav class="navigation post-navigation" role="navigation">
                 <h1 class="screen-reader-text">Post navigation</h1>
                 <div class="nav-links">
-                    [% IF post.next(category) %]
-                    <a href="[% post.next.fullurl %]" rel="next"><span class="meta-nav">Next Post</span>[% post.next.label | html %]</a>
+                    [% IF post.newer(category) %]
+                    <a href="[% post.newer.fullurl %]" rel="next"><span class="meta-nav">Next Post</span>[% post.newer.label | html %]</a>
                     [% END %]
-                    [% IF post.prev(category) %]
-                    <a href="[% post.prev.fullurl %]" rel="prev"><span class="meta-nav">Previous Post</span>[% post.prev.label | html %]</a>
+                    [% IF post.older(category) %]
+                    <a href="[% post.older.fullurl %]" rel="prev"><span class="meta-nav">Previous Post</span>[% post.older.label | html %]</a>
                     [% END %]
                 </div>
             </nav>

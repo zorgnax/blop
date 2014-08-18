@@ -1,0 +1,12 @@
+[% PROCESS header.html title=page.title _ " | " _ blop.conf.title %]
+<article class="post">
+    <header class="post-header">
+        <span class="post-meta"><time datetime="[% page.published.str %]" title="[% page.published.str %]">[% page.published.natural %]</time></span>
+        <h1 class="post-title">[% page.label | html %]</h1>
+    </header>
+    <section class="post-content">
+        [% page.parsed_content %]
+    </section>
+</article>
+[% PROCESS comments.html entry=page %]
+[% PROCESS footer.html %]
