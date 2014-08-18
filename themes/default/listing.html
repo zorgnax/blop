@@ -3,14 +3,8 @@
 <div class="navigation-summary">[% navigation.summary %]</div>
 
 [% FOREACH post IN posts %]
-    [% IF post.category %]
-        <div class="category"><a href="[% urlbase %]/[% post.category.url | uri %]">[% post.category.name %]</a></div>
-    [% END %]
     <h2><a href="[% post.fullurl %]">[% post.label | html %]</a></h2>
-    <span class="published">[% post.published.natural %]</span>
-    [% IF post.num_comments %]
-        <span class="num_comments">[% post.num_comments %] comment[% IF post.num_comments != 1 %]s[% END %]</span>
-    [% END %]
+    <span class="published" title="[% post.published.str %]">Posted [% post.published.natural %]</span>
     [% IF blop.admin %]<a href="[% urlbase %]/admin/post/[% post.postid %]">edit</a>[% END %]
     <div class="content">
         [% post.parsed_content %]
@@ -18,14 +12,24 @@
         [% blop.ps.parsed_content %]
         [% END %]
     </div>
+    <div class="post-footer">
+    [% IF post.category %]
+        <span class="category">Posted in <a href="[% urlbase %]/[% post.category.url | uri %]">[% post.category.name %]</a></span>
+    [% END %]
     [% IF post.tags.size %]
-        <div class="tags">
+        [% IF post.category %]|[% END %]
+        <span class="tags">
             Tags:
             [% FOREACH tag IN post.tags %]
                 <a href="[% tag.fullurl %]">[% tag.name | html %]</a>
             [% END %]
-        </div>
+        </span>
     [% END %]
+    [% IF post.num_comments %]
+        [% IF post.category || post.tags.size %]|[% END %]
+        <span class="num_comments">[% post.num_comments %] comment[% IF post.num_comments != 1 %]s[% END %]</span>
+    [% END %]
+    </div>
     <hr/>
     <br/>
 [% END %]

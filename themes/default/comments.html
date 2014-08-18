@@ -2,7 +2,7 @@
 
 <br/>
 
-<h3 class="comments-heading">[% entry.num_comments %] Comment[% IF entry.num_comments != 1 %]s[% END %]</h3>
+<h3 class="comments-heading">[% IF !entry.num_comments %]Comments[% ELSIF entry.num_comments == 1 %]1 Comment[% ELSE %][% entry.num_comments %] Comments[% END %]</h3>
 
 [% FOREACH comment IN entry.comments %]
 <div class="comment[% IF comment.editable %] editable-comment[% END %]" data-commentid="[% comment.commentid %]">

@@ -145,7 +145,7 @@ sub editurl {
 sub category {
     my ($self) = @_;
     return $self->{category} if exists $self->{category};
-    if (exists $self->{category_str}) {
+    if ($self->{category_str}) {
         $self->{category} = bless {
             categoryid => $self->{categoryid},
             name => $self->{category_str},

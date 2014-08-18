@@ -4,6 +4,10 @@
     margin: 0 auto;
 }
 
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 code {
     font-family: Monaco, Consolas, ProFont, monospace;
     font-size: 12px;
@@ -116,6 +120,11 @@ input, textarea {
     background-color: #ff9999;
     font-weight: bold;
     border: 1px solid #cc6666;
+}
+
+.comment-date {
+    color: #666666;
+    font-size: 75%;
 }
 
 .muted {
