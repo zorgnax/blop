@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>[% title | html %]</title>
+    <meta name="generator" content="Blop [% blop.version %]"/>
+    <meta name="description" content="[% blop.conf.meta_description | html %]"/>
+    <meta name="keywords" content="[% blop.conf.meta_tags | html %]"/>
+    <meta name="author" content="[% blop.conf.meta_author | html %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('style.css') %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('gallery.css') %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('syntax.css') %]"/>
+    <link rel="stylesheet" id="ravel-fonts-css"  href="http://fonts.googleapis.com/css?family=Lora%3A400%2C700%2C400italic%2C700italic%7CRoboto%3A400%2C400italic%2C700%2C700italic&#038;ver=3.9.2" type="text/css" media="all" />
+    <script type="text/javascript" src="[% theme.url('jquery-1.11.0.js') %]"></script>
+</head>
+<body class="[% theme.body_classes %]" dir="ltr" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+    <div id="container" class="page-container">
+        <div class="wrap">
+            <header id="header" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+                <div id="branding">
+                    <h1 id="site-title" itemprop="headline" title="[% blop.conf.slogan | html %]"><a href="[% urlbase %]/" rel="home">[% blop.conf.title | html %]</a></h1>
+                </div>
+                <nav id="menu-primary" class="menu" role="navigation" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+                    <div class="assistive-text skip-link"><a href="#content">Skip to content</a></div>
+                    <h3 class="menu-toggle"><span class="screen-reader-text">Navigation</span></h3>
+                    <div class="wrap">
+                        <ul id="menu-primary-items" class="menu-items">
+                            [% FOREACH page_ IN blop.pages %]
+                            <li class="menu-item menu-item-type-post_type menu-item-object-page[% IF page_.children %] menu-item-has-children[% END %]"><a href="[% page_.fullurl %]">[% page_.title %]</a>
+                            [% IF page_.children %]
+                            <ul class="sub-menu">
+                                [% FOREACH page__ IN page_.children %]
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="[% page__.fullurl %]">[% page__.title %]</a></li>
+                                [% END %]
+                            </ul>
+                            [% END %]
+                            </li>
+                            [% END %]
+                            [% IF blop.allcat.url %]
+                            <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="[% blop.allcat.fullurl %]">Blop</a></li>
+                            [% END %]
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <div id="main" class="main content-container">
+                <main id="content" class="content" role="main" itemprop="mainContentOfPage" itemscope="itemscope" itemtype="http://schema.org/Blog">
+

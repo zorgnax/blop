@@ -2,9 +2,11 @@
 
 [% IF !post.was_published %]<div class="note">Note: This post has not been published.</div>[% END %]
 
-<h2>[% post.label | html %]</h2>
+<h2 class="post-heading">[% post.label | html %]</h2>
+<div class="post-header">
 <span class="published" title="[% post.published.str %]">Posted [% post.published.natural %]</span>
 [% IF blop.admin %]<a href="[% urlbase %]/admin/post/[% post.postid %]">edit</a>[% END %]
+</div>
 <div class="content">
 [% post.parsed_content %]
 [% IF blop.ps.content %]

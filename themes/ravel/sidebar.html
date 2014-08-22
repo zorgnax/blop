@@ -1,0 +1,17 @@
+<aside id="sidebar-primary" class="sidebar" role="complimentary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+    <h1 class="sidebar-toggle">Sidebar</h1>
+    <section id="hybrid-search-2" class="widget widget-search widget_search">
+        <h3 class="widget-title">Search</h3>
+        <form role="search" method="get" class="search-form" action="[% blop.allcat.fullurl %]">
+            <div>
+                <label>
+                    <span class="screen-reader-text">Search</span>
+                    <input class="search-text" type="text" name="s" placeholder="Search for &hellip;" />
+                </label>
+                <input class="search-submit button" type="submit" value="Search" />
+            </div>
+        </form>
+    </section>
+    [% blop.sidebar.parsed_content %]
+</aside>
+

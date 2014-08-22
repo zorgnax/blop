@@ -1,0 +1,15 @@
+[% PROCESS header.html title=page.title _ " | " _ blop.conf.title %]
+[% IF !page.was_published %]<div class="note">Note: This page has not been published.</div>[% END %]
+<article class="entry page singular-page publish format-standard" itemscope="itemscope" itemtype="http://schema.org/CreativeWork">
+    <header class="entry-header">
+        <h1 class="entry-title" itemprop="headline">[% page.label %]</h1>
+        [% IF blop.admin %]
+        <a class="post-edit-link" href="[% urlbase %]/admin/page/[% page.pageid %]">Edit This</a>
+        [% END %]
+    </header>
+    <div class="entry-content" itemprop="articleBody">
+        [% page.parsed_content %]
+    </div>
+</article>
+[% PROCESS comments.html entry=post %]
+[% PROCESS footer.html %]

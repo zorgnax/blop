@@ -37,6 +37,18 @@ input, textarea {
     float: right;
 }
 
+.post-heading {
+    margin-bottom: 0px;
+}
+
+.post-heading a {
+    text-decoration: none;
+}
+
+.post-header {
+    margin-bottom: 2em;
+}
+
 .sidebar {
     float: right;
     width: 230px;

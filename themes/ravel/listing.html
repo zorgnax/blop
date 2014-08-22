@@ -1,0 +1,47 @@
+[% PROCESS header.html title=blop.conf.title %]
+[% FOREACH post IN posts %]
+<article class="entry post publish format-standard" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+    <header class="entry-header">
+        <div class="entry-byline">
+            <time class="entry-published updated" datetime="[% post.published.str %]" title="[% post.published.str %]">[% post.published.natural %]</time>
+            <a href="[% post.fullurl %]#comments" class="comments-link" itemprop="discussionURL" title="Comment on [% post.label | html %]">[% post.num_comments %] Comment[% IF post.num_comments != 1 %]s[% END %]</a>
+            [% IF blop.admin %]
+            <a class="post-edit-link" href="[% urlbase %]/admin/post/[% post.postid %]">Edit This</a>
+            [% END %]
+        </div>
+        <h2 class="entry-title" itemprop="headline"><a href="[% post.fullurl %]" rel="bookmark" itemprop="url">[% post.label %]</a></h2>
+    </header>
+    <div class="entry-summary" itemprop="description">
+        [% post.parsed_content %]
+        [% IF blop.ps.content %]
+        [% blop.ps.parsed_content %]
+        [% END %]
+    </div>
+    <footer class="entry-footer">
+        [% IF post.category %]
+        <span class="entry-terms category" itemprop="articleSection"><a href="[% post.category.fullurl %]">[% post.category.name | html %]</a></span>
+        [% END %]
+        [% IF post.tags.size %]
+        <span class="entry-terms post_tag" itemprop="keywords">
+            [% FOREACH tag IN post.tags %]
+                <a href="[% tag.fullurl %]" rel="tag">[% tag.name | html %]</a>
+            [% END %]
+        </span>
+        [% END %]
+    </footer>
+</article>
+[% END %]
+[% IF navigation.pages > 1 %]
+<nav class="pagination loop-pagination">
+        [% IF navigation.prev %]<a class="prev page-numbers" href="[% navigation.prev %]">&larr; Previous</a>[% END %]
+        [% FOREACH link IN navigation.window(7) %]
+            [% IF link.selected %]
+                <span class="page-numbers current">[% link.page %]</span>
+            [% ELSE %]
+                <a class="page-numbers" href="[% link.url %]">[% link.page %]</a>
+            [% END %]
+        [% END %]
+        [% IF navigation.next %]<a class="next page-numbers" href="[% navigation.next %]">Next &rarr;</a>[% END %]
+</nav>
+[% END %]
+[% PROCESS footer.html %]

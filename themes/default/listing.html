@@ -3,9 +3,11 @@
 <div class="navigation-summary">[% navigation.summary %]</div>
 
 [% FOREACH post IN posts %]
-    <h2><a href="[% post.fullurl %]">[% post.label | html %]</a></h2>
+    <h2 class="post-heading"><a href="[% post.fullurl %]">[% post.label | html %]</a></h2>
+    <div class="post-header">
     <span class="published" title="[% post.published.str %]">Posted [% post.published.natural %]</span>
     [% IF blop.admin %]<a href="[% urlbase %]/admin/post/[% post.postid %]">edit</a>[% END %]
+    </div>
     <div class="content">
         [% post.parsed_content %]
         [% IF blop.ps.content %]

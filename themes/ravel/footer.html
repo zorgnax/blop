@@ -1,0 +1,17 @@
+                </main>
+                [% PROCESS sidebar.html %]
+            </div>
+            <footer id="footer" role="contentinfo" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+                <div class="footer-content">
+                    [% IF blop.footer.content %]
+                    [% blop.footer.parsed_content %]
+                    [% END %]
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script type="text/javascript" src="[% theme.url('gallery.js') %]"></script>
+    <script type="text/javascript" src="[% theme.url('ravel.js') %]"></script>
+</body>
+</html>
+

@@ -1,0 +1,94 @@
+[% RETURN IF !entry.comments_enabled %]
+<section id="comments-template">
+    <div id="comments">
+        <header id="comments-header">
+            <h3 id="comments-number">[% entry.num_comments %] Comment[% IF entry.num_comments != 1 %]s[% END %]</h3>
+        </header>
+        <ol class="comment-list">
+            [% FOREACH comment IN entry.comments %]
+            <li class="comment[% IF comment.editable %] editable-comment[% END %]" data-commentid="[% comment.commentid %]">
+                <article class="comment-wrap">
+                    <header class="comment-meta">
+                        <cite class="comment-author" itemprop="creator" itemscope="itemscope" itemtype="http://schema.org/Person">[% comment.name | html %]</cite><br />
+                        <time class="comment-published" datetime="[% comment.added.str %]" title="[% comment.added.str %]" itemprop="commentTime">[% comment.added.natural %]</time>
+                        [% IF comment.editable %]
+                            <a class="comment-edit-link edit-comment" href="#">Edit This</a>
+                            <a href="#" class="comment-edit-link delete-comment">Delete This</a>
+                        [% END %]
+                        [% IF comment.status != "approved" %]<span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
+                    </header>
+                    <div class="comment-content" itemprop="commentText">
+                        [% comment.parsed_content %]
+                    </div>
+                </article>
+                [% IF comment.editable %]
+                <div class="edit-comment-form comment-form" style="display:none">
+                    <form method="post">
+                    <input type="hidden" name="[% entry.id_name %]" value="[% entry.id_value %]"/>
+                    <input type="hidden" name="commentid" value="[% comment.commentid %]"/>
+                    [% IF blop.session %]
+                    <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
+                    [% END %]
+                    <p class="comment-form-author">
+                        <label for="name-[% comment.commentid %]">Name <span class="required">*</span></label>
+                        <input id="name-[% comment.commentid %]" name="name" type="text" value="[% comment.name | html %]" size="30" aria-required='true' />
+                    </p>
+                    <p class="comment-form-email">
+                        <label for="email-[% comment.commentid %]">Email <span class="required">*</span></label>
+                        <input id="email-[% comment.commentid %]" name="email" type="email" value="[% comment.email | html %]" size="30" aria-required='true' />
+                    </p>
+                    <p class="comment-form-comment">
+                        <label for="content-[% comment.commentid %]">Comment</label>
+                        <textarea id="content-[% comment.commentid %]" name="content" cols="45" rows="8" aria-required="true">[% comment.content | html %]</textarea>
+                    </p>
+                    <p class="form-submit">
+                        <input name="submit" type="submit" id="submit" value="Post Comment" />
+                        <span class="comment-mesg comment-main-mesg"></span>
+                    </p>
+                    </form>
+                    [% IF comment.edited %]Last edited: [% comment.edited.natural %][% END %]
+                </div>
+                [% END %]
+            </li>
+            [% END %]
+        </ol>
+    </div>
+
+    <div id="respond" class="comment-respond">
+        <h3 id="reply-title" class="comment-reply-title">Leave a Reply</h3>
+        <form method="post" id="commentform" class="comment-form" novalidate>
+            <p class="comment-form-author">
+                <label for="author">Name <span class="required">*</span></label>
+                <input id="author" name="name" type="text" value="[% blop.last_comment.name | html %]" size="30" aria-required='true' />
+            </p>
+            <p class="comment-form-email">
+                <label for="email">Email <span class="required">*</span></label>
+                <input id="email" name="email" type="email" value="[% blop.last_comment.email | html %]" size="30" aria-required='true' />
+            </p>
+            <p class="comment-form-comment">
+                <label for="comment">Comment</label>
+                <textarea id="comment" name="content" cols="45" rows="8" aria-required="true"></textarea>
+            </p>
+            <p class="form-submit">
+                <input name="submit" type="submit" id="submit" value="Post Comment" />
+                <input type="hidden" name="[% entry.id_name %]" value="[% entry.id_value %]"/>
+                [% IF blop.session %]
+                <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
+                [% END %]
+                <span class="comment-mesg comment-main-mesg"></span>
+            </p>
+        </form>
+    </div>
+
+</section>
+
+<script type="text/javascript" src="[% theme.url('comments.js') %]"></script>
+<script type="text/javascript">
+var comments = new Comments({
+    formId: "#commentform",
+    csrf: "[% blop.csrf %]",
+    editableComments: ".editable-comment",
+    processUrl: "[% urlbase %]/admin/comment-js",
+    deleteUrl: "[% urlbase %]/admin/delete-comment-js"});
+</script>
+
