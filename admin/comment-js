@@ -87,7 +87,7 @@ if (!$commentid) {
         die "Page comments not enabled.\n";
     }
 
-    my $status = $blop->{conf}{mod_comments} ? "pending" : "approved";
+    my $status = $blop->{conf}{mod_comments} ? "Pending" : "Approved";
 
     if (!$cmnt) {
         $cmnt = $blop->token(22);
@@ -124,6 +124,10 @@ my $comment = $blop->comment(commentid => $commentid)
 
 if (!$cmnt || $cmnt ne $comment->{cookie}) {
     die "Unauthorized.\n";
+}
+
+if ($comment->{status} eq "Approved") {
+    die "Approved comments can't be edited.";
 }
 
 my %args;

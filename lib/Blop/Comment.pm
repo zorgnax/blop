@@ -53,6 +53,15 @@ sub edited {
 
 sub editable {
     my ($self) = @_;
+    return 0 if !$self->pending;
+    my $blop = Blop::instance();
+    my $cookie = $blop->cgi->cookie("cmnt") || "";
+    $self->{cookie} ||= "";
+    return $cookie && $cookie eq $self->{cookie};
+}
+
+sub deletable {
+    my ($self) = @_;
     my $blop = Blop::instance();
     my $cookie = $blop->cgi->cookie("cmnt") || "";
     $self->{cookie} ||= "";
@@ -90,6 +99,11 @@ sub gravatar {
     require Digest::MD5;
     my $md5 = Digest::MD5::md5_hex($email);
     return "http://www.gravatar.com/avatar/$md5";
+}
+
+sub pending {
+    my ($self) = @_;
+    return $self->{status} ne "Approved";
 }
 
 1;

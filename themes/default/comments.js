@@ -2,6 +2,13 @@ function Comments (args) {
     this.args = args;
     this.initCommentForm($(this.args.formId));
     var self = this;
+    $(this.args.deletableComments).each(function () {
+        var div = $(this);
+        div.find(".delete-comment").on("click", function (event) {
+            event.preventDefault();
+            self.delete(div);
+        });
+    });
     $(this.args.editableComments).each(function () {
         self.initEditCommentForm($(this));
     });

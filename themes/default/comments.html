@@ -5,13 +5,15 @@
 <h3 class="comments-heading">[% IF !entry.num_comments %]Comments[% ELSIF entry.num_comments == 1 %]1 Comment[% ELSE %][% entry.num_comments %] Comments[% END %]</h3>
 
 [% FOREACH comment IN entry.comments %]
-<div class="comment[% IF comment.editable %] editable-comment[% END %]" data-commentid="[% comment.commentid %]">
+<div class="comment[% IF comment.editable %] editable-comment[% END %][% IF comment.deletable %] deletable-comment[% END %]" data-commentid="[% comment.commentid %]">
 <div class="comment-heading">
 <b class="comment-name">[% comment.name | html %]</b>
 <span class="comment-date" title="[% comment.added.str %]">[% comment.added.natural | html %]</span>
-[% IF comment.status != "approved" %]<span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
+[% IF comment.pending %]<span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
 [% IF comment.editable %]
 <a href="#" class="edit-comment">edit</a>
+[% END %]
+[% IF comment.deletable %]
 <a href="#" class="delete-comment">delete</a>
 [% END %]
 </div>
@@ -73,6 +75,7 @@ var comments = new Comments({
     formId: "#comment",
     csrf: "[% blop.csrf %]",
     editableComments: ".editable-comment",
+    deletableComments: ".deletable-comment",
     processUrl: "[% urlbase %]/admin/comment-js",
     deleteUrl: "[% urlbase %]/admin/delete-comment-js"});
 </script>
