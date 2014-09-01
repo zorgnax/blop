@@ -6,11 +6,12 @@
 <tr><th>Name</th><th>URL</th><th>Posts</th><th>Actions</th></tr>
 [% FOREACH category IN categories %]
 <tr data-categoryid="[% category.categoryid %]"[% IF category.special %] class="special-category"[% END %]>
-    <td>[% IF category.special %]Special: [% END %][% category.name | html %]</td>
-    <td><a href="[% urlbase %]/[% category.url | uri %]">/[% category.url | html %]</a></td>
+    <td><a href="[% category.editurl %]">[% IF category.special %]Special: [% END %][% category.name | html %]</a></td>
+    <td>/[% category.url | html %]</td>
     <td><a href="[% urlbase %]/admin/posts/[% category.url %]">[% category.num_posts | html %]</a></td>
     <td class="entry-actions">
-        <a href="[% urlbase %]/admin/category/[% category.categoryid %]">Edit</a>
+        <a href="[% category.fullurl %]">View</a>
+        <a href="[% category.editurl %]">Edit</a>
         <a href="#" class="delete-category">Delete</a>
     </td>
 </tr>

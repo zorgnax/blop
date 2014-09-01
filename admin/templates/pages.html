@@ -9,13 +9,14 @@
     [% IF !page.published %]
     <td colspan="3" align="center">-*- Draft -*-</td>
     [% ELSE %]
-    <td>[% page.title | html %]</td>
-    <td>[% IF page.url.defined %]<a href="[% urlbase %]/[% page.url | uri %]">/[% page.url | html %]</a>[% END %]</td>
+    <td><a href="[% page.editurl %]">[% page.label | html %]</a></td>
+    <td>/[% page.url | html %]</td>
     <td>[% page.published.natural | html %]</td>
     [% END %]
     <td>[% page.num_files %]</td>
     <td class="entry-actions">
-        <a href="[% urlbase %]/admin/page/[% page.pageid %]">Edit</a>
+        <a href="[% page.fullurl %]">View</a>
+        <a href="[% page.editurl %]">Edit</a>
         <a href="#" class="delete-page">Delete</a>
     </td>
 </tr>

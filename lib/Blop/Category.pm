@@ -151,5 +151,11 @@ sub fullurl {
     return "$blop->{urlbase}/$self->{url}";
 }
 
+sub editurl {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    return "$blop->{urlbase}/admin/category/$self->{categoryid}";
+}
+
 1;
 

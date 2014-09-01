@@ -13,8 +13,8 @@
     [% IF !post.published %]
     <td colspan="5" align="center">-*- Draft -*-</td>
     [% ELSE %]
-    <td>[% post.title | html %]</td>
-    <td>[% IF post.url.defined %]<a href="[% urlbase %]/[% post.url | uri %]">/[% post.url | html %]</a>[% END %]</td>
+    <td><a href="[% post.editurl %]">[% post.label | html %]</a></td>
+    <td>/[% post.url | html %]</td>
     <td>[% IF post.category %]<a href="[% urlbase %]/admin/posts/[% post.category.url %]">[% post.category.name | html %]</a>[% END %]</td>
     <td>
     [% FOREACH tag IN post.tags %]
@@ -25,7 +25,8 @@
     [% END %]
     <td>[% post.num_files %]</td>
     <td class="entry-actions">
-        <a href="[% urlbase %]/admin/post/[% post.postid %]">Edit</a>
+        <a href="[% post.fullurl %]">View</a>
+        <a href="[% post.editurl %]">Edit</a>
         <a href="#" class="delete-post">Delete</a>
     </td>
 </tr>
