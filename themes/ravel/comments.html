@@ -6,16 +6,18 @@
         </header>
         <ol class="comment-list">
             [% FOREACH comment IN entry.comments %]
-            <li class="comment[% IF comment.editable %] editable-comment[% END %]" data-commentid="[% comment.commentid %]">
+            <li class="comment[% IF comment.editable %] editable-comment[% END %][% IF comment.deletable %] deletable-comment[% END %]" data-commentid="[% comment.commentid %]">
                 <article class="comment-wrap">
                     <header class="comment-meta">
                         <cite class="comment-author" itemprop="creator" itemscope="itemscope" itemtype="http://schema.org/Person">[% comment.name | html %]</cite><br />
                         <time class="comment-published" datetime="[% comment.added.str %]" title="[% comment.added.str %]" itemprop="commentTime">[% comment.added.natural %]</time>
                         [% IF comment.editable %]
                             <a class="comment-edit-link edit-comment" href="#">Edit This</a>
+                        [% END %]
+                        [% IF comment.deletable %]
                             <a href="#" class="comment-edit-link delete-comment">Delete This</a>
                         [% END %]
-                        [% IF comment.status != "approved" %]<span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
+                        [% IF comment.pending %]<span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
                     </header>
                     <div class="comment-content" itemprop="commentText">
                         [% comment.parsed_content %]
@@ -88,6 +90,7 @@ var comments = new Comments({
     formId: "#commentform",
     csrf: "[% blop.csrf %]",
     editableComments: ".editable-comment",
+    deletableComments: ".deletable-comment",
     processUrl: "[% urlbase %]/admin/comment-js",
     deleteUrl: "[% urlbase %]/admin/delete-comment-js"});
 </script>

@@ -29,10 +29,6 @@ Comments.prototype.initEditCommentForm = function (div) {
         event.preventDefault();
         self.edit(div);
     });
-    div.find(".delete-comment").on("click", function (event) {
-        event.preventDefault();
-        self.delete(div);
-    });
 }
 
 Comments.prototype.edit = function (div) {
