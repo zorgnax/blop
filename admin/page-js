@@ -78,10 +78,8 @@ EOSQL
 
 my %args;
 
-my $to_title = "";
 if ($page->{title} ne $title) {
     $args{title} = $title;
-    $to_title = " to \"" . ($title ? $title : "Page $pageid") . "\"";
 }
 if ($page->{url} ne $url) {
     $args{url} = $url;
@@ -112,7 +110,12 @@ $page->update_content;
 
 my $parts = $blop->comma_and(keys %args);
 $parts .= " of " if $parts;
-$blop->log(content => "Edited ${parts}page \"" . $page->label . "\"$to_title", pageid => $pageid);
+$blop->log(content => "Edited ${parts}page \"" . $page->label . "\"", pageid => $pageid);
+if ($page->{title} ne $title) {
+    my $label = $title ? $title : "Page $pageid";
+    my $content = "Renamed page \"" . $page->label . "\" to \"" . $label . "\"";
+    $blop->log(content => $content, pageid => $pageid);
+}
 
 print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({ok => 1, pageid => $pageid});

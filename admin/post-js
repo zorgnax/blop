@@ -111,10 +111,8 @@ EOSQL
 
 my %args;
 
-my $to_title = "";
 if ($post->{title} ne $title) {
     $args{title} = $title;
-    $to_title = " to \"" . ($title ? $title : "Post $postid") . "\""
 }
 if ($post->{url} ne $url) {
     $args{url} = $url;
@@ -161,7 +159,12 @@ my @parts = keys %args;
 push @parts, "tags" if $tags_edited;
 my $parts = $blop->comma_and(@parts);
 $parts .= " of " if $parts;
-$blop->log(content => "Edited ${parts}post \"" . $post->label . "\"$to_title", postid => $postid);
+$blop->log(content => "Edited ${parts}post \"" . $post->label . "\"", postid => $postid);
+if ($post->{title} ne $title) {
+    my $label = $title ? $title : "Post $postid";
+    my $content = "Renamed post \"" . $post->label . "\" to \"" . $label . "\"";
+    $blop->log(content => $content, postid => $postid);
+}
 
 print $blop->http_header("Content-Type" => "application/json");
 print $blop->escape_json({ok => 1, postid => $postid});
