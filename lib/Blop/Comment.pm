@@ -2,6 +2,8 @@ package Blop::Comment;
 use strict;
 use warnings;
 use Blop;
+use Blop::Post;
+use Blop::Page;
 
 sub new {
     my ($class, %args) = @_;
@@ -66,14 +68,16 @@ sub parsed_content {
 sub added_to {
     my ($self) = @_;
     if ($self->{postid}) {
-        my $title = $self->{post_title} || "Post " . $self->{postid};
-        my $url = $self->{post_url};
-        return {title => $title, url => $url};
+        my $post = bless {postid => $self->{postid}}, "Blop::Post";
+        $post->{title} = $self->{post_title};
+        $post->{url} = $self->{post_url};
+        return $post;
     }
     elsif ($self->{pageid}) {
-        my $title = $self->{page_title} || "Page " . $self->{pageid};
-        my $url = $self->{page_url};
-        return {title => $title, url => $url};
+        my $page = bless {pageid => $self->{pageid}}, "Blop::Page";
+        $page->{title} = $self->{page_title};
+        $page->{url} = $self->{page_url};
+        return $page;
     }
     return undef;
 }

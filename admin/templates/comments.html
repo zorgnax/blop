@@ -2,15 +2,22 @@
 
 <div class="navigation-summary">[% navigation.summary %]</div>
 
-<table class="entry-list">
-<tr><th>Author</th><th>Status</th><th>Comment</th><th>Added To</th></tr>
+<table class="entry-list comments">
+<tr><th>Author</th><th>What</th><th>Comment</th></tr>
 [% FOREACH comment IN comments %]
-<tr data-commentid="[% comment.commentid %]" class="comment-[% comment.status %]">
-    <td>[% comment.name | html %]<br/>[% comment.email | html %]<br/>[% comment.ipaddr | html %]</td>
-    <td>[% comment.status %]</td>
+<tr data-commentid="[% comment.commentid %]" class="comment-[% comment.status | lower %]">
     <td>
-        <p>Added [% comment.added.natural %]</p>
-        <pre><code>[% comment.content | html %]</code></pre>
+        [% comment.name | html %]<br/>
+        [% comment.email | html %]<br/>
+        [% comment.ipaddr | html %]
+    </td>
+    <td>
+        <span class="comment-added" title="[% comment.added.str %]">[% comment.added.natural %]</span><br/>
+        <a href="[% comment.added_to.fullurl %]" title="[% comment.added_to.label | html %]">[% comment.added_to.short %]</a><br/>
+        <span class="comment-status">[% comment.status %]</span>
+    </td>
+    <td>
+        [% comment.parsed_content %]
         <div class="entry-actions">
             [% IF comment.status == "approved" %]
             <a href="#" class="unapprove-comment">Unapprove</a>
@@ -20,9 +27,6 @@
             [% END %]
             <a href="#" class="delete-comment">Delete</a>
         </div>
-    </td>
-    <td>
-        <a href="[% urlbase %]/[% comment.added_to.url %]">[% comment.added_to.title %]</a>
     </td>
 </tr>
 [% END %]
@@ -56,7 +60,7 @@ function approveComment (event) {
     var requestData = {commentid: commentId, status: "approved", csrf: "[% blop.csrf %]"};
     ajaxCall("[% urlbase %]/admin/comment-status-js", requestData, function (data) {
         tr.attr("class", "comment-approved");
-        tr.find("td:nth-child(2)").text("approved");
+        tr.find(".comment-status").text("Approved");
         var unapprove = $("<a href='#' class='unapprove-comment'>Unapprove</a>");
         unapprove.on("click", unapproveComment);
         tr.find(".approve-comment").replaceWith(unapprove);
@@ -70,7 +74,7 @@ function unapproveComment (event) {
     var requestData = {commentid: commentId, status: "pending", csrf: "[% blop.csrf %]"};
     ajaxCall("[% urlbase %]/admin/comment-status-js", requestData, function (data) {
         tr.attr("class", "comment-pending");
-        tr.find("td:nth-child(2)").text("pending");
+        tr.find(".comment-status").text("Pending");
         var approve = $("<a href='#' class='approve-comment'>Approve</a>");
         approve.on("click", approveComment);
         tr.find(".unapprove-comment").replaceWith(approve);
@@ -84,7 +88,7 @@ function deleteComment (event) {
     var requestData = {commentid: commentId, csrf: "[% blop.csrf %]"};
     ajaxCall("[% urlbase %]/admin/delete-comment-js", requestData, function (data) {
         tr.attr("class", "comment-deleted");
-        tr.find("td:nth-child(2)").text("deleted");
+        tr.find(".comment-status").text("Deleted");
         tr.find(".entry-actions").html("-*- Deleted -*-");
     });
 }

@@ -103,7 +103,7 @@ create table comments (
     cookie varchar(32),
     added datetime,
     edited datetime,
-    status enum("pending", "approved", "spam"),
+    status enum("Pending", "Approved", "Spam"),
     content text);
 
 create table sessions (

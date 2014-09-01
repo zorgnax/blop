@@ -147,6 +147,16 @@ table.entry-list td.deleted {
     float: right;
 }
 
+table.comments tr td {
+    border-bottom: 2px solid #333333;
+    border-top: 2px solid #333333;
+    vertical-align: text-top;
+}
+
+.comment-added {
+    white-space: nowrap;
+}
+
 .comment-pending {
     background-color: #ffffcc;
 }
