@@ -19,7 +19,7 @@ use Blop::Config;
 use Blop::Log;
 use Blop::Theme;
 
-our $VERSION = "2014-08-04";
+our $VERSION = 1;
 
 my $blop;
 my $template;
@@ -241,6 +241,7 @@ EOSQL
     return $sessionid;
 }
 
+# keeps refreshing your cookies so they expire x days after last view not login
 sub http_header {
     my ($self, @headers) = @_;
     my $out = "";

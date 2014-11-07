@@ -1,0 +1,11 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+use Blop::Theme;
+
+$blop->read_conf();
+$blop->require_admin();
+
+print $blop->http_header();
+print $blop->template("plugins.html");
+
