@@ -19,7 +19,7 @@ use Blop::Config;
 use Blop::Log;
 use Blop::Theme;
 
-our $VERSION = "1.5";
+our $VERSION = "1.0";
 
 my $blop;
 my $template;

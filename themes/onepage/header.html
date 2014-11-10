@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>[% title | html %]</title>
+    <meta name="generator" content="Blop [% blop.version %]"/>
+    <meta name="description" content="[% blop.conf.meta_description | html %]"/>
+    <meta name="keywords" content="[% blop.conf.meta_tags | html %]"/>
+    <meta name="author" content="[% blop.conf.meta_author | html %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('style.css') %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('gallery.css') %]"/>
+    <link rel="stylesheet" type="text/css" href="[% theme.url('syntax.css') %]"/>
+    <script type="text/javascript" src="[% theme.url('jquery-1.11.0.js') %]"></script>
+    [% IF blop.background %]
+    <style type="text/css">
+    body {
+        background-image: url("[% blop.background %]");
+        background-repeat: repeat;
+        background-position: top left;
+        background-attachment: fixed;
+        background-size: 100%;
+    }
+    </style>
+    [% END %]
+</head>
+
+<body>
+<div class="page-wrap">
+
+[% IF blop.logo %]
+<h1 class="site-title"><a href="[% urlbase %]/"><img src="[% blop.logo %]"></img></a></h1>
+[% ELSE %]
+<h1 class="site-title"><a href="[% urlbase %]/">[% blop.conf.title %]</a>
+[% IF blop.conf.slogan %]
+<span class="site-slogan">[% blop.conf.slogan %]</span>
+[% END %]
+</h1>
+[% END %]
+
+[% PROCESS sidebar.html %]
+
+<div class="content-wrap">
+
