@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if ! [ -e .blop ]; then
+    echo "must be run from blop top level directory"
+    exit
+fi
+if [ -e blop ]; then
+    echo "dist directory, blop/, already exists"
+    exit
+fi
+
+version=$(perl -Ilib -MBlop -e 'print Blop->version')
+mkdir blop
+tar cf - . --exclude ./blop.conf --exclude ./blop --exclude ./.git --exclude './content/*/*' --exclude-tag .keep | tar xpf - -C blop
+tar czf blop-$version.tar.gz blop
+rm -rf blop
+echo "created blop-$version.tar.gz"
+
