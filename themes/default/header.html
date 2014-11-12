@@ -40,6 +40,7 @@
 
 <div class="content-wrap">
 
+[% IF blop.pages.size %]
 <div class="page-links">
 [% FOREACH pagelink IN blop.pages %]
 <a href="[% urlbase %]/[% pagelink.url | uri %]">[% pagelink.title %]</a>
@@ -48,3 +49,5 @@
 <a href="[% urlbase %]/[% blop.allcat.url | uri %]">Blog</a>
 [% END %]
 </div>
+[% END %]
+

@@ -1,7 +1,11 @@
 package Blop;
 use strict;
 use warnings;
-BEGIN {eval {require cPanelUserConfig}}
+BEGIN {
+    eval {require cPanelUserConfig};
+    my $home = (getpwuid($<))[7];
+    $ENV{PATH} .= ":$home/bin";
+}
 use CGI;
 use Template;
 use DBI;
@@ -18,8 +22,6 @@ use Blop::Widget;
 use Blop::Config;
 use Blop::Log;
 use Blop::Theme;
-
-our $VERSION = "1.5";
 
 my $blop;
 my $template;
@@ -360,6 +362,8 @@ select count(*) count, sum(published < $now) published, sum(published is null or
 EOSQL
     $sth->execute();
     $self->{num_posts} = $sth->fetchrow_hashref();
+    $self->{num_posts}{published} ||= 0;
+    $self->{num_posts}{unpublished} ||= 0;
     return $self->{num_posts};
 }
 
@@ -372,6 +376,8 @@ select count(*) count, sum(published < $now) published, sum(published is null or
 EOSQL
     $sth->execute();
     $self->{num_pages} = $sth->fetchrow_hashref();
+    $self->{num_pages}{published} ||= 0;
+    $self->{num_pages}{unpublished} ||= 0;
     return $self->{num_pages};
 }
 
@@ -405,6 +411,8 @@ select sum(status="approved") approved, sum(status="pending") pending from comme
 EOSQL
     $sth->execute();
     $self->{num_comments} = $sth->fetchrow_hashref();
+    $self->{num_comments}{approved} ||= 0;
+    $self->{num_comments}{pending} ||= 0;
     return $self->{num_comments};
 }
 
@@ -530,8 +538,27 @@ sub comma_and {
     return join(", ", @a) . ", and " . $last;
 }
 
-sub version {
-    return $VERSION;
+sub build {
+    my ($self) = @_;
+    return $self->{build} if $self->{build};
+    if (-e "$self->{base}.blop-build") {
+        open my $fh, "<", "$self->{base}.blop-build" or die "$!\n";
+        $self->{build} = do {local $/; <$fh>};
+        chomp $self->{build};
+        close $fh;
+        return $self->{build};
+    }
+    if (-e "$self->{base}.git") {
+        if (open my $fh, "-|", "git", "log", "--format=%cd",
+                          "-1", "--date=iso") {
+            $self->{build} = do {local $/; <$fh>};
+            $self->{build} =~ s/\s+[+-]?\d+\s*$//;
+            close $fh;
+            return $self->{build};
+        }
+    }
+    $self->{build} = "unknown";
+    return $self->{build};
 }
 
 sub search {

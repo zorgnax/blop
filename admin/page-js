@@ -108,9 +108,12 @@ EOSQL
 
 $page->update_content;
 
-my $parts = $blop->comma_and(keys %args);
-$parts .= " of " if $parts;
-$blop->log(content => "Edited ${parts}page \"" . $page->label . "\"", pageid => $pageid);
+if  (%args) {
+    my $parts = $blop->comma_and(keys %args);
+    $parts .= " of " if $parts;
+    $blop->log(content => "Edited ${parts}page \"" . $page->label . "\"", pageid => $pageid);
+}
+
 if ($page->{title} ne $title) {
     my $label = $title ? $title : "Page $pageid";
     my $content = "Renamed page \"" . $page->label . "\" to \"" . $label . "\"";

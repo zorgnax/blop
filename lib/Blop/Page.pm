@@ -175,7 +175,7 @@ sub comments {
     if ($blop->cgi->cookie("cmnt")) {
         $or_cookie = " or cookie=" . $blop->dbh->quote($blop->cgi->cookie("cmnt"));
     }
-    $where .=  "(status='Approved'$or_cookie)";
+    $where .= "(status='Approved'$or_cookie)";
     $self->{comments} = Blop::Comment->list($where);
     return $self->{comments};
 }

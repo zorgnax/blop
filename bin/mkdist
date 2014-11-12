@@ -9,10 +9,13 @@ if [ -e blop ]; then
     exit
 fi
 
-version=$(perl -Ilib -MBlop -e 'print Blop->version')
 mkdir blop
-tar cf - . --exclude ./blop.conf --exclude ./blop --exclude ./.git --exclude './content/*/*' --exclude-tag .keep | tar xpf - -C blop
-tar czf blop-$version.tar.gz blop
+tar cf - . \
+    --exclude ./blop.conf --exclude ./blop --exclude ./.git \
+    --exclude './content/*/*' --exclude-tag .keep |
+    tar xpf - -C blop
+date +"%Y-%m-%d %H:%M:%S" > blop/.blop-build
+tar czf blop.tar.gz blop
 rm -rf blop
-echo "created blop-$version.tar.gz"
+echo "created blop.tar.gz"
 
