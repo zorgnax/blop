@@ -17,11 +17,7 @@ if (defined $name && $name =~ /^\s*$/) {
 }
 
 my $email = $cgi->param("email");
-if (defined $email && $email =~ /^\s*$/) {
-    $out->{emailError} = "Email cannot be blank.";
-    $out->{error} = 1;
-}
-elsif (defined $email && $email !~ /^[^\w\._-]+\@.+\.\w+$/) {
+if ($email && $email !~ /^[^\w\._-]+\@.+\.\w+$/) {
     $out->{emailError} = "Invalid email.";
     $out->{error} = 1;
 }
