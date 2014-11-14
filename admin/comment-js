@@ -21,7 +21,7 @@ if (defined $email && $email =~ /^\s*$/) {
     $out->{emailError} = "Email cannot be blank.";
     $out->{error} = 1;
 }
-elsif (defined $email && $email !~ /^[^\s\@]+\@.+\.\w+$/) {
+elsif (defined $email && $email !~ /^[^\w\._-]+\@.+\.\w+$/) {
     $out->{emailError} = "Invalid email.";
     $out->{error} = 1;
 }
