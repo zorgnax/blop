@@ -14,7 +14,8 @@ tar cf - . \
     --exclude ./blop.conf --exclude ./blop --exclude ./.git \
     --exclude './content/*/*' --exclude-tag .keep |
     tar xpf - -C blop
-date +"%Y-%m-%d %H:%M:%S" > blop/.blop-build
+git log --format=%cd -1 --date=iso |
+    sed 's/\s\+[+-]\?[0-9]\+\s*$//g' > blop/.blop-build
 tar czf blop.tar.gz blop
 rm -rf blop
 echo "created blop.tar.gz"
