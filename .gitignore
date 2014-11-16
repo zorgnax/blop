@@ -1,3 +1,6 @@
 /blop.conf
 /content/*/*
 !/content/*/.keep
+/admin/priv/*
+!/admin/priv/.htaccess
+

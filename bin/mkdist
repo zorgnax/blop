@@ -10,10 +10,11 @@ if [ -e blop ]; then
 fi
 
 mkdir blop
-tar cf - . \
+tar cf - . ./admin/priv/.htaccess \
     --exclude ./blop.conf --exclude ./blop --exclude ./.git \
-    --exclude './content/*/*' --exclude-tag .keep |
+    --exclude './content/*/*' --exclude './admin/priv/*' |
     tar xpf - -C blop
+cp admin/priv/.htaccess blop/admin/priv
 git log --format=%cd -1 --date=iso |
     sed 's/\s\+[+-]\?[0-9]\+\s*$//g' > blop/.blop-build
 tar czf blop.tar.gz blop
