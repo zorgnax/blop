@@ -1,3 +1,5 @@
 add link to create post/page in manage posts/pages page
 benchmark against other blog software
 exec perl code in posts [exec] bbcode, but have a way of disabling this in demo site
+markup: end of line whitespace to <br/>
+

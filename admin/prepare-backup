@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+$| = 1;
+use lib "../lib";
+use blopcgi text => 1;
+use Blop::Backup;
+
+$blop->read_conf;
+$blop->assert_admin;
+$blop->assert_csrf;
+
+print "Content-Type: text/event-stream\n\n";
+Blop::Backup::dump_database();
+
+my $tarball = "$blop->{base}admin/priv/backup.tar.gz";
+print "Creating archive $tarball\n";
+my $size1 = -s $tarball || 0;
+system "tar", "cvzf", $tarball, $blop->{base}, "--exclude", $tarball;
+my $size2 = -s $tarball || 0;
+print "Archive change " . $blop->human_readable($size2 - $size1) . "\n";
+print "Done!\n";
+

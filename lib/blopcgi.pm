@@ -9,7 +9,8 @@ my $blop;
 sub import {
     my ($class, %args) = @_;
     my ($base, $urlbase, $pluginbase, $pluginurlbase) = find_bases();
-    $blop = Blop->new(base => $base, urlbase => $urlbase, js => $args{js});
+    $blop = Blop->new(base => $base, urlbase => $urlbase,
+                      js => $args{js}, text => $args{text});
     strict->import;
     warnings->import;
     no strict "refs";
@@ -49,6 +50,10 @@ sub simple_output_error {
         print "Content-Type: application/json\n\n";
         print "{\"error\": 1, \"mesg\": " . Blop->escape_json_str(@_) . "}\n";
     }
+    elsif ($blop && $blop->{text}) {
+        print "Content-Type: text/plain\n\n";
+        print "@_";
+    }
     else {
         print "Status: 500 Internal Server Error\n";
         print "Content-Type: text/html; charset=utf-8\n\n";
@@ -61,6 +66,10 @@ sub output_error {
     if ($blop && $blop->{js}) {
         print "Content-Type: application/json\n\n";
         print "{\"error\": 1, \"mesg\": " . Blop->escape_json_str(@_) . "}\n";
+    }
+    elsif ($blop && $blop->{text}) {
+        print "Content-Type: text/plain\n\n";
+        print "@_";
     }
     else {
         print "Status: 500 Internal Server Error\n";

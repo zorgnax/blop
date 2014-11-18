@@ -117,9 +117,9 @@ EOHEADER
 }
 
 sub dbh {
-    my ($self, $conf) = @_;
+    my ($self) = @_;
     return $self->{dbh} if $self->{dbh};
-    $conf ||= Blop::Config::read("$self->{base}blop.conf");
+    my $conf = Blop::Config::read("$self->{base}blop.conf");
     my $dsn = "dbi:mysql:host=$conf->{dbhost};database=$conf->{dbtable};";
     $dsn .= "mysql_multi_statements=1";
     my %vars = (PrintError => 0, RaiseError => 1);
@@ -138,11 +138,15 @@ sub human_readable {
     my ($self, $size) = @_;
     my @power = ("B", "K", "M", "G", "T", "P", "E", "Z", "Y");
     my $i = 0;
+    my $abs_size = abs $size;
     for ($i = 0; $i < @power; $i++) {
-        last if $size < 1024;
-        $size /= 1024;
+        last if $abs_size < 1024;
+        $abs_size /= 1024;
     }
-    return sprintf("%.0f", $size) . $power[$i];
+    my $str = sprintf("%.1f", $abs_size) . $power[$i];
+    $str =~ s/\.0//;
+    $str = "-$str" if $size < 0;
+    return $str;
 }
 
 sub escape_uri {

@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+$| = 1;
+use lib "../lib";
+use blopcgi text => 1;
+use Blop::Backup;
+
+$blop->read_conf;
+
+my $pass = $cgi->param("pass") || "";
+if ($pass ne $blop->{conf}{pass}) {
+    die "Incorrect pass!\n";
+}
+
+print "Content-Type: text/event-stream\n\n";
+Blop::Backup::dump_database();
+

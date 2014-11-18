@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi text => 1;
+use Blop::Backup;
+
+$blop->read_conf;
+$blop->assert_admin;
+
+my $tarball = "$blop->{base}admin/priv/backup.tar.gz";
+
+if (!-e $tarball) {
+    print "Content-Type: text/plain\n";
+    print "Status: 404 Not Found\n\n";
+    print "A backup has not been created yet.\n";
+    exit;
+}
+
+binmode STDOUT;
+print "Content-Type: application/x-gzip\n";
+print "Content-Length: " . (-s $tarball) . "\n";
+print "Content-Disposition: attachment; filename=\"backup.tar.gz\"\n\n";
+
+open my $fh, "<", $tarball or die "Can't open $tarball: $!\n";
+binmode $fh;
+my $buffer;
+while (read $fh, $buffer, 4096) {
+    print $buffer;
+}
+close $fh;
+

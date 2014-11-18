@@ -1,0 +1,44 @@
+[% PROCESS header.html title="Backup" x1="Settings" x2="Backup" %]
+
+<a href="#" id="backup-link">Prepare and download backup archive</a>
+<pre id="log"></pre>
+
+<script type="text/javascript">
+$("#backup-link").on("click", function (event) {
+    event.preventDefault();
+    prepare_backup();
+});
+
+var working = 0;
+function prepare_backup () {
+    $("#log").empty();
+    if (working) {
+        alert("working on it!");
+        return;
+    }
+    working = 1;
+    var xhr = new XMLHttpRequest();
+    var loaded = 0;
+    xhr.onprogress = function (event) {
+        var update = xhr.responseText.substr(loaded, xhr.responseText.length - loaded);
+        loaded = xhr.responseText.length;
+        $("#log").append(update);
+    };
+    xhr.onload = function (event) {
+        working = 0;
+        if (event.target.status != 200) {
+            alert(event.target.status + " " + event.target.statusText);
+            return;
+        }
+        var update = xhr.responseText.substr(loaded, xhr.responseText.length - loaded);
+        loaded = xhr.responseText.length;
+        $("#log").append(update);
+        location.href = "[% urlbase %]/admin/download-backup";
+    }
+    xhr.open("POST", "[% urlbase %]/admin/prepare-backup");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("csrf=[% blop.csrf %]");
+}
+</script>
+
+[% PROCESS footer.html %]

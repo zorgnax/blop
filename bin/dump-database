@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "lib";
+use Blop;
+use Blop::Backup;
+
+my $blop = Blop->new;
+Blop::Backup::dump_database();
+
