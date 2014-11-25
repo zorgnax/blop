@@ -88,16 +88,15 @@ sub files {
     my ($self) = @_;
     my @files;
     my $blop = Blop::instance();
-    for my $path (glob "$blop->{base}content/page/$self->{pageid}/*") {
+    for my $path (glob $self->content_path . "/files/*") {
         next if -d $path;
         $path =~ m{([^/]+)$};
         my $name = $1;
-        my $url = "/content/page/$self->{pageid}/$name";
         my $file = {
             name => $name,
             path => $path,
-            url => $url,
-            fullurl => "$blop->{urlbase}$url",
+            url => "/" . $self->content_url . "/files/$name",
+            fullurl => $self->content_fullurl . "/files/$name",
             size => $blop->human_readable(-s $path),
         };
         push @files, $file;
@@ -109,28 +108,29 @@ sub num_files {
     my ($self) = @_;
     my $count = 0;
     my $blop = Blop::instance();
-    for my $path (glob "$blop->{base}content/page/$self->{pageid}/*") {
+    for my $path (glob ($self->content_path . "/files/*")) {
         next if -d $path;
         $count++;
     }
     return $count;
 }
 
+sub content_url {
+    my ($self) = @_;
+    return $self->{content_url} if $self->{content_url};
+    return "page/$self->{pageid}";
+}
+
 sub content_path {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return "$blop->{base}content/page/$self->{pageid}";
-}
-
-sub content_url {
-    my ($self) = @_;
-    return "/content/page/$self->{pageid}";
+    return $blop->{base} . $self->content_url;
 }
 
 sub content_fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return $blop->{urlbase} . $self->content_url;
+    return $blop->{urlbase} . "/" . $self->content_url;
 }
 
 sub published {

@@ -221,7 +221,7 @@ sub parse_paragraph_content {
             $$str =~ m{\G (?=\n>)}xmsgc) {
             last;
         }
-        if ($$str =~ m{\G (?!\n(?:\n|$)) (?!\[\/) (?!\*) (.)}xmsgc ||
+        if ($$str =~ m{\G (?!\n(?:\n|$)) (?![\[<]\/) (?!\*) (.)}xmsgc ||
             $$str =~ m{\G (?<!\S) (\*)}xmsgc) {
             $self->add_str_to_content($content, $1);
             next;
@@ -284,7 +284,7 @@ sub parse_html_element {
         my $attr = $2;
         $elem = {type => "html", tag => $tag, attr => $attr};
     }
-    elsif ($$str =~ m{\G <(script)\b ([^>]*)> (.*?) </script>}xmsgc) {
+    elsif ($$str =~ m{\G <(script|style)\b ([^>]*)> (.*?) </\1>}xmsgc) {
         $elem = {type => "html", tag => $1, attr => $2, content => $3};
     }
     elsif ($$str =~ m{\G < ([^/\s>=]+) ([^>]*) />}xmsgc) {
@@ -295,13 +295,23 @@ sub parse_html_element {
     elsif ($$str =~ m{\G < ([^/\s>=]+) ([^>]*) >}xmsgc) {
         my $tag = $1;
         my $attr = $2;
-        my $content = $self->parse_html_content($str);
+        my $content;
+        if ($attr =~ s/\bmarkup=['"]?(\d+)['"]?\s*//) {
+            $self->{markup_html} = $1;
+        }
+        if ($self->{markup_html}) {
+            $content = $self->parse($str);
+            $self->{markup_html} = 0;
+        }
+        else {
+            $content = $self->parse_html_content($str);
+        }
         $$str =~ m{\G </\Q$tag\E> }xmsgc;
         $elem = {type => "html", tag => $tag, attr => $attr, content => $content};
     }
     if ($elem && $elem->{tag} =~ m{^ (p|div|h[1-6]|blockquote|pre|table|
-                                      dl|ol|ul|script|noscript|form|fieldset|
-                                      iframe|math|hr|!--) $}ix) {
+                                      dl|ol|ul|script|noscript|style|form|
+                                      fieldset|iframe|math|hr|!--) $}ix) {
         $elem->{block} = 1;
     }
     if ($elem && $elem->{content} && !$elem->{block}) {
@@ -454,7 +464,7 @@ sub display_html {
     if ($elem->{tag} eq "!--") {
         $pre = "<!--$elem->{attr}-->";
     }
-    elsif ($elem->{tag} eq "script") {
+    elsif ($elem->{tag} =~ /^(script|style)$/) {
         $pre = "<$elem->{tag}$elem->{attr}>";
         $content = $elem->{content};
         $post = "</$elem->{tag}>";
@@ -471,7 +481,7 @@ sub display_html {
         my $blop = Blop::instance() or return "";
         $pre = $blop->escape_html($pre);
         $post = $blop->escape_html($post);
-        if ($elem->{tag} eq "script") {
+        if ($elem->{tag} =~ /^(script|style)$/) {
             $content = $blop->escape_html($content);
         }
     }

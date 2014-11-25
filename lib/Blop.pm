@@ -75,22 +75,22 @@ sub load_theme {
 sub logo {
     my ($self) = @_;
     return $self->{logo} if exists $self->{logo};
-    my ($logo) = glob "$self->{base}content/main/logo.*";
+    my ($logo) = glob "$self->{base}sect/main/logo.*";
     return "" if !$logo;
     $logo =~ m{([^/]+)$};
     my $name = $1;
-    $self->{logo} = "$self->{urlbase}/content/main/$name";
+    $self->{logo} = "$self->{urlbase}/sect/main/$name";
     return $self->{logo};
 }
 
 sub background {
     my ($self) = @_;
     return $self->{background} if exists $self->{background};
-    my ($background) = glob "$self->{base}content/main/background.*";
+    my ($background) = glob "$self->{base}sect/main/background.*";
     return "" if !$background;
     $background =~ m{([^/]+)$};
     my $name = $1;
-    $self->{background} = "$self->{urlbase}/content/main/$name";
+    $self->{background} = "$self->{urlbase}/sect/main/$name";
     return $self->{background};
 }
 
@@ -474,7 +474,7 @@ sub url_available {
     if (length($url) && -e "$self->{base}$url") {
         return 0;
     }
-    return 0 if $url =~ m{^(admin|tag|themes|\d{4})(/|$)};
+    return 0 if $url =~ m{^(admin|tag|themes|\d{4}|post/\d+|page/\d+|sect)(/|$)};
     return 0 if $self->post(url => $url);
     return 0 if $self->page(url => $url);
     return 0 if $self->category(url => $url);

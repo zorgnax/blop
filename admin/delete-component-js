@@ -11,7 +11,7 @@ if ($component !~ /^(logo|background)$/) {
     die "Invalid component.\n";
 }
 
-for my $crud (glob "$blop->{base}content/main/$component.*") {
+for my $crud (glob "$blop->{base}sect/main/$component.*") {
     unlink $crud;
 }
 

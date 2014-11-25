@@ -44,6 +44,9 @@ my $dir = $entry->content_path;
 if (!-e $dir) {
     mkdir $dir or die "Unable to mkdir $dir: $!\n";
 }
+if (!-e "$dir/files") {
+    mkdir "$dir/files" or die "Unable to mkdir $dir/files: $!\n";
+}
 
 my $name = $cgi->param("file") or die "No file name given.\n";
 if ($name =~ m{(^|/)\.\.($|/)}) {
@@ -53,14 +56,14 @@ if ($name =~ m{/}) {
     die "File name can't include \"/\".\n";
 }
 
-my $path = "$dir/$name";
+my $path = "$dir/files/$name";
 
 # iPhone names all images image.jpg, so don't overwrite each one
 if ($name eq "image.jpg" && -e $path) {
     my $i = 2;
     while (1) {
         $name = "image$i.jpg";
-        $path = "$dir/$name";
+        $path = "$dir/files/$name";
         last if !-e $path;
         $i++;
     }
@@ -74,7 +77,7 @@ while ($uploadfh2->read($buffer, 1024)) {
 }
 close $fh;
 
-my $url = $entry->content_url . "/$name";
+my $url = "/" . $entry->content_url . "/files/$name";
 my $file = {
     name => $name,
     path => $path,

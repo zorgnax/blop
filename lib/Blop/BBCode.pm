@@ -49,7 +49,6 @@ sub display {
         if ($elem->{settings}{update}) {
             $elem->{settings}{update}($markup, $elem);
         }
-        return "";
     }
     if ($elem->{settings}{display}) {
         return $elem->{settings}{display}($markup, $elem);
@@ -72,7 +71,7 @@ sub parse_attr {
     while (1) {
         $attr =~ m{\G\s*}xmsgc;
         my ($key, $value);
-        if ($attr =~ m{\G ([^\s=]+) \s* = \s*}xmsgc) {
+        if ($attr =~ m{\G ([^?\s=]+) \s* = \s*}xmsgc) {
             $key = $1;
         }
         if ($attr =~ m{\G "((\\"|[^"])*)"}xmsgc ||
@@ -107,11 +106,12 @@ sub display_link {
         $title = " title=\"$title\"";
     }
     my $url = $elem->{args}[0] || "";
+    my $str = $elem->{str} || $url;
     my $entry = $markup->{entry};
-    if ($entry && $url !~ m{^(/|\w+://)}) {
-        $url = $entry->content_fullurl . "/$url";
+    if ($entry && $url !~ m{^(/|\./|\.\./|\w+://)}) {
+        $url = $entry->content_fullurl . "/files/$url";
     }
-    return "<a href=\"$url\"$title>$elem->{str}</a>";
+    return "<a href=\"$url\"$title>$str</a>";
 }
 
 sub display_code {
@@ -212,7 +212,7 @@ sub create_thumb {
     $thumb =~ s{(\.\w+)$}{.$size$1};
     return if -e $thumb && !$force;
     my $magick = Image::Magick->new;
-    my $path = $entry->content_path . "/$file_name";
+    my $path = $entry->content_path . "/files/$file_name";
     $magick->Read($path);
     $magick->Resize(geometry => $geometry);
     $magick->Extent(geometry => $extent, gravity => "Center") if $extent;
@@ -258,7 +258,7 @@ sub display_thumb {
     my $size = $elem->{hash}{size} || "medium";
     my $thumb = $entry->content_fullurl . "/thumb/$name";
     $thumb =~ s{(\.\w+)$}{.$size$1};
-    my $url = $entry->content_fullurl . "/$name";
+    my $url = $entry->content_fullurl . "/files/$name";
     my $html = "<span class=\"thumb\">";
     $html .= "<a href=\"$url\"><img src=\"$thumb\"/></a>";
     $html .= "</span>\n";
@@ -269,7 +269,7 @@ sub display_image {
     my ($markup, $elem) = @_;
     my $entry = $markup->{entry} or return "";
     my $name = $elem->{args}[0] or return "";
-    my $url = $entry->content_fullurl . "/$name";
+    my $url = $entry->content_fullurl . "/files/$name";
     my $html = "<span class=\"image\"><img src=\"$url\"/></span>\n";
     return $html;
 }

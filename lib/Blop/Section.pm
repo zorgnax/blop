@@ -16,16 +16,15 @@ sub files {
     my ($self) = @_;
     my @files;
     my $blop = Blop::instance();
-    for my $path (glob "$blop->{base}content/$self->{name}/*") {
+    for my $path (glob $self->content_path . "/files/*") {
         next if -d $path;
         $path =~ m{([^/]+)$};
         my $name = $1;
-        my $url = "/content/$self->{name}/$name";
         my $file = {
             name => $name,
             path => $path,
-            url => $url,
-            fullurl => "$blop->{urlbase}$url",
+            url => "/" . $self->content_url . "/files/$name",
+            fullurl => $self->content_fullurl . "/files/$name",
             size => $blop->human_readable(-s $path),
         };
         push @files, $file;
@@ -33,21 +32,22 @@ sub files {
     return \@files;
 }
 
+sub content_url {
+    my ($self) = @_;
+    return $self->{content_url} if $self->{content_url};
+    return "sect/$self->{name}";
+}
+
 sub content_path {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return "$blop->{base}content/$self->{name}";
-}
-
-sub content_url {
-    my ($self) = @_;
-    return "/content/$self->{name}";
+    return $blop->{base} . $self->content_url;
 }
 
 sub content_fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return $blop->{urlbase} . $self->content_url;
+    return $blop->{urlbase} . "/" . $self->content_url;
 }
 
 sub parsed_content {

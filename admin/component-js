@@ -23,7 +23,7 @@ if ($upload_name !~ m{\.(jpe?g|gif|png)$}i) {
 }
 my $name = lc "$component.$1";
 
-my $dir = "$blop->{base}content/main";
+my $dir = "$blop->{base}sect/main";
 if (!-e $dir) {
     mkdir $dir or die "Unable to mkdir $dir: $!\n";
 }
@@ -42,12 +42,12 @@ while ($uploadfh2->read($buffer, 1024)) {
 close $fh;
 
 # if you upload logo.jpg, delete the old logo.png
-for my $crud (glob "$blop->{base}content/main/$component.*") {
+for my $crud (glob "$blop->{base}sect/main/$component.*") {
     next if $crud eq $path;
     unlink $crud;
 }
 
-my $url = "/content/main/$name";
+my $url = "/sect/main/$name";
 my $file = {
     name => $name,
     path => $path,

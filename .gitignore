@@ -1,6 +1,10 @@
 /blop.conf
-/content/*/*
-!/content/*/.keep
+/sect/*
+!/sect/.keep
+/post/*
+!/post/.keep
+/page/*
+!/page/.keep
 /admin/priv/*
 !/admin/priv/.htaccess
 

@@ -13,7 +13,7 @@ if (!$postid) {
 
 my $post = $blop->post(postid => $postid) or die "Invalid postid.\n";
 
-system "rm", "-rf", "$blop->{base}/content/post/$postid";
+system "rm", "-rf", "$blop->{base}/post/$postid";
 
 my $sth = $blop->dbh->prepare(<<EOSQL);
 delete from tags where postid=?

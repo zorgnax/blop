@@ -37,7 +37,7 @@ if ($name =~ m{(^|/)\.\.($|/)}) {
     die "Name cannot traverse upwards.\n";
 }
 
-my $path = $entry->content_path . "/$name";
+my $path = $entry->content_path . "/files/$name";
 unlink $path;
 
 for my $path (glob $entry->content_path . "/thumb/*") {

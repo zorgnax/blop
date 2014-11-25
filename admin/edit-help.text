@@ -1,0 +1,172 @@
+Edit Help
+=========
+
+The posting format is similar to [link
+"http://daringfireball.net/projects/markdown/"]Markdown[/link],
+except square brackets "`[]`" are used more like [link
+"https://www.phpbb.com/community/faq.php?mode=bbcode"]BBCode[/link].
+
+*   Most importantly, HTML is passed through
+    untouched.
+
+    [example]<a href="http://google.com">Okay!</a>[/example]
+
+    If you add the `markup="1"` attribute, the text of the
+    element will be parsed as more markup.
+
+    [example]<div markup="1">**Bold** Text</div>[/example]
+
+*   Blocks of text become paragraphs.
+
+    [example p="1"]This is a normal paragraph.
+    Single line breaks are included
+
+    Another paragraph.[/example]
+
+*   Indented lines are preformatted text. HTML characters are encoded
+    automatically.
+
+    [example p="1"]This is a normal paragraph.
+
+        a < b[/example]
+
+*   Lines starting with "`>`" are block
+    quoted.
+
+    [example p="1"]This is a normal paragraph.
+
+    > A quote.
+
+    He said:
+    > She said:
+    >> what
+    >> foo?
+    [/example]
+
+*   Headings are underlined or start with hash
+    marks.
+
+    [example]
+    Foo
+    ===
+
+    Bar
+    ---
+
+    # Baz
+
+    ## Qux[/example]
+
+*   Bold text can be surrounded by "`**`". Unlike Markdown, you
+    cannot use "`__`".
+
+    [example]**Bold Text**[/example]
+
+*   Italicized text can be surrounded by "`*`". Unlike Markdown, you
+    cannot use "`_`".
+
+    [example]*Italicized Text*[/example]
+
+*   Backticks can make text look like code examples. Multiple backticks
+    can be used to surround inner backticks.
+
+    [example]lol `tdm`.[/example]
+
+*   Backslashes can be used to escape characters that would otherwise
+    cause markup to change.
+
+    [example]\*\*Not Bolded\*\*[/example]
+
+*   Three or more astericks or dashes result in a horizontal
+    rule.
+
+    [example]* * *
+
+    ---[/example]
+
+*   Text starting with `http://` are automatically converted to
+    links.
+
+    [example]http://a.co[/example]
+
+*   Lists can be any block of text that starts with a "`*`", "`+`", "`-`", or
+    a digit followed by "`.`". If the item content is more than one line. It
+    will be surrounded by `<p>` tags.
+
+    [example]
+    1. foo
+    2. bar
+        * items
+        * can
+        * nest
+    3. baz
+    [/example]
+
+*   Square bracket commands are for special tasks. There can be any
+    number of square bracket commands depending on the plugins you
+    have installed. If the command is unrecognized, the text will be
+    unmodified.
+
+    [example p="1"][link a.jpg /]
+
+    [unrecognized]
+    [/example]
+
+
+Built-in Square Bracket Commands
+================================
+
+*   `[code]` will show its content as a code sample. You can put text
+    after the tag name to escape inner `[code][/code]` spans like this
+    `[code-ex1][code][/code][/code-ex1]`. You can even give it a `lang`
+    attribute, which can be used for syntax highlighting. Otherwise, the
+    result is exactly like an indented block or backticks. In fact, if
+    it's alone in a paragraph, the result gets surrounded by `<pre>` tags:
+
+    [example noout="1"]
+    [code lang="python"]
+    def average(values):
+        """Computes the arithmetic
+        mean of a list of numbers.
+
+        >>> print average([20, 30, 70])
+        40.0
+        """
+        return sum(values, 0.0) / len(values)
+    [/code]
+    [/example]
+
+*   `[link]` is a shortcut for adding links. If the link relative
+    like "image.jpg", the URL will be based in the post's content
+    directory. i.e. /post/24/image.jpg:
+
+    [example noout="1"][link a.jpg "opt title"]Click[/link][/example]
+
+*   `[gallery]` will show a list of thumbnail links to the images attached
+    to the post. The size attribute can be used to set the size of
+    the thumbnails, which can be either "small", "medium", "large",
+    "nxn", or "xn>" (full spec is at
+    http://www.imagemagick.org/script/command-line-processing.php#geometry).
+
+    [example noout="1"][gallery size="x70>" /][/example]
+
+    The `x70>` above sets the height to 70 pixels but allows the width to
+    change to maintain proportions of the original image.
+
+*   `[thumb]` will show one picture as a clickable thumbnail. The thumbnail
+    size can be set with the size attribute just as `[gallery]`. The name
+    of the picture is the first (unnamed) argument. It needs to be found
+    in the post's (or page's) content directory (usually /post/1234/).
+
+    [example noout="1"][thumb a.jpg size="small" /][/example]
+
+*   `[image]` will show an image from the post (or page).
+
+    [example noout="1"][image "j.jpg" /][/example]
+
+*   `[listing]` will show a list of links to files attached to the post.
+
+    [example noout="1"][listing /][/example]
+
+You can see the source of this page at <a href="edit-help.text">edit-help.text</a>.
+

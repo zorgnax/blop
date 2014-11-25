@@ -13,7 +13,7 @@ if (!$pageid) {
 
 my $page = $blop->page(pageid => $pageid) or die "Invalid pageid.\n";
 
-system "rm", "-rf", "$blop->{base}/content/page/$pageid";
+system "rm", "-rf", "$blop->{base}/page/$pageid";
 
 my $sth = $blop->dbh->prepare(<<EOSQL);
 delete from pages where pageid=?

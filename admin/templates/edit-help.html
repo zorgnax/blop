@@ -1,173 +1,425 @@
 [% PROCESS header2.html title="Edit Help" %]
 
+<link rel="stylesheet" type="text/css" href="../themes/default/syntax.css" />
+
+<style>
+    table.example {
+        border-collapse: collapse;
+        background-color: #eee;
+    }
+    .example td {
+        padding-left: 10px;
+        padding-right: 10px;
+        border-right: 3px solid #666;
+        width: 275px;
+        vertical-align: top;
+    }
+    .example td:last-child {
+        border-right: none;
+        vertical-align: middle;
+    }
+</style>
 <h1>Edit Help</h1>
 
-<p>The posting format is similar to <a href="http://daringfireball.net/projects/markdown/">Markdown</a>, except square brackets "<code>[]</code>" are used more like <a href="https://www.phpbb.com/community/faq.php?mode=bbcode">bbcode</a>:</p>
+<p>The posting format is similar to <a href="http://daringfireball.net/projects/markdown/">Markdown</a>,
+except square brackets "<code>[]</code>" are used more like <a href="https://www.phpbb.com/community/faq.php?mode=bbcode">BBCode</a>.</p>
 
 <ul>
+<li><p>Most importantly, HTML is passed through
+untouched.</p>
 
-<li><p>Most importantly, HTML is passed through untouched.</p>
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>&lt;a href=&quot;http://google.com&quot;&gt;Okay!&lt;/a&gt;</code></pre></td>
+        <td title="Output"><pre><code>&lt;a href=&quot;http://google.com&quot;&gt;Okay!&lt;/a&gt;</code></pre></td>
+        <td title="Result"><a href="http://google.com">Okay!</a></td>
+    </tr>
+</table>
 
-<pre><code>&lt;a href="/page.html"&gt;No Problem&lt;/a&gt;</code></pre>
 
+<p>If you add the <code>markup="1"</code> attribute, the text of the
+element will be parsed as more markup.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>&lt;div markup=&quot;1&quot;&gt;**Bold** Text&lt;/div&gt;</code></pre></td>
+        <td title="Output"><pre><code>&lt;div &gt;&lt;p&gt;&lt;b&gt;Bold&lt;/b&gt; Text&lt;/p&gt;&lt;/div&gt;</code></pre></td>
+        <td title="Result"><div ><p><b>Bold</b> Text</p></div></td>
+    </tr>
+</table>
 </li>
+<li><p>Blocks of text become paragraphs.</p>
 
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>This is a normal paragraph.
+Single line breaks are included
+
+Another paragraph.</code></pre></td>
+        <td title="Output"><pre><code>&lt;p&gt;This is a normal paragraph.
+Single line breaks are included&lt;/p&gt;
+
+&lt;p&gt;Another paragraph.&lt;/p&gt;</code></pre></td>
+        <td title="Result"><p>This is a normal paragraph.
+Single line breaks are included</p>
+
+<p>Another paragraph.</p></td>
+    </tr>
+</table>
+</li>
 <li><p>Indented lines are preformatted text. HTML characters are encoded
 automatically.</p>
 
-<pre><code>This is a normal paragraph.
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>This is a normal paragraph.
 
-    This is a preformatted &lt;code&gt; block.</code></pre>
+    a &lt; b</code></pre></td>
+        <td title="Output"><pre><code>&lt;p&gt;This is a normal paragraph.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;a &amp;lt; b&lt;/code&gt;&lt;/pre&gt;</code></pre></td>
+        <td title="Result"><p>This is a normal paragraph.</p>
+
+<pre><code>a &lt; b</code></pre></td>
+    </tr>
+</table>
+</li>
+<li><p>Lines starting with "<code>&gt;</code>" are block
+quoted.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>This is a normal paragraph.
+
+&gt; A quote.
+
+He said:
+&gt; She said:
+&gt;&gt; what
+&gt;&gt; foo?
+</code></pre></td>
+        <td title="Output"><pre><code>&lt;p&gt;This is a normal paragraph.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;A quote.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;He said:&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;She said:&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;what
+foo?&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;
+</code></pre></td>
+        <td title="Result"><p>This is a normal paragraph.</p>
+
+<blockquote><p>A quote.</p></blockquote>
+
+<p>He said:</p>
+<blockquote><p>She said:</p>
+<blockquote><p>what
+foo?</p></blockquote></blockquote>
+</td>
+    </tr>
+</table>
+</li>
+<li><p>Headings are underlined or start with hash
+marks.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>Foo
+===
+
+Bar
+---
+
+# Baz
+
+## Qux</code></pre></td>
+        <td title="Output"><pre><code>&lt;h1&gt;Foo&lt;/h1&gt;
+
+&lt;h2&gt;Bar&lt;/h2&gt;
+
+&lt;h1&gt;Baz&lt;/h1&gt;
+
+&lt;h2&gt;Qux&lt;/h2&gt;</code></pre></td>
+        <td title="Result"><h1>Foo</h1>
+
+<h2>Bar</h2>
+
+<h1>Baz</h1>
+
+<h2>Qux</h2></td>
+    </tr>
+</table>
+</li>
+<li><p>Bold text can be surrounded by "<code>**</code>". Unlike Markdown, you
+cannot use "<code>__</code>".</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>**Bold Text**</code></pre></td>
+        <td title="Output"><pre><code>&lt;b&gt;Bold Text&lt;/b&gt;</code></pre></td>
+        <td title="Result"><b>Bold Text</b></td>
+    </tr>
+</table>
+</li>
+<li><p>Italicized text can be surrounded by "<code>*</code>". Unlike Markdown, you
+cannot use "<code>_</code>".</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>*Italicized Text*</code></pre></td>
+        <td title="Output"><pre><code>&lt;i&gt;Italicized Text&lt;/i&gt;</code></pre></td>
+        <td title="Result"><i>Italicized Text</i></td>
+    </tr>
+</table>
+</li>
+<li><p>Backticks can make text look like code examples. Multiple backticks
+can be used to surround inner backticks.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>lol `tdm`.</code></pre></td>
+        <td title="Output"><pre><code>lol &lt;code&gt;tdm&lt;/code&gt;.</code></pre></td>
+        <td title="Result">lol <code>tdm</code>.</td>
+    </tr>
+</table>
+</li>
+<li><p>Backslashes can be used to escape characters that would otherwise
+cause markup to change.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>\*\*Not Bolded\*\*</code></pre></td>
+        <td title="Output"><pre><code>**Not Bolded**</code></pre></td>
+        <td title="Result">**Not Bolded**</td>
+    </tr>
+</table>
+</li>
+<li><p>Three or more astericks or dashes result in a horizontal
+rule.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>* * *
+
+---</code></pre></td>
+        <td title="Output"><pre><code>&lt;hr/&gt;
+
+&lt;hr/&gt;
+
+</code></pre></td>
+        <td title="Result"><hr/>
+
+<hr/>
+
+</td>
+    </tr>
+</table>
+</li>
+<li><p>Text starting with <code>http://</code> are automatically converted to
+links.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>http://a.co</code></pre></td>
+        <td title="Output"><pre><code>&lt;a href=&quot;http://a.co&quot;&gt;http://a.co&lt;/a&gt;</code></pre></td>
+        <td title="Result"><a href="http://a.co">http://a.co</a></td>
+    </tr>
+</table>
+</li>
+<li><p>Lists can be any block of text that starts with a "<code>*</code>", "<code>+</code>", "<code>-</code>", or
+a digit followed by "<code>.</code>". If the item content is more than one line. It
+will be surrounded by <code>&lt;p&gt;</code> tags.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>1. foo
+2. bar
+    * items
+    * can
+    * nest
+3. baz
+</code></pre></td>
+        <td title="Output"><pre><code>&lt;ol&gt;
+&lt;li&gt;foo&lt;/li&gt;
+&lt;li&gt;bar
+&lt;ul&gt;
+&lt;li&gt;items&lt;/li&gt;
+&lt;li&gt;can&lt;/li&gt;
+&lt;li&gt;nest&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/li&gt;
+&lt;li&gt;baz&lt;/li&gt;
+&lt;/ol&gt;
+
+</code></pre></td>
+        <td title="Result"><ol>
+<li>foo</li>
+<li>bar
+<ul>
+<li>items</li>
+<li>can</li>
+<li>nest</li>
+</ul>
 
 </li>
+<li>baz</li>
+</ol>
 
-<li><p>Lines starting with "<code>&gt;</code>" are block quoted.</p>
-
-<pre><code>This is a normal paragraph.
-
-> This is a blockquote.</code></pre>
-
+</td>
+    </tr>
+</table>
 </li>
-
-<li><p>Headers are underlined or start with hash marks.</p>
-
-<pre><code>Header 1
-========
-
-Header 2
---------
-
-# Header 1
-
-## Header 2</code></pre>
-
-</li>
-
-<li><p>Bold text can be surrounded by "<code>**</code>". Unlike Markdown,
-you cannot use "<code>__</code>".</p>
-
-<pre><code>**bold text**</code></pre>
-
-</li>
-
-<li><p>Italicized text can be surrounded by "<code>*</code>". Unlike
-Markdown, you cannot use "<code>_</code>".</p>
-
-<pre><code>*italicized text*</code></pre>
-
-</li>
-
-<li><p>Backslashes can be used to escape characters that would otherwise cause markup to change.</p>
-
-<pre><code>\*\*not bolded\*\*</code></pre>
-
-</li>
-
-<li><p>Three or more astericks or dashes result in a horizontal rule</p>
-
-<pre><code>* * *
-
----</code></pre>
-</li>
-
-<li><p>Text starting with <code>http://</code> are automatically converted to links.</p>
-
-<pre><code>Check out http://google.com.</code></pre>
-
-</li>
-
-<li><p>Lists can be any block of text that starts with a "<code>*</code>", "<code>+</code>", "<code>-</code>", or a digit followed by "<code>.</code>". If the item content is more than one line. It will be surrounded by <code>&lt;p&gt;</code> tags.
-
-<pre><code>* foo
-* bar
-    1. items
-    2. can
-    3. be nested
-* baz
-</code></pre>
-
-</li>
-
-<li><p>Square bracket commands are for special tasks. There can be
-any number of square bracket commands depending on the plugins you
+<li><p>Square bracket commands are for special tasks. There can be any
+number of square bracket commands depending on the plugins you
 have installed. If the command is unrecognized, the text will be
 unmodified.</p>
 
-<p>These are the commands available by default:</p>
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>[link a.jpg /]
 
-<ul>
-    <li><p><code>[code]</code> will show its content as a code sample. You can
-    put text after the tag name to escape inner <code>[code][/code]</code>
-    spans like this <code>[code-ex1][code][/code][/code-ex1]</code>. You
-    can even give it a lang attribute, which can be used for syntax
-    highlighting. Otherwise, the result is exactly like an indented block
-    or <code>`backticks`</code>. In fact, if it's alone in a paragraph,
-    the result gets surrounded by <code>&lt;pre&gt;</code> tags:</p>
+[unrecognized]
+</code></pre></td>
+        <td title="Output"><pre><code>&lt;p&gt;&lt;a href=&quot;eh/files/a.jpg&quot;&gt;a.jpg&lt;/a&gt;&lt;/p&gt;
 
-    <pre><code>
-    [code lang="python"]
-    def average(values):
-        """Computes the arithmetic mean of a list of numbers.
+&lt;p&gt;[unrecognized]&lt;/p&gt;
+</code></pre></td>
+        <td title="Result"><p><a href="eh/files/a.jpg">a.jpg</a></p>
 
-        &gt;&gt;&gt; print average([20, 30, 70])
-        40.0
-        """
-        return sum(values, 0.0) / len(values)
-    [/code]
-    </code></pre>
-    </li>
-
-    <li><p><code>[link]</code> is a shortcut for adding links. If the
-    link relative like "image.jpg", the URL will be based in the post's
-    content directory. i.e. /content/post/24/image.jpg:</p>
-
-    <pre><code>
-    [link image.jpg "optional title"]Click here![/link]
-    </code></pre>
-    </li>
-
-    <li><p><code>[gallery]</code> will show a list of thumbnail links
-    to the images attached to the post. The size attribute can be used
-    to set the size of the thumbnails, which can be either "small",
-    "medium", "large", or "200x200" (nxn).</p>
-
-    <pre><code>
-    [gallery size="medium" /]
-    </pre></code>
-    </li>
-
-    <li><p><code>[thumb]</code> will show one picture as a clickable
-    thumbnail. The thumbnail size can be set with the size attribute. The
-    name of the picture is the first (unnamed) argument. It needs
-    to be found in the post's (or page's) content directory (usually
-    /content/post/1234/).</p>
-
-    <pre><code>
-    [thumb image.jpg size="medium" /]
-    </code></pre>
-    </li>
-
-    <li><p><code>[image]</code> will show an image in the post.</p>
-
-    <pre><code>
-    [image image.jpg /]
-    </code></pre>
-    </li>
-
-    <li><p><code>[listing]</code> will show a list of links to files
-    attached to the post.</p>
-
-    <pre><code>
-    [listing /]
-    </code></pre>
-    </li>
-
-    <li><p>Unrecognized square bracket elements, will be sent as normal
-    text to the parsed output.</p></li>
-</ul>
+<p>[unrecognized]</p>
+</td>
+    </tr>
+</table>
 
 </li>
-
 </ul>
+
+<h1>Built-in Square Bracket Commands</h1>
+
+<ul>
+<li><p><code>[code]</code> will show its content as a code sample. You can put text
+after the tag name to escape inner <code>[code][/code]</code> spans like this
+<code>[code-ex1][code][/code][/code-ex1]</code>. You can even give it a <code>lang</code>
+attribute, which can be used for syntax highlighting. Otherwise, the
+result is exactly like an indented block or backticks. In fact, if
+it's alone in a paragraph, the result gets surrounded by <code>&lt;pre&gt;</code> tags:</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>[code lang=&quot;python&quot;]
+def average(values):
+    &quot;&quot;&quot;Computes the arithmetic
+    mean of a list of numbers.
+
+    &gt;&gt;&gt; print average([20, 30, 70])
+    40.0
+    &quot;&quot;&quot;
+    return sum(values, 0.0) / len(values)
+[/code]
+</code></pre></td>
+        
+        <td title="Result"><pre><code><span class="synStatement">def</span> <span class="synIdentifier">average</span>(values):
+    &quot;&quot;&quot;<span class="synConstant">Computes the arithmetic</span>
+<span class="synConstant">    mean of a list of numbers.</span>
+
+<span class="synConstant">    &gt;&gt;&gt; print average([20, 30, 70])</span>
+<span class="synConstant">    40.0</span>
+<span class="synConstant">    </span>&quot;&quot;&quot;
+    <span class="synStatement">return</span> sum(values, 0.0) / len(values)</code></pre>
+</td>
+    </tr>
+</table>
+</li>
+<li><p><code>[link]</code> is a shortcut for adding links. If the link relative
+like "image.jpg", the URL will be based in the post's content
+directory. i.e. /post/24/image.jpg:</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>[link a.jpg &quot;opt title&quot;]Click[/link]</code></pre></td>
+        
+        <td title="Result"><a href="eh/files/a.jpg" title="opt title">Click</a></td>
+    </tr>
+</table>
+</li>
+<li><p><code>[gallery]</code> will show a list of thumbnail links to the images attached
+to the post. The size attribute can be used to set the size of
+the thumbnails, which can be either "small", "medium", "large",
+"nxn", or "xn&gt;" (full spec is at
+<a href="http://www.imagemagick.org/script/command-line-processing.php#geometry">http://www.imagemagick.org/script/command-line-processing.php#geometry</a>).</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>[gallery size=&quot;x70&gt;&quot; /]</code></pre></td>
+        
+        <td title="Result"><div class="gallery">
+<a href="eh/files/a.jpg"><img src="eh/thumb/a.x70>.jpg"/></a>
+<a href="eh/files/b.jpg"><img src="eh/thumb/b.x70>.jpg"/></a>
+<a href="eh/files/c.jpg"><img src="eh/thumb/c.x70>.jpg"/></a>
+<a href="eh/files/d.jpg"><img src="eh/thumb/d.x70>.jpg"/></a>
+<a href="eh/files/e.jpg"><img src="eh/thumb/e.x70>.jpg"/></a>
+<a href="eh/files/f.jpg"><img src="eh/thumb/f.x70>.jpg"/></a>
+<a href="eh/files/g.jpg"><img src="eh/thumb/g.x70>.jpg"/></a>
+<a href="eh/files/h.jpg"><img src="eh/thumb/h.x70>.jpg"/></a>
+<a href="eh/files/i.jpg"><img src="eh/thumb/i.x70>.jpg"/></a>
+<a href="eh/files/j.jpg"><img src="eh/thumb/j.x70>.jpg"/></a>
+</div>
+</td>
+    </tr>
+</table>
+
+
+<p>The <code>x70&gt;</code> above sets the height to 70 pixels but allows the width to
+change to maintain proportions of the original image.</p></li>
+<li><p><code>[thumb]</code> will show one picture as a clickable thumbnail. The thumbnail
+size can be set with the size attribute just as <code>[gallery]</code>. The name
+of the picture is the first (unnamed) argument. It needs to be found
+in the post's (or page's) content directory (usually /post/1234/).</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>[thumb a.jpg size=&quot;small&quot; /]</code></pre></td>
+        
+        <td title="Result"><span class="thumb"><a href="eh/files/a.jpg"><img src="eh/thumb/a.small.jpg"/></a></span>
+</td>
+    </tr>
+</table>
+</li>
+<li><p><code>[image]</code> will show an image from the post (or page).</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>[image &quot;j.jpg&quot; /]</code></pre></td>
+        
+        <td title="Result"><span class="image"><img src="eh/files/j.jpg"/></span>
+</td>
+    </tr>
+</table>
+</li>
+<li><p><code>[listing]</code> will show a list of links to files attached to the post.</p>
+
+<table class="example">
+    <tr>
+        <td title="Markup"><pre><code>[listing /]</code></pre></td>
+        
+        <td title="Result"><ul class="listing">
+<li><a href="eh/files/a.jpg">a.jpg</a> <span class="muted">5M</span></li>
+<li><a href="eh/files/b.jpg">b.jpg</a> <span class="muted">265.9K</span></li>
+<li><a href="eh/files/c.jpg">c.jpg</a> <span class="muted">190.9K</span></li>
+<li><a href="eh/files/d.jpg">d.jpg</a> <span class="muted">523.6K</span></li>
+<li><a href="eh/files/e.jpg">e.jpg</a> <span class="muted">321.8K</span></li>
+<li><a href="eh/files/f.jpg">f.jpg</a> <span class="muted">321K</span></li>
+<li><a href="eh/files/g.jpg">g.jpg</a> <span class="muted">174.9K</span></li>
+<li><a href="eh/files/h.jpg">h.jpg</a> <span class="muted">95.3K</span></li>
+<li><a href="eh/files/i.jpg">i.jpg</a> <span class="muted">208.7K</span></li>
+<li><a href="eh/files/j.jpg">j.jpg</a> <span class="muted">37.9K</span></li>
+</ul></td>
+    </tr>
+</table>
+</li>
+</ul>
+
+<p>You can see the source of this page at <a href="edit-help.text">edit-help.text</a>.</p>
 
 [% PROCESS footer2.html %]
