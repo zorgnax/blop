@@ -1,4 +1,0 @@
-<p>This is <i>italic</i>. This is <b>bold</b>. This is <b><i>bold italic</i></b>.</p>
-
-<p>This is _not italic_. This is __not bold__. This is ___not bold italic___.</p>
-

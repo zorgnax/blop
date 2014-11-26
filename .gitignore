@@ -7,4 +7,5 @@
 !/page/.keep
 /admin/priv/*
 !/admin/priv/.htaccess
+/t/markup/*.got
 
