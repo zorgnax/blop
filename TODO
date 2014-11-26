@@ -2,28 +2,4 @@ do not track .got files
 view post link on edit post page. same with page edit screen.
 add link to create post/page in manage posts/pages page
 benchmark against other blog software
-exec perl code in posts [exec] bbcode, but have a way of disabling this in demo site
 
-markup: end of line whitespace to <br/> -- on second thought no, better
-something like <pre markup="1">text text text</pre> because poems may
-have start of line whitespace and **bold** formatting too. markup="1"
-will be recursively set down so you can set it on <table> tag and have
-it affect all the td's.
-
-what about??:
-
-<table markup="1"><tr><td>
-one paragraph
-
-two paragraph
-</td></tr></table>
-
-and
-
-<table markup="1"><tr><td>
-one thing
-</td></tr></table>
-
-I guess paragraph it then remove the paragraphing if just one.
-
-or markup="1" is paragraphs, markup="2" is no paragraphs. (YES!)

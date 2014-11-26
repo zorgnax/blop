@@ -13,7 +13,7 @@ sub dump_database {
         my $size1 = -s $file || 0;
         print "Dumping $table to $file";
         my @cmd = ("mysqldump", "-h", $conf->{dbhost}, "-u", $conf->{dbuser},
-                   "-p$conf->{dbpass}", $conf->{dbtable}, $table,
+                   "-p$conf->{dbpass}", $conf->{db}, $table,
                    "--skip-extended-insert");
         open my $cmd_fh, "-|", @cmd or die "$!\n";
         open my $fh, ">", $file or die "Can't open $file: $!\n";

@@ -120,7 +120,7 @@ sub dbh {
     my ($self) = @_;
     return $self->{dbh} if $self->{dbh};
     my $conf = Blop::Config::read("$self->{base}blop.conf");
-    my $dsn = "dbi:mysql:host=$conf->{dbhost};database=$conf->{dbtable};";
+    my $dsn = "dbi:mysql:host=$conf->{dbhost};database=$conf->{db};";
     $dsn .= "mysql_multi_statements=1";
     my %vars = (PrintError => 0, RaiseError => 1);
     $self->{dbh} = DBI->connect($dsn, $conf->{dbuser}, $conf->{dbpass}, \%vars);
