@@ -3,5 +3,5 @@ use lib "../lib";
 use blopcgi;
 
 print $blop->http_header();
-print $blop->template("edit-help.html");
+print $blop->template("markup.html");
 

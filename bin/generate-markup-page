@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if ! [ -e .blop ]; then
+    echo "must be run from blop top level directory"
+    exit
+fi
+
+cd admin
+cat <<EOHTML > templates/markup.html
+[% PROCESS header2.html title="Edit Help" %]
+
+<link rel="stylesheet" type="text/css" href="../themes/default/syntax.css" />
+<link rel="stylesheet" type="text/css" href="../themes/default/gallery.css" />
+
+<style>
+    table.example {
+        border-collapse: collapse;
+        background-color: #eee;
+    }
+    .example td {
+        padding-left: 10px;
+        padding-right: 10px;
+        border-right: 3px solid #666;
+        width: 275px;
+        vertical-align: top;
+    }
+    .example td:last-child {
+        border-right: none;
+        vertical-align: middle;
+    }
+</style>
+EOHTML
+perl -I../lib ../bin/markup markup.text -c mu >> templates/markup.html
+cat <<EOHTML >> templates/markup.html
+<script type="text/javascript" src="../themes/default/gallery.js"></script>
+[% PROCESS footer2.html %]
+EOHTML
+

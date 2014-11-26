@@ -1,6 +1,7 @@
 [% PROCESS header2.html title="Edit Help" %]
 
 <link rel="stylesheet" type="text/css" href="../themes/default/syntax.css" />
+<link rel="stylesheet" type="text/css" href="../themes/default/gallery.css" />
 
 <style>
     table.example {
@@ -281,11 +282,11 @@ unmodified.</p>
 
 [unrecognized]
 </code></pre></td>
-        <td title="Output"><pre><code>&lt;p&gt;&lt;a href=&quot;eh/files/a.jpg&quot;&gt;a.jpg&lt;/a&gt;&lt;/p&gt;
+        <td title="Output"><pre><code>&lt;p&gt;&lt;a href=&quot;./mu/files/a.jpg&quot;&gt;a.jpg&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;[unrecognized]&lt;/p&gt;
 </code></pre></td>
-        <td title="Result"><p><a href="eh/files/a.jpg">a.jpg</a></p>
+        <td title="Result"><p><a href="./mu/files/a.jpg">a.jpg</a></p>
 
 <p>[unrecognized]</p>
 </td>
@@ -339,7 +340,7 @@ directory. i.e. /post/24/image.jpg:</p>
     <tr>
         <td title="Markup"><pre><code>[link a.jpg &quot;opt title&quot;]Click[/link]</code></pre></td>
         
-        <td title="Result"><a href="eh/files/a.jpg" title="opt title">Click</a></td>
+        <td title="Result"><a href="./mu/files/a.jpg" title="opt title">Click</a></td>
     </tr>
 </table>
 </li>
@@ -354,16 +355,16 @@ the thumbnails, which can be either "small", "medium", "large",
         <td title="Markup"><pre><code>[gallery size=&quot;x70&gt;&quot; /]</code></pre></td>
         
         <td title="Result"><div class="gallery">
-<a href="eh/files/a.jpg"><img src="eh/thumb/a.x70>.jpg"/></a>
-<a href="eh/files/b.jpg"><img src="eh/thumb/b.x70>.jpg"/></a>
-<a href="eh/files/c.jpg"><img src="eh/thumb/c.x70>.jpg"/></a>
-<a href="eh/files/d.jpg"><img src="eh/thumb/d.x70>.jpg"/></a>
-<a href="eh/files/e.jpg"><img src="eh/thumb/e.x70>.jpg"/></a>
-<a href="eh/files/f.jpg"><img src="eh/thumb/f.x70>.jpg"/></a>
-<a href="eh/files/g.jpg"><img src="eh/thumb/g.x70>.jpg"/></a>
-<a href="eh/files/h.jpg"><img src="eh/thumb/h.x70>.jpg"/></a>
-<a href="eh/files/i.jpg"><img src="eh/thumb/i.x70>.jpg"/></a>
-<a href="eh/files/j.jpg"><img src="eh/thumb/j.x70>.jpg"/></a>
+<a href="./mu/files/a.jpg"><img src="./mu/thumb/a.x70>.jpg"/></a>
+<a href="./mu/files/b.jpg"><img src="./mu/thumb/b.x70>.jpg"/></a>
+<a href="./mu/files/c.jpg"><img src="./mu/thumb/c.x70>.jpg"/></a>
+<a href="./mu/files/d.jpg"><img src="./mu/thumb/d.x70>.jpg"/></a>
+<a href="./mu/files/e.jpg"><img src="./mu/thumb/e.x70>.jpg"/></a>
+<a href="./mu/files/f.jpg"><img src="./mu/thumb/f.x70>.jpg"/></a>
+<a href="./mu/files/g.jpg"><img src="./mu/thumb/g.x70>.jpg"/></a>
+<a href="./mu/files/h.jpg"><img src="./mu/thumb/h.x70>.jpg"/></a>
+<a href="./mu/files/i.jpg"><img src="./mu/thumb/i.x70>.jpg"/></a>
+<a href="./mu/files/j.jpg"><img src="./mu/thumb/j.x70>.jpg"/></a>
 </div>
 </td>
     </tr>
@@ -381,7 +382,7 @@ in the post's (or page's) content directory (usually /post/1234/).</p>
     <tr>
         <td title="Markup"><pre><code>[thumb a.jpg size=&quot;small&quot; /]</code></pre></td>
         
-        <td title="Result"><span class="thumb"><a href="eh/files/a.jpg"><img src="eh/thumb/a.small.jpg"/></a></span>
+        <td title="Result"><span class="thumb"><a href="./mu/files/a.jpg"><img src="./mu/thumb/a.small.jpg"/></a></span>
 </td>
     </tr>
 </table>
@@ -392,7 +393,7 @@ in the post's (or page's) content directory (usually /post/1234/).</p>
     <tr>
         <td title="Markup"><pre><code>[image &quot;j.jpg&quot; /]</code></pre></td>
         
-        <td title="Result"><span class="image"><img src="eh/files/j.jpg"/></span>
+        <td title="Result"><span class="image"><img src="./mu/files/j.jpg"/></span>
 </td>
     </tr>
 </table>
@@ -404,22 +405,23 @@ in the post's (or page's) content directory (usually /post/1234/).</p>
         <td title="Markup"><pre><code>[listing /]</code></pre></td>
         
         <td title="Result"><ul class="listing">
-<li><a href="eh/files/a.jpg">a.jpg</a> <span class="muted">5M</span></li>
-<li><a href="eh/files/b.jpg">b.jpg</a> <span class="muted">265.9K</span></li>
-<li><a href="eh/files/c.jpg">c.jpg</a> <span class="muted">190.9K</span></li>
-<li><a href="eh/files/d.jpg">d.jpg</a> <span class="muted">523.6K</span></li>
-<li><a href="eh/files/e.jpg">e.jpg</a> <span class="muted">321.8K</span></li>
-<li><a href="eh/files/f.jpg">f.jpg</a> <span class="muted">321K</span></li>
-<li><a href="eh/files/g.jpg">g.jpg</a> <span class="muted">174.9K</span></li>
-<li><a href="eh/files/h.jpg">h.jpg</a> <span class="muted">95.3K</span></li>
-<li><a href="eh/files/i.jpg">i.jpg</a> <span class="muted">208.7K</span></li>
-<li><a href="eh/files/j.jpg">j.jpg</a> <span class="muted">37.9K</span></li>
+<li><a href="./mu/files/a.jpg">a.jpg</a> <span class="muted">5M</span></li>
+<li><a href="./mu/files/b.jpg">b.jpg</a> <span class="muted">265.9K</span></li>
+<li><a href="./mu/files/c.jpg">c.jpg</a> <span class="muted">190.9K</span></li>
+<li><a href="./mu/files/d.jpg">d.jpg</a> <span class="muted">523.6K</span></li>
+<li><a href="./mu/files/e.jpg">e.jpg</a> <span class="muted">321.8K</span></li>
+<li><a href="./mu/files/f.jpg">f.jpg</a> <span class="muted">321K</span></li>
+<li><a href="./mu/files/g.jpg">g.jpg</a> <span class="muted">174.9K</span></li>
+<li><a href="./mu/files/h.jpg">h.jpg</a> <span class="muted">95.3K</span></li>
+<li><a href="./mu/files/i.jpg">i.jpg</a> <span class="muted">208.7K</span></li>
+<li><a href="./mu/files/j.jpg">j.jpg</a> <span class="muted">37.9K</span></li>
 </ul></td>
     </tr>
 </table>
 </li>
 </ul>
 
-<p>You can see the source of this page at <a href="edit-help.text">edit-help.text</a>.</p>
+<p>You can see the source of this page at <a href="markup.text">markup.text</a>.</p>
 
+<script type="text/javascript" src="../themes/default/gallery.js"></script>
 [% PROCESS footer2.html %]

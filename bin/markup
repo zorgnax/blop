@@ -8,7 +8,6 @@ use Data::Dumper;
 
 my $content_path;
 my $dump;
-my $zeh_page;
 
 my @args = @ARGV;
 @ARGV = ();
@@ -23,9 +22,6 @@ while (my $arg = shift @args) {
     elsif ($arg eq "-d") {
         $dump = 1;
     }
-    elsif ($arg eq "-z") {
-        $zeh_page = 1;
-    }
     elsif ($arg =~ /^(--?help|-h|-\?)$/) {
         usage();
     }
@@ -37,41 +33,16 @@ while (my $arg = shift @args) {
     }
 }
 
-my $blop = Blop->new;
+my $blop = Blop->new(urlbase => ".");
+$Blop::BBCode::bbcode{example} = {
+    block => 1, norecurse => 1, display => \&display_example
+};
+
 my $post;
 if ($content_path) {
     $post = bless {content_url => $content_path}, "Blop::Post";
 }
 my $markup = Blop::Markup->new(entry => $post, update => 1);
-
-if ($zeh_page) {
-    print <<EOHTML;
-[% PROCESS header2.html title="Edit Help" %]
-
-<link rel="stylesheet" type="text/css" href="../themes/default/syntax.css" />
-
-<style>
-    table.example {
-        border-collapse: collapse;
-        background-color: #eee;
-    }
-    .example td {
-        padding-left: 10px;
-        padding-right: 10px;
-        border-right: 3px solid #666;
-        width: 275px;
-        vertical-align: top;
-    }
-    .example td:last-child {
-        border-right: none;
-        vertical-align: middle;
-    }
-</style>
-EOHTML
-    $Blop::BBCode::bbcode{example} = {
-        block => 1, norecurse => 1, display => \&display_example
-    };
-}
 
 for my $file (@ARGV) {
     open my $fh, "<", $file or die "Can't open $file: $!\n";
@@ -82,9 +53,6 @@ for my $file (@ARGV) {
 if (!@ARGV) {
     my $input = do {local $/; <STDIN>};
     convert($input);
-}
-if ($zeh_page) {
-    print "[% PROCESS footer2.html %]\n";
 }
 
 sub convert {
@@ -114,9 +82,6 @@ sub display_example {
     my $html = $markup->convert($content);
     if (!$elem->{hash}{p}) {
         $html =~ s{^\s*<p>|</p>\s*$}{}g;
-    }
-    if ($content_path) {
-        $html =~ s{/$content_path}{$content_path}g;
     }
     my $output = $blop->escape_html($html);
     my $output_row = "<td title=\"Output\"><pre><code>$output</code></pre></td>";
