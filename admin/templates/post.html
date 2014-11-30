@@ -46,7 +46,10 @@
 
 <div class="aentry">
 <input type="submit" value="Post"/>
-<input type="button" id="delete" value="[% IF post %]Delete[% ELSE %]Cancel[% END %]"/>
+[% IF post %]
+<input type="button" id="delete" value="Delete"/>
+[% END %]
+<input type="button" id="cancel" value="Cancel"/>
 </div>
 
 </form>
@@ -108,6 +111,10 @@ $("#delete").on("click", function () {
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
         $("#post .aform-mesg").text(errorThrown);
     });
+});
+
+$("#cancel").on("click", function () {
+    location.href = "[% urlbase %]/admin";
 });
 </script>
 

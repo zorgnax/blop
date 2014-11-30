@@ -18,7 +18,10 @@
 
 <div class="aentry">
 <input type="submit" value="[% IF category %]Edit Category[% ELSE %]Add Category[% END %]"/>
-<input type="button" id="delete" value="[% IF category %]Delete[% ELSE %]Cancel[% END %]"/>
+[% IF category && !category.special %]
+<input type="button" id="delete" value="Delete"/>
+[% END %]
+<input type="button" id="cancel" value="Cancel"/>
 <br/><span class="aform-mesg bform-error"></span>
 </div>
 
@@ -58,6 +61,11 @@ $("#delete").on("click", function () {
         $("#category .aform-mesg").text(errorThrown);
     });
 });
+
+$("#cancel").on("click", function () {
+    location.href = "[% urlbase %]/admin/categories";
+});
+
 </script>
 
 [% PROCESS footer.html %]

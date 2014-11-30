@@ -12,7 +12,9 @@
     <td class="entry-actions">
         <a href="[% category.fullurl %]">View</a>
         <a href="[% category.editurl %]">Edit</a>
+        [% IF !category.special %]
         <a href="#" class="delete-category">Delete</a>
+        [% END %]
     </td>
 </tr>
 [% END %]

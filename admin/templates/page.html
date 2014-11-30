@@ -51,7 +51,10 @@
 
 <div class="aentry">
 <input type="submit" value="[% IF page %]Edit Page[% ELSE %]Add Page[% END %]"/>
-<input type="button" id="delete" value="[% IF page %]Delete[% ELSE %]Cancel[% END %]"/>
+[% IF page %]
+<input type="button" id="delete" value="Delete"/>
+[% END %]
+<input type="button" id="cancel" value="Cancel"/>
 </div>
 
 </form>
@@ -112,6 +115,10 @@ $("#delete").on("click", function () {
     ajax.fail(function (jqXHR, textStatus, errorThrown) {
         $("#page .aform-mesg").text(errorThrown);
     });
+});
+
+$("#cancel").on("click", function () {
+    location.href = "[% urlbase %]/admin";
 });
 </script>
 
