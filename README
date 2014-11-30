@@ -1,47 +1,89 @@
 Blop
 ====
 
-A Blog site written in Perl. Uses MySQL. Similar to WordPress.
+Blop is a blog site written in Perl. It uses MySQL. And it's similar to WordPress.
+
+Website
+=======
+
+*   http://blopblog.com
 
 Installation
 ============
 
-Copy blop folder to your website's document root. It can also be placed
-into a subfolder. Go to the website, and fill out the installation form
-with a blog title, login info, and database details. Manage posts and
-pages in the admin interface at /admin.
+Copy the contents from the blop distribution into your website's document
+root. It can also be placed into a subfolder. Go to the website, and fill
+out the installation form with a blog title, login info, and database
+details. Manage posts and pages in the admin interface at /admin.
 
-Features
+    $ cd webroot
+    $ wget blopblog.com/blop.tar.gz
+    $ tar xvpf blop.tar.gz --strip-components 1
+
+An Apache server and a MySQL server are prerequisites.
+
+Upgrades
 ========
 
-- Complete top level URL control. example.com/about or
-  example.com/mycategory or example.com/mycategory/subcategory. Posts,
-  categories, and pages can all have whatever URL they want as long as
-  they don't conflict with each other or an existing file.
+To upgrade, just extract the latest version of blop over the files in
+your webroot:
 
-    - A page can be the home page, the special "all" category can be somewhere
-      else. /blog for example. Just edit the URL in /admin/pages and
-      /admin/categories.
+    $ cd webroot
+    $ wget blopblog.com/blop.tar.gz
+    $ tar xvpf blop.tar.gz --strip-components 1
 
-- Themes
+Demo
+====
 
-- Plugins
+Demo: http://blopblog.com/demo.
+Demo Admin Section: http://blopblog.com/demo/admin.
+Admin Password: password.
 
-- Only intended for one user to administrate/add posts.
+Features / Ideas
+================
 
-- Files are organized by post, not date uploaded.
+*   Complete top level URL control. example.com/about or
+example.com/mycategory or example.com/mycategory/subcategory. Posts,
+categories, and pages can all have whatever URL they want as long as
+they don't conflict with each other or an existing file.
 
-- HTML / Markdown / BBcode hybrid input.
+*   A page can be the home page, the special "all" category can be
+somewhere else. /blog for example. Just edit the URL in /admin/pages
+and /admin/categories.
 
-- Rich text editing is more trouble than it's worth.
+*   Tags can be anything, even ":)" and ":(". However, you should keep
+in mind that whatever you choose will need to be uri-encoded, so your
+urls may end up looking like /tag/%3A%29 and /tag/%3A%28.
 
-- Unlike Wordpress, all links are based at /, not http://.
+*   Markdown/BBcode/HTML hybrid input. AKA Easy to write/Powerful/Flexible.
 
-- Tags can be anything, even ":)" and ":(".
+*   Themes
 
-- Lets you edit your own comments.
+*   Only intended for one user to administrate/add posts.
 
-- If top to bottom is newest to oldest, left to right is newest to oldest.
+*   Files are organized by post, not date uploaded.
 
-- Fully configurable sidebar and footer widgets.
+*   Rich text editing is more trouble than it's worth.
+
+*   Unlike Wordpress, all links are based at /, not http://.
+
+*   Lets you edit your own comments.
+
+*   If top to bottom is newest to oldest, left to right is newest to oldest (next and prev links on posts).
+
+*   Fully configurable sidebar and footer widgets.
+
+*   A simple and clean database schema.
+
+
+Backups
+=======
+
+To download a backup of your site you could go to /admin/backup to
+download an archive of all your files which includes dumps of all the
+database tables. But a better way to do this is to use rsync which only
+transfers changes:
+
+    $ ssh -t mysite.com 'cd webroot; ./bin/dump-database'
+    $ rsync -hav mysite.com:webroot/ ~/backup/webroot
 
