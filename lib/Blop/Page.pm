@@ -23,7 +23,7 @@ sub list {
     my $now = $blop->dbh->quote($blop->now->str);
     my $sth = $blop->dbh->prepare(<<EOSQL);
 select pageid, title, url, added, published, sequence, parentid
-from pages where published <= $now order by sequence, title
+from pages where published <= $now order by sequence, pageid
 EOSQL
     $sth->execute();
     my (@pages, %pages);
