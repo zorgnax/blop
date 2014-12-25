@@ -12,24 +12,28 @@ our %widgets = (
 
 sub display_categories {
     my ($markup, $elem) = @_;
+    return "" if $markup->{update};
     my $blop = Blop::instance() or return "";
     return $blop->template("categories-widget.html", elem => $elem);
 }
 
 sub display_search {
     my ($markup, $elem) = @_;
+    return "" if $markup->{update};
     my $blop = Blop::instance() or return "";
     return $blop->template("search-widget.html", elem => $elem);
 }
 
 sub display_archives {
     my ($markup, $elem) = @_;
+    return "" if $markup->{update};
     my $blop = Blop::instance() or return "";
     return $blop->template("archives-widget.html", elem => $elem);
 }
 
 sub display_admin_links {
     my ($markup, $elem) = @_;
+    return "" if $markup->{update};
     my $blop = Blop::instance() or return "";
     return $blop->template("admin-links-widget.html", elem => $elem);
 }

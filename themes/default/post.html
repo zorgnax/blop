@@ -1,10 +1,10 @@
-[% PROCESS header.html title=post.title _ " | " _ blop.conf.title %]
+[% PROCESS header.html title=post.label _ " | " _ blop.conf.title %]
 
 [% IF !post.was_published %]<div class="note">Note: This post has not been published.</div>[% END %]
 
-<h2 class="post-heading">[% post.label | html %]</h2>
+<h1 class="post-heading">[% post.label | html %]</h1>
 <div class="post-header">
-<span class="published" title="[% post.published.str %]">Posted [% post.published.natural %]</span>
+<span class="publish-date" title="[% post.published.str %]">Posted [% post.published.natural %]</span>
 [% IF blop.admin %]<a href="[% urlbase %]/admin/post/[% post.postid %]">edit</a>[% END %]
 </div>
 <div class="content">
@@ -31,17 +31,19 @@
 
 <br/>
 
+<div class="next-prev">
 [% IF post.newer(category) %]
 <span class="next-link">
 ← <a href="[% post.newer.fullurl %]">[% post.newer.title || "Next Post" | html %]</a>
 </span>
 [% END %]
-
 [% IF post.older(category) %]
 <span class="prev-link">
 <a href="[% post.older.fullurl %]">[% post.older.title || "Previous Post" | html %]</a> →
 </span>
 [% END %]
+<span style="clear:both;">&nbsp;</span>
+</div>
 
 [% PROCESS comments.html entry=post %]
 [% PROCESS footer.html %]

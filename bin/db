@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "lib";
+use Blop;
+
+my $blop = Blop->new;
+my $conf = Blop::Config::read("$blop->{base}blop.conf");
+my @cmd = ("mysql", "-h", $conf->{dbhost}, "-u", $conf->{dbuser},
+           "-p$conf->{dbpass}", $conf->{db}, @ARGV);
+exec @cmd;
+

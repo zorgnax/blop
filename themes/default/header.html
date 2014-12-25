@@ -26,28 +26,31 @@
 <body>
 <div class="page-wrap">
 
+<div class="title-wrap">
+<span class="site-title"[% IF blop.conf.slogan %] title="[% blop.conf.slogan %]"[% END %]><a href="[% urlbase %]/">
 [% IF blop.logo %]
-<h1 class="site-title"><a href="[% urlbase %]/"><img src="[% blop.logo %]"></img></a></h1>
+<img src="[% blop.logo %]"></img>
 [% ELSE %]
-<h1 class="site-title"><a href="[% urlbase %]/">[% blop.conf.title %]</a>
-[% IF blop.conf.slogan %]
-<span class="site-slogan">[% blop.conf.slogan %]</span>
+[% blop.conf.title %]
 [% END %]
-</h1>
-[% END %]
-
-[% PROCESS sidebar.html %]
-
-<div class="content-wrap">
+</a>
+</span>
 
 [% IF blop.pages.size %]
-<div class="page-links">
+<span class="page-links">
+<small>
 [% FOREACH pagelink IN blop.pages %]
 <a href="[% urlbase %]/[% pagelink.url | uri %]">[% pagelink.title %]</a>
 [% END %]
 [% IF blop.allcat.url %]
 <a href="[% urlbase %]/[% blop.allcat.url | uri %]">Blog</a>
 [% END %]
-</div>
+</small>
+</span>
 [% END %]
+</div>
+
+[% PROCESS sidebar.html %]
+
+<div class="content-wrap">
 

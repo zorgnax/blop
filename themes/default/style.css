@@ -1,40 +1,81 @@
 .page-wrap {
-    padding-top: 30px;
     max-width: 1000px;
     margin: 0 auto;
 }
 
+.content {
+    line-height: 1.5;
+}
+
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: #515151;
+}
+
+pre {
+    line-height: 1.2;
 }
 
 code {
     font-family: Monaco, Consolas, ProFont, monospace;
-    font-size: 12px;
+    font-size: 80%;
 }
 
 input, textarea {
-    font-family: Monaco, Consolas, ProFont, monospace;
+    font-family: Menlo, Monaco, Consolas, ProFont, monospace;
+}
+
+a:link {
+    color: #268bd2;
+}
+
+a:visited {
+    color: #566bc2;
 }
 
 .site-title a:link, .site-title a:visited {
     text-decoration: none;
-    color: #000000;
+    color: #454545;
+    font-size: 26px;
+    font-weight: bold;
 }
 
-.site-slogan {
-    font-size: 55%;
-    color: #666666;
+.page-links a:link, .page-links a:visited {
+    text-decoration: none;
+    font-size: 19px;
+    color: #454545;
+    margin-left: 20px;
+}
+
+.page-links a:hover, .page-links a:focus {
+    text-decoration: underline;
+}
+
+.title-wrap {
+    margin-top: 20px;
+    margin-bottom: 80px;
 }
 
 .page-links {
-    margin-bottom: 12px;
-    text-align: center;
+    font-size: smaller;
 }
 
 .navigation-summary {
     display: inline-block;
     float: right;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #303030;
+    line-height: 1.25;
+}
+
+.post-separator {
+    background-color: #d5d5d5;
+    height: 2px;
+    border: 0px;
+    margin-top: 26px;
 }
 
 .post-heading {
@@ -47,6 +88,7 @@ input, textarea {
 
 .post-header {
     margin-bottom: 2em;
+    color: #9a9a9a;
 }
 
 .sidebar {
@@ -57,6 +99,7 @@ input, textarea {
     min-height: 350px;
     border: 1px solid #cccccc;
     padding: 5px;
+    font-size: 14px;
 }
 
 .widget-categories ul {
@@ -97,9 +140,23 @@ input, textarea {
     float: right;
 }
 
-.comment-form td:first-child {
-    text-align: right;
-    vertical-align: top;
+.comment {
+    line-height: 1;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+.comment-heading {
+    color: #555555;
+}
+
+.comment-content {
+    font-size: 20px;
+}
+
+.comment p {
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .comment-mesg {
@@ -107,36 +164,47 @@ input, textarea {
     color: red;
 }
 
-.comment-form textarea {
-    width: 420px;
-    height: 220px;
+.comment-form {
+    font-size: 12px;
 }
 
-.comment {
-    padding: 5px;
-    border: 1px solid transparent;
+.comment-form input {
+    padding: 4px;
+    margin-bottom: 3px;
+}
+
+.comment-form textarea {
+    width: 500px;
+    height: 120px;
+    padding: 4px;
 }
 
 .editing-comment {
     border: 1px solid #cccccc;
     background-color: #eeeeee;
+    padding: 5px;
+}
+
+.editing-comment .comment-heading {
+    margin-bottom: 10px;
 }
 
 .comment-awaiting-moderation {
     background-color: #ffff99;
     font-weight: bold;
     border: 1px solid #cccc66;
+    padding: 1px 6px;
 }
 
 .comment-deleted {
     background-color: #ff9999;
     font-weight: bold;
     border: 1px solid #cc6666;
+    padding: 1px 6px;
 }
 
 .comment-date {
     color: #666666;
-    font-size: 75%;
 }
 
 .muted {

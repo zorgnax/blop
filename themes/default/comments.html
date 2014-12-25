@@ -1,21 +1,21 @@
 [% RETURN IF !entry.comments_enabled %]
+<div class="comments" id="comments">
 
-<br/>
-
-<h3 class="comments-heading">[% IF !entry.num_comments %]Comments[% ELSIF entry.num_comments == 1 %]1 Comment[% ELSE %][% entry.num_comments %] Comments[% END %]</h3>
+[% IF entry.num_comments %]
+<h3>[% IF entry.num_comments == 1 %]1 Comment[% ELSE %][% entry.num_comments %] Comments[% END %]</h3>
 
 [% FOREACH comment IN entry.comments %]
 <div class="comment[% IF comment.editable %] editable-comment[% END %][% IF comment.deletable %] deletable-comment[% END %]" data-commentid="[% comment.commentid %]">
 <div class="comment-heading">
 <b class="comment-name">[% comment.name | html %]</b>
 <span class="comment-date" title="[% comment.added.str %]">[% comment.added.natural | html %]</span>
-[% IF comment.pending %]<span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
 [% IF comment.editable %]
 <a href="#" class="edit-comment">edit</a>
 [% END %]
 [% IF comment.deletable %]
 <a href="#" class="delete-comment">delete</a>
 [% END %]
+[% IF comment.pending %]<span class="comment-awaiting-moderation">Awaiting moderation</span>[% END %]
 </div>
 <div class="comment-content">
 [% comment.parsed_content %]
@@ -28,24 +28,19 @@
     [% IF blop.session %]
     <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
     [% END %]
-
-    <table><tr><td><label for="name-[% comment.commentid %]">Name:</label></td>
-    <td><input id="name-[% comment.commentid %]" name="name" type="text" value="[% comment.name | html %]"/><span class="name-error comment-mesg"></span></td></tr>
-
-    <tr><td><label for="email-[% comment.commentid %]">Email:</label></td>
-    <td><input id="email-[% comment.commentid %]" name="email" type="text" value="[% comment.email %]"/><span class="email-error comment-mesg"></span></td></tr>
-
-    <tr><td><label for="content-[% comment.commentid %]">Comment:</label></td>
-    <td><textarea id="content-[% comment.commentid %]" name="content">[% comment.content | html %]</textarea></span></td></tr>
-
-    <tr><td></td>
-    <td><input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span></td></tr></table>
+    <input name="name" type="text" value="[% comment.name | html %]" placeholder="Name"/><span class="name-error comment-mesg"></span><br/>
+    <input name="email" type="text" value="[% comment.email %]" placeholder="Email"/><span class="email-error comment-mesg"></span><br/>
+    <textarea name="content" placeholder="Comment">[% comment.content | html %]</textarea><br/>
+    <input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span>
     </form>
     [% IF comment.edited %]Last edited: [% comment.edited.natural %][% END %]
 </div>
 [% END %]
 </div>
 [% END %]
+[% END %]
+
+<h3>Reply</h3>
 
 <div class="comment-form">
     <form id="comment" method="post">
@@ -54,19 +49,16 @@
     <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
     [% END %]
 
-    <table><tr><td><label for="name">Name:</label></td>
-    <td><input id="name" name="name" type="text" value="[% blop.last_comment.name | html %]"/><span class="name-error comment-mesg"></span></td></tr>
+    <input name="name" type="text" value="[% blop.last_comment.name | html %]" placeholder="Name"/><span class="name-error comment-mesg"></span><br/>
 
-    <tr><td><label for="email">Email:</label></td>
-    <td><input id="email" name="email" type="text" value="[% blop.last_comment.email %]"/><span class="email-error comment-mesg"></span></td></tr>
+    <input name="email" type="text" value="[% blop.last_comment.email %]" placeholder="Email"/><span class="email-error comment-mesg"></span><br/>
 
-    <tr><td><label for="content">Comment:</label></td>
-    <td><textarea id="content" name="content"></textarea></span></td></tr>
+    <textarea name="content" placeholder="Comment"></textarea><br/>
 
-    <tr><td></td>
-    <td><input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span></td></tr></table>
+    <input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span>
 
     </form>
+</div>
 </div>
 
 <script type="text/javascript" src="[% theme.url('comments.js') %]"></script>
