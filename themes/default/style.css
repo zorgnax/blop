@@ -1,16 +1,26 @@
-.page-wrap {
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.content {
-    line-height: 1.5;
-}
-
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 20px;
     color: #515151;
+    padding: 0px;
+    margin: 0px;
+}
+
+.page-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.page-table td {
+    vertical-align: top;
+}
+
+.page-wrap {
+    width: 800px;
+}
+
+.content {
+    line-height: 1.5;
 }
 
 pre {
@@ -92,13 +102,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .sidebar {
-    float: right;
     width: 230px;
-    margin-left: 18px;
-    background-color: #eeeeee;
+    background-color: #f3f3f3;
     min-height: 350px;
-    border: 1px solid #cccccc;
-    padding: 5px;
+    border-left: 1px solid #d7d7d7;
+    padding: 7px;
     font-size: 14px;
 }
 
