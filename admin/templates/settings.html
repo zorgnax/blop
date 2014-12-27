@@ -140,7 +140,10 @@
 <script type="text/javascript" src="[% urlbase %]/admin/js/component.js"></script>
 <script type="text/javascript">
 var aform = new AForm({
-    formId: "#settings", processUrl: "[% urlbase %]/admin/settings-js"});
+    formId: "#settings",
+    processUrl: "[% urlbase %]/admin/settings-js",
+    successUrl: "[% urlbase %]/admin/settings-edited"
+});
 
 new Component({
     divId: "#logo-component",
