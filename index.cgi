@@ -107,7 +107,8 @@ sub listing {
     }
 
     my $search = $cgi->param("s");
-    if ($search && length($search)) {
+    $blop->{display_search} = $search;
+    if ($search) {
         my $s = $blop->dbh->quote($search);
         $join = "left join tags t on t.postid=p.postid";
         $where .= "and (p.content regexp $s or p.title regexp $s or\n" .
@@ -149,7 +150,8 @@ EOSQL
     print $blop->http_header();
     print $blop->template(
         "listing.html", category => $category, tags => \@tags, posts => \@posts,
-        navigation => $navigation);
+        navigation => $navigation, search => $search, year => $year,
+        month => $month, day => $day);
     exit;
 }
 

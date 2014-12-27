@@ -17,6 +17,7 @@ body {
 
 .page-wrap {
     width: 800px;
+    margin: 0px auto;
 }
 
 .content {
@@ -71,8 +72,11 @@ a:visited {
     font-size: smaller;
 }
 
+.listing-info {
+    overflow: auto;
+}
+
 .navigation-summary {
-    display: inline-block;
     float: right;
 }
 

@@ -1,6 +1,19 @@
 [% PROCESS header.html title=blop.conf.title %]
 
-<div class="navigation-summary">[% navigation.summary %]</div>
+<div class="listing-info">
+<span class="listing-info2">
+[% IF search %]
+    Search results for: [% blop.display_search | html %]
+[% ELSIF category && category.special != "allcat" %]
+    [% category.name | html %]
+[% ELSIF tags && tags.size > 0 %]
+    Tag[% IF tags.size != 1 %]s[% END %]: [% tags.join(", ") | html %]
+[% ELSIF year %]
+    Archive: [% year %][% IF month %]-[% month %][% IF day %]-[% day %][% END %][% END %]
+[% END %]
+</span>
+<span class="navigation-summary">[% navigation.summary %]</span>
+</div>
 
 [% FOREACH post IN posts %]
     <h1 class="post-heading"><a href="[% post.fullurl %]">[% post.label | html %]</a></h1>
