@@ -2,8 +2,8 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 20px;
     color: #515151;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 .page-table {
@@ -13,11 +13,6 @@ body {
 
 .page-table td {
     vertical-align: top;
-}
-
-.page-wrap {
-    width: 800px;
-    margin: 0px auto;
 }
 
 .content {
@@ -66,6 +61,27 @@ a:visited {
 .title-wrap {
     margin-top: 20px;
     margin-bottom: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    padding: 5px;
+}
+
+.content-wrap {
+    width: 800px;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+.footer {
+    margin-top: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    min-height: 12px;
+    clear: both;
+    text-align: center;
+    padding: 5px;
 }
 
 .page-links {
@@ -86,14 +102,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .post-separator {
-    background-color: #d5d5d5;
+    background: #d5d5d5;
     height: 2px;
-    border: 0px;
+    border: 0;
     margin-top: 26px;
 }
 
 .post-heading {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .post-heading a {
@@ -107,7 +123,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .sidebar {
     width: 230px;
-    background-color: #f3f3f3;
+    background: #f3f3f3;
     min-height: 350px;
     border-left: 1px solid #d7d7d7;
     padding: 7px;
@@ -116,28 +132,21 @@ h1, h2, h3, h4, h5, h6 {
 
 .widget-categories ul {
     list-style: none;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .widget-archives ul {
     list-style: none;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .widget-admin-links ul {
     list-style: none;
-    padding-left: 0px;
-}
-
-.footer {
-    margin-top: 12px;
-    min-height: 12px;
-    clear: both;
-    text-align: center;
+    padding-left: 0;
 }
 
 .note {
-    background-color: #ffff99;
+    background: #ffff99;
     font-weight: bold;
     padding: 12px;
     border: 1px solid #cccc66;
@@ -193,7 +202,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .editing-comment {
     border: 1px solid #cccccc;
-    background-color: #eeeeee;
+    background: #eeeeee;
     padding: 5px;
 }
 
@@ -202,14 +211,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .comment-awaiting-moderation {
-    background-color: #ffff99;
+    background: #ffff99;
     font-weight: bold;
     border: 1px solid #cccc66;
     padding: 1px 6px;
 }
 
 .comment-deleted {
-    background-color: #ff9999;
+    background: #ff9999;
     font-weight: bold;
     border: 1px solid #cc6666;
     padding: 1px 6px;

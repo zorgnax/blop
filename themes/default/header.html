@@ -28,29 +28,28 @@
 <tr>
 <td>
 
-<div class="page-wrap">
 <div class="title-wrap">
-<span class="site-title"[% IF blop.conf.slogan %] title="[% blop.conf.slogan %]"[% END %]><a href="[% urlbase %]/">
-[% IF blop.logo %]
-<img src="[% blop.logo %]"></img>
-[% ELSE %]
-[% blop.conf.title %]
-[% END %]
-</a>
-</span>
+    <span class="site-title"[% IF blop.conf.slogan %] title="[% blop.conf.slogan %]"[% END %]><a href="[% urlbase %]/">
+    [% IF blop.logo %]
+    <img src="[% blop.logo %]"></img>
+    [% ELSE %]
+    [% blop.conf.title %]
+    [% END %]
+    </a>
+    </span>
 
-[% IF blop.pages.size %]
-<span class="page-links">
-<small>
-[% FOREACH pagelink IN blop.pages %]
-<a href="[% urlbase %]/[% pagelink.url | uri %]">[% pagelink.title %]</a>
-[% END %]
-[% IF blop.allcat.url %]
-<a href="[% urlbase %]/[% blop.allcat.url | uri %]">Blog</a>
-[% END %]
-</small>
-</span>
-[% END %]
+    [% IF blop.pages.size %]
+    <span class="page-links">
+    <small>
+    [% FOREACH pagelink IN blop.pages %]
+    <a href="[% urlbase %]/[% pagelink.url | uri %]">[% pagelink.title %]</a>
+    [% END %]
+    [% IF blop.allcat.url %]
+    <a href="[% urlbase %]/[% blop.allcat.url | uri %]">Blog</a>
+    [% END %]
+    </small>
+    </span>
+    [% END %]
 </div>
 
 <div class="content-wrap">
