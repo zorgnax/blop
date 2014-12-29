@@ -1,5 +1,7 @@
 <div class="widget widget-categories">
+    [% IF !elem.hash.noheading %]
     <h1 class="widget-title">Categories</h1>
+    [% END %]
     <ul>
         [% FOREACH category_ IN blop.categories %]
         <li class="cat-item"><a href="[% category_.fullurl %]">[% category_.name %] ([% category_.num_posts("published") %])</a></li>

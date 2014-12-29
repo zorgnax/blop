@@ -130,17 +130,21 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 14px;
 }
 
-.widget-categories ul {
+.sidebar .widget .widget-title {
+    font-size: 18px;
+}
+
+.sidebar .widget-categories ul {
     list-style: none;
     padding-left: 0;
 }
 
-.widget-archives ul {
+.sidebar .widget-archives ul {
     list-style: none;
     padding-left: 0;
 }
 
-.widget-admin-links ul {
+.sidebar .widget-admin-links ul {
     list-style: none;
     padding-left: 0;
 }
@@ -231,9 +235,5 @@ h1, h2, h3, h4, h5, h6 {
 .muted {
     color: #cccccc;
     font-size: smaller;
-}
-
-.widget .widget-title {
-    font-size: 18px;
 }
 
