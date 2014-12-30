@@ -270,9 +270,14 @@ sub num_comments {
     my ($self) = @_;
     return $self->{num_comments} if exists $self->{num_comments};
     my $blop = Blop::instance();
-    my $sth = $blop->dbh->prepare(<<EOSQL);
-select count(*) from comments where postid=$self->{postid} and status="Approved"
-EOSQL
+    my $where = "postid=$self->{postid} and ";
+    my $or_cookie = "";
+    if ($blop->cgi->cookie("cmnt")) {
+        $or_cookie = " or cookie=" . $blop->dbh->quote($blop->cgi->cookie("cmnt"));
+    }
+    $where .=  "(status='Approved'$or_cookie)";
+    my $query = "select count(*) from comments where $where";
+    my $sth = $blop->dbh->prepare($query);
     $sth->execute();
     my ($count) = $sth->fetchrow_array();
     $self->{num_comments} = $count;
