@@ -10,7 +10,10 @@
 <td>
     <h3>[% theme.conf.title || theme.name %][% IF theme.date %] <span class="muted">[% theme.date.natural %]</span>[% END %]</h3>
     [% theme.desc %]
-    <p><a href="#" class="activate-theme">activate</a></p>
+    <p>
+        <a href="#" class="activate-theme">activate</a>
+        <span class="theme-is-active">active!</span>
+    </p>
 </td>
 </tr>
 </table>

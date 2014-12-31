@@ -191,6 +191,22 @@ table.comments tr td {
     border: 1px solid #00cc00;
 }
 
+.theme-is-active {
+    display: none;
+}
+
+.activate-theme {
+    display: inline-block;
+}
+
+.selected-theme .theme-is-active {
+    display: inline-block;
+}
+
+.selected-theme .activate-theme {
+    display: none;
+}
+
 .footer {
     margin: 2em 0 2em 0;
     text-align: center;
