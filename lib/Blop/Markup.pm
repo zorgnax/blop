@@ -61,19 +61,32 @@ sub parse {
 
 sub add_paragraph {
     my ($self, $paragraph, $a) = @_;
-    if (@{$paragraph->{content}} == 1) {
-        my $item = $paragraph->{content}[0];
+    # this is a special case so that "paragraphs" that just contain block
+    # level bbcode elements and whitespace dont get surrounded by <p> tags
+    # for example:     should become:     not:
+    #
+    # [hr /]           <hr/>              <p><hr/>
+    # [hr /]           <hr/>              <hr/></p>
+    #
+    my @tmp;
+    for my $item (@{$paragraph->{content}}) {
         if ($item && ref $item eq "HASH") {
             if ($item->{type} eq "bbcode") {
                 $item->{paragraph} = 1;
                 if ($item->{settings}{block}) {
-                    push @$a, $item;
-                    return;
+                    push @tmp, $item;
+                    next;
                 }
             }
         }
+        if (defined $item && !ref $item && $item =~ /^(\s+)$/ms) {
+            push @tmp, $1;
+            next;
+        }
+        push @$a, $paragraph;
+        return;
     }
-    push @$a, $paragraph;
+    push @$a, @tmp;
 }
 
 sub parse_newlines {
@@ -119,6 +132,8 @@ sub parse_item {
             $content = $content->[0]{content};
         }
         elsif (@$content > 1 && $text =~ m{^[^\n]+\n$bullet_rx}x) {
+            # a single line followed by a nested list should not be
+            # surrounded by <p> tags
             my $x = shift @$content;
             unshift @$content, $x->{content};
         }
