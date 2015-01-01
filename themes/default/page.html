@@ -1,12 +1,17 @@
-[% PROCESS header.html title=page.title _ " | " _ blop.conf.title %]
+[% PROCESS header.html title=page.full_title %]
 
 [% IF !page.was_published %]<div class="note">Note: This page has not been published.</div>[% END %]
 
-<h1 class="post-heading">[% page.title | html %]</h2>
+[% IF !page.noheading %]
+<h1 class="post-heading">[% page.title | html %]</h1>
+[% END %]
+
+[% IF blop.admin %]
 <div class="post-header">
-<span class="publish-date" title="[% page.published.str %]">Posted [% page.published.natural %]</span>
-[% IF blop.admin %]<a href="[% urlbase %]/admin/page/[% page.pageid %]">edit</a>[% END %]
+<a href="[% urlbase %]/admin/page/[% page.pageid %]">edit</a>
 </div>
+[% END %]
+
 <div class="content">
 [% page.parsed_content %]
 </div>

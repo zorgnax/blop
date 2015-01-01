@@ -1,4 +1,4 @@
-[% PROCESS header.html title=post.label _ " | " _ blop.conf.title %]
+[% PROCESS header.html title=post.full_title %]
 
 [% IF !post.was_published %]<div class="note">Note: This post has not been published.</div>[% END %]
 

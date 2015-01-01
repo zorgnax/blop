@@ -23,7 +23,8 @@ sub list {
     my $now = $blop->dbh->quote($blop->now->str);
     my $sth = $blop->dbh->prepare(<<EOSQL);
 select pageid, title, url, added, published, sequence, parentid
-from pages where published <= $now order by sequence, pageid
+from pages where published <= $now and hidden=0 and title!=""
+order by sequence, pageid
 EOSQL
     $sth->execute();
     my (@pages, %pages);
@@ -45,6 +46,8 @@ EOSQL
     return \@top;
 }
 
+# gives a list of pages that do not include $child as one of it's
+# possible parents
 sub parent_pages {
     my ($class, $child) = @_;
     my $blop = Blop::instance();
@@ -218,6 +221,16 @@ sub label {
 sub short {
     my ($self) = @_;
     return "Page $self->{pageid}";
+}
+
+sub full_title {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    my $title = $blop->{conf}{title};
+    if ($self->{title}) {
+        $title = "$self->{title} | $title";
+    }
+    return $title;
 }
 
 1;

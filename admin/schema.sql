@@ -27,7 +27,9 @@ create table pages (
     published datetime,
     content text,
     sequence float not null,
-    parentid int unsigned not null);
+    parentid int unsigned not null,
+    hidden int unsigned not null,
+    noheading int unsigned not null);
 
 create table comments (
     commentid int unsigned primary key auto_increment,

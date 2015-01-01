@@ -7,7 +7,7 @@
 <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
 
 <div class="aentry">
-<label for="title">Title <span class="input-info">Required.</span></label><br/>
+<label for="title">Title</label><br/>
 <input id="title" name="title" type="text" value="[% page.title | html %]"/><span class="title-error aform-error"></span>
 </div>
 
@@ -47,6 +47,17 @@
 <option value="[% page_.pageid %]"[% IF page.parentid == page_.pageid %] selected="selected"[% END %]>[% page_.label %]</option>
 [% END %]
 </select>
+</div>
+
+<div class="aentry">
+<label for="hidden">Hidden
+<span class="input-info">Page will not show up in the theme's list of pages.</span></label><br/>
+<input id="hidden" name="hidden" type="checkbox"[% IF page.hidden %] checked="checked"[% END %]/>
+</div>
+
+<div class="aentry">
+<label for="hoheading">No Heading</label><br/>
+<input id="noheading" name="noheading" type="checkbox"[% IF page.noheading %] checked="checked"[% END %]/>
 </div>
 
 <div class="aentry">

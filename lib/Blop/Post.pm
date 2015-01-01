@@ -294,5 +294,12 @@ sub short {
     return "Post $self->{postid}";
 }
 
+sub full_title {
+    my ($self) = @_;
+    my $blop = Blop::instance();
+    my $title = $self->label . " | " . $blop->{conf}{title};
+    return $title;
+}
+
 1;
 

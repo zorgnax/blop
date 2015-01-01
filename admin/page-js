@@ -17,10 +17,6 @@ if ($pageid) {
 }
 
 my $title = $cgi->param("title");
-if (!defined $title || !length($title)) {
-    $out->{titleError} = "Title cannot be empty.";
-    $out->{error} = 1;
-}
 
 my $url = $cgi->param("url");
 $url = "" if !defined $url;
@@ -50,6 +46,8 @@ else {
 
 my $sequence = $cgi->param("sequence");
 my $parentid = $cgi->param("parentid");
+my $hidden = $cgi->param("hidden") ? 1 : 0;
+my $noheading = $cgi->param("noheading") ? 1 : 0;
 
 if ($out->{error}) {
     print $blop->http_header("Content-Type" => "application/json");
@@ -60,9 +58,11 @@ if ($out->{error}) {
 if (!$pageid) {
     my $sth = $blop->dbh->prepare(<<EOSQL);
 insert into pages set
-    title=?, url=?, added=?, published=?, content=?, sequence=?, parentid=?
+    title=?, url=?, added=?, published=?, content=?, sequence=?,
+    parentid=?, hidden=?, noheading=?
 EOSQL
-    $sth->execute($title, $url, $now, $published, $content, $sequence, $parentid);
+    $sth->execute($title, $url, $now, $published, $content, $sequence,
+                  $parentid, $hidden, $noheading);
     $pageid = $sth->{mysql_insertid};
 
     $page = $blop->page(pageid => $pageid);
@@ -97,13 +97,18 @@ if ($page->{sequence} ne $sequence) {
 if ($page->{parentid} ne $parentid) {
     $args{parentid} = $parentid;
 }
+if ($page->{hidden} ne $hidden) {
+    $args{hidden} = $hidden;
+}
+if ($page->{noheading} ne $noheading) {
+    $args{noheading} = $noheading;
+}
 
 if (%args) {
     my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
-    my $sth = $blop->dbh->prepare(<<EOSQL);
-update pages set $sets where pageid=?
-EOSQL
-    $sth->execute($pageid);
+    my $query = "update pages set $sets where pageid=" . $blop->dbh->quote($pageid);
+    my $sth = $blop->dbh->prepare($query);
+    $sth->execute();
 }
 
 $page->update_content;
