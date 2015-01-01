@@ -126,6 +126,7 @@ Upload.prototype.end = function (text) {
     if (text != null)
         this.mesg.text(text);
     this.files[0].disabled = false;
+    this.files.val("");
     this.abortLink.hide();
 }
 

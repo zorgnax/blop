@@ -1,3 +1,2 @@
 Allow page titles to be empty in which case don't show the title or the posted on ... date, also make sure to allow for empty urls which shouldn't be affected by this. Once done you can remove the onepage theme.
 Also a hidden page option to make it not show on pages links
-Clear upload element after finished so you can upload the same file twice.
