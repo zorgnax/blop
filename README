@@ -84,6 +84,6 @@ download an archive of all your files which includes dumps of all the
 database tables. But a better way to do this is to use rsync which only
 transfers changes:
 
-    $ ssh -t mysite.com 'cd webroot; ./bin/dump-database'
+    $ ssh -t mysite.com 'cd webroot; ./bin/dumpdb'
     $ rsync -hav mysite.com:webroot/ ~/backup/webroot
 
