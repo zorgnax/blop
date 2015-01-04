@@ -3,4 +3,3 @@ edit page 4 should be edit "About" page
 when error occurs during template processing, the page is messed up. see if you can make it output better, or create your own templating system.
 post by mail support? http://codex.wordpress.org/Post_to_your_blog_using_email
 move find_bases inside Blop->new, possibly separate blop.conf redirect from read_conf
-in the log when there isnt an ip put localhost

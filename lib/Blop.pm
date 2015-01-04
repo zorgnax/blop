@@ -215,10 +215,11 @@ sub escape_json {
 sub log {
     my ($self, %args) = @_;
     my $sets = join ", ", map "$_=" . $blop->dbh->quote($args{$_}), keys %args;
+    my $ipaddr = $ENV{REMOTE_ADDR} || "localhost";
     my $sth = $self->dbh->prepare(<<EOSQL);
 insert into log set date=?, ipaddr=?, uri=?, $sets
 EOSQL
-    $sth->execute($self->now->str, $ENV{REMOTE_ADDR}, $ENV{REQUEST_URI});
+    $sth->execute($self->now->str, $ipaddr, $ENV{REQUEST_URI});
 }
 
 sub session {
