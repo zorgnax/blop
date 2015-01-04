@@ -39,15 +39,13 @@
     </span>
 
     [% IF blop.pages.size %]
-    <span class="page-links">
-    <small>
+    <span class="page-links[% IF blop.pages.size > 4 %] page-links-block[% END %]">
     [% FOREACH pagelink IN blop.pages %]
     <a href="[% urlbase %]/[% pagelink.url | uri %]">[% pagelink.title %]</a>
     [% END %]
     [% IF blop.allcat.url %]
     <a href="[% urlbase %]/[% blop.allcat.url | uri %]">Blog</a>
     [% END %]
-    </small>
     </span>
     [% END %]
 </div>

@@ -32,12 +32,17 @@ input, textarea {
     font-family: Menlo, Monaco, Consolas, ProFont, monospace;
 }
 
-a:link {
+a {
+    text-decoration: none;
     color: #268bd2;
 }
 
 a:visited {
     color: #566bc2;
+}
+
+a:hover, a:focus {
+    text-decoration: underline;
 }
 
 .site-title a:link, .site-title a:visited {
@@ -47,20 +52,37 @@ a:visited {
     font-weight: bold;
 }
 
-.page-links a:link, .page-links a:visited {
-    text-decoration: none;
+.page-links {
     font-size: 19px;
-    color: #454545;
+}
+
+.page-links a {
+    text-decoration: none;
     margin-left: 20px;
+    color: #454545;
 }
 
 .page-links a:hover, .page-links a:focus {
     text-decoration: underline;
 }
 
+.page-links.page-links-block {
+    display: block;
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.page-links.page-links-block a {
+    margin-left: 15px;
+}
+
+.page-links.page-links-block a:first-child {
+    margin-left: 0;
+}
+
 .title-wrap {
     margin-top: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 14px;
     margin-left: auto;
     margin-right: auto;
     width: 800px;
@@ -82,10 +104,6 @@ a:visited {
     clear: both;
     text-align: center;
     padding: 5px;
-}
-
-.page-links {
-    font-size: smaller;
 }
 
 .listing-info {
