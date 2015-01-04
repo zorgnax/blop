@@ -295,10 +295,17 @@ sub allcat {
 }
 
 sub categories {
-    my ($self, %args) = @_;
+    my ($self) = @_;
     return $self->{categories} if $self->{categories};
-    $self->{categories} = Blop::Category->list(%args);
+    $self->{categories} = Blop::Category->list();
     return $self->{categories};
+}
+
+sub tags {
+    my ($self) = @_;
+    return $self->{tags} if $self->{tags};
+    $self->{tags} = Blop::Tag->list();
+    return $self->{tags};
 }
 
 sub add_category {
@@ -431,13 +438,6 @@ sub pages {
     my ($self) = @_;
     return $self->{pages} if $self->{pages};
     my $pages = Blop::Page->list();
-    my $extra_links = $self->{conf}{extra_links} || "";
-    while ($extra_links =~ /\s*([^,]+)\s+([^,]+)/g) {
-        my $title = $1;
-        my $fullurl = $2;
-        my $link = bless {title => $title, fullurl => $fullurl}, "Blop::Page";
-        push @$pages, $link;
-    }
     $self->{pages} = $pages;
     return $pages;
 }

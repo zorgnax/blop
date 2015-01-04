@@ -43,6 +43,13 @@ EOSQL
             push @top, $page;
         }
     }
+    my $extra_links = $blop->{conf}{extra_links} || "";
+    while ($extra_links =~ /\s*([^,]+)\s+([^,]+)/g) {
+        my $title = $1;
+        my $fullurl = $2;
+        my $link = bless {title => $title, fullurl => $fullurl}, $class;
+        push @top, $link;
+    }
     return \@top;
 }
 

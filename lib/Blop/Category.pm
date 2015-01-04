@@ -26,7 +26,7 @@ sub list {
 select c.*, count(p.postid) posts
 from categories c
 left join posts p on p.categoryid=c.categoryid
-where special="uncat" or (special is null and (p.published <= $now))
+where special="uncat" or special is null and p.published <= $now
 group by c.categoryid
 order by c.categoryid
 EOSQL

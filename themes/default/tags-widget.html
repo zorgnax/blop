@@ -1,0 +1,9 @@
+<div class="widget widget-tags">
+    [% IF !elem.hash.noheading %]
+    <h1 class="widget-title">Tags</h1>
+    [% END %]
+    [% FOREACH tag_ IN blop.tags %]
+    <span class="tag-item" style="font-size:[% tag_.size %]"><a href="[% tag_.fullurl %]">[% tag_.name %]</a></span>
+    [% END %]
+</div>
+

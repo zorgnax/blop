@@ -165,6 +165,7 @@ sub get_bcat {
     return 0 if !$wpcat;
     my $name = $wpcat->{name};
     return 0 if !$name;
+    return 0 if $name eq "Uncategorized";
     my $bcat = $blop->category(name => $name);
     return $bcat->{categoryid} if $bcat;
     print "Adding category \"$name\"\n";
