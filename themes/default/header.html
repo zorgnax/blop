@@ -41,7 +41,7 @@
     [% IF blop.pages.size %]
     <span class="page-links[% IF blop.pages.size > 4 %] page-links-block[% END %]">
     [% FOREACH page_ IN blop.pages %]
-    <a href="[% page_.fullurl | uri %]">[% page_.title | html %]</a>
+    <a href="[% page_.fullurl %]">[% page_.title %]</a>
     [% END %]
     </span>
     [% END %]

@@ -79,7 +79,7 @@ sub fullurl {
     my ($self) = @_;
     return $self->{fullurl} if $self->{fullurl};
     my $blop = Blop::instance();
-    return "$blop->{urlbase}/$self->{url}";
+    return "$blop->{urlbase}/" . $blop->escape_uri($self->{url});
 }
 
 sub editurl {

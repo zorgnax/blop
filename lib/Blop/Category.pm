@@ -148,7 +148,7 @@ EOSQL
 sub fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
-    return "$blop->{urlbase}/$self->{url}";
+    return "$blop->{urlbase}/" . $blop->escape_uri($self->{url});
 }
 
 sub editurl {

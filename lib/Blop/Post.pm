@@ -129,7 +129,7 @@ EOSQL
 sub fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
-    my $url = "$blop->{urlbase}/$self->{url}";
+    my $url = "$blop->{urlbase}/" . $blop->escape_uri($self->{url});
     if ($self->{chain_category}) {
         $url .= "?cat=" . $self->{chain_category}{categoryid};
     }
