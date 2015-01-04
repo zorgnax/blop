@@ -1,0 +1,295 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "lib";
+use Blop;
+
+if (!-e ".blop") {
+    die "Must be run from blop directory.\n";
+}
+
+my @args = @ARGV;
+@ARGV = ();
+while (my $arg = shift @args) {
+    if ($arg eq "--") {
+        push @ARGV, @args;
+        last;
+    }
+    elsif ($arg =~ /^(--?help|-h|-\?)$/) {
+        usage();
+    }
+    elsif ($arg =~ /^-/) {
+        die "Invalid argument '$arg'\n";
+    }
+    else {
+        push @ARGV, $arg;
+    }
+}
+
+my ($wpdir) = @ARGV or die "WordPress dir required\n";
+
+my $wpdbh;
+my $prefix = "";
+read_wpconf();
+
+my $blop = Blop->new(urlbase => ".");
+my $bdbh = $blop->dbh;
+
+my $wpsth = $wpdbh->prepare(<<EOQUERY);
+select * from ${prefix}posts where post_type in ("post","page")
+order by id
+EOQUERY
+$wpsth->execute;
+my $posts_processed = 0;
+my $pages_processed = 0;
+my %bid;
+my @wp_parents;
+while (my $post = $wpsth->fetchrow_hashref) {
+    if ($post->{post_type} eq "post") {
+        add_post($post);
+        $posts_processed++;
+    }
+    else {
+        add_page($post);
+        $pages_processed++;
+    }
+}
+set_parentids();
+$blop->log(content => "Migrated from WordPress");
+
+sub read_wpconf {
+    my $host = "";
+    my $user = "";
+    my $pass = "";
+    my $db = "";
+    my $file = "$wpdir/wp-config.php";
+    open my $fh, "<", $file or die "Can't open $file: $!\n";
+    while (<$fh>) {
+        if (/^\s*define\s*\(\s*'DB_(\w+)'\s*,\s*'([^']*)'\s*\)/m) {
+            my $key = $1;
+            my $val = $2;
+            if ($key eq "NAME") {
+                $db = $val;
+            }
+            elsif ($key eq "USER") {
+                $user = $val;
+            }
+            elsif ($key eq "PASSWORD") {
+                $pass = $val;
+            }
+            elsif ($key eq "HOST") {
+                $host = $val;
+            }
+        }
+        elsif (/^\s*\$table_prefix\s*=\s*'([^']*)'/) {
+            $prefix = $1;
+        }
+    }
+    close $fh;
+    my $dsn = "dbi:mysql:host=$host;database=$db;mysql_multi_statements=1";
+    my %vars = (PrintError => 0, RaiseError => 1);
+    $wpdbh = DBI->connect($dsn, $user, $pass, \%vars);
+}
+
+sub get_url {
+    my ($title) = @_;
+    my $url = $blop->url($title);
+    return $url if $blop->url_available($url);
+    while (1) {
+        my $rand_url = $url . ($url ? "-" : "");
+        $rand_url .= $blop->token(4, "abcdefghijklmnopqrstuvwxyz");
+        return $rand_url if $blop->url_available($rand_url);
+    }
+}
+
+sub process_content {
+    my ($content) = @_;
+    $content =~ s{\r?\n}{\n}g;
+    $content =~ s{<font color="black".*?>you can click on.*?</font>}{}si;
+    $content =~ s{<font color[^\n]+to hire this.*?</font>}{}si;
+    $content =~ s{\nTo Hire this Artist:.*}{}si;
+    $content =~ s{<div class="bigbox">\n*(.*?)\n*</div>}{$1}sg;
+    my $galleries = 0;
+    while ($content =~ /\[gallery\b/g) {
+        $galleries++;
+    }
+    my $grouped_galleries = 0;
+    if ($content =~ /((\[gallery[^\]]*\]\s*){2,})/s) {
+        my $str = $1;
+        while ($str =~ /\[gallery\b/g) {
+            $grouped_galleries++;
+        }
+    }
+    if ($galleries == 1) {
+        $content =~ s{\[gallery.*?\]}{[gallery /]}sg
+    }
+    elsif ($galleries > 1 && $grouped_galleries == $galleries) {
+        $content =~ s{((\[gallery[^\]]*\]\s*){2,})}{[gallery /]}s;
+    }
+    elsif ($galleries > 1) {
+        $content =~ s{
+            \[gallery[^\]]+pic="([^"]*)"[^\]]*\]
+        }{[thumb "$1.jpg" size="large" /]}gxs;
+    }
+    $content =~ s{^\s+|\n+$}{}g;
+    $content .= "\n";
+    return $content;
+}
+
+sub get_terms {
+    my ($post) = @_;
+    my $query = <<EOQUERY;
+select taxonomy, name, slug
+from ${prefix}term_relationships r
+join ${prefix}term_taxonomy t on t.term_taxonomy_id=r.term_taxonomy_id
+join ${prefix}terms c on c.term_id=t.term_id
+where r.object_id=$post->{ID}
+EOQUERY
+    my $wpsth = $wpdbh->prepare($query);
+    $wpsth->execute;
+    my $wpcat;
+    my @tags;
+    while (my $term = $wpsth->fetchrow_hashref) {
+        if (!$wpcat && $term->{taxonomy} eq "category") {
+            $wpcat = $term;
+        }
+        elsif ($term->{taxonomy} eq "post_tag") {
+            push @tags, $term;
+        }
+    }
+    return ($wpcat, \@tags);
+}
+
+sub get_bcat {
+    my ($wpcat) = @_;
+    return 0 if !$wpcat;
+    my $name = $wpcat->{name};
+    return 0 if !$name;
+    my $bcat = $blop->category(name => $name);
+    return $bcat->{categoryid} if $bcat;
+    print "Adding category \"$name\"\n";
+    my $url = get_url($name);
+    my $bsth = $bdbh->prepare(<<EOSQL);
+insert into categories set name=?, url=?
+EOSQL
+    $bsth->execute($name, $url);
+    my $categoryid = $bsth->{mysql_insertid};
+    $blop->log(content => "Added category \"$name\"", categoryid => $categoryid);
+    return $categoryid;
+}
+
+sub get_files {
+    my ($wppost) = @_;
+    my $query = <<EOQUERY;
+select * from ${prefix}posts
+where post_type="attachment" and post_parent=$wppost->{ID}
+EOQUERY
+    my $wpsth = $wpdbh->prepare($query);
+    $wpsth->execute();
+    my $files = 0;
+    while (my $file = $wpsth->fetchrow_hashref) {
+        $file = $file->{guid};
+        $file =~ m{/(wp-content/.*?/([^/]+))$};
+        $file = $1;
+        my $base = $2;
+        $base =~ s{\.jpeg$}{.jpg};
+        my $wpfile = "$wpdir/$file";
+        print "Adding file \"$base\"\n";
+        system "mkdir", "-p", "tmp";
+        system "cp", $wpfile, "tmp/$base";
+        $files++;
+    }
+    return $files;
+}
+
+sub add_page {
+    my ($wppost) = @_;
+    return if $wppost->{post_status} !~ /^(publish|future)$/;
+    my $title = $wppost->{post_title} || "";
+    $title =~ s{^\s+|\s+$}{}g;
+    my $url = get_url($title);
+    my $added = Blop::Date->now->str;
+    my $published = $wppost->{post_date} || "";
+    my $content = $wppost->{post_content} || "";
+    $content = process_content($content);
+    my $sequence = $wppost->{menu_order};
+    print "Adding page \"$title\" url \"$url\" published on $published\n";
+    my $bsth = $bdbh->prepare(<<EOQUERY);
+insert into pages set title=?, url=?, added=?, published=?, content=?, sequence=?
+EOQUERY
+    $bsth->execute($title, $url, $added, $published, $content, $sequence);
+    my $pageid = $bsth->{mysql_insertid};
+    $bid{$wppost->{ID}} = $pageid;
+    push @wp_parents, [$wppost->{ID}, $wppost->{post_parent}];
+    my $files = get_files($wppost);
+    if (-e "tmp") {
+        system "mkdir", "-p", "page/$pageid";
+        system "mv", "tmp", "page/$pageid/files"
+    }
+    my $page = $blop->page(pageid => $pageid);
+    $page->update_content;
+    my $label = $page->label;
+    $blop->log(content => "Added page \"$label\"", pageid => $pageid);
+}
+
+sub set_parentids {
+    for my $hier (@wp_parents) {
+        my $child = $hier->[0] or next;
+        my $parent = $hier->[1] or next;
+        my $bchild = $bid{$child} or next;
+        my $bparent = $bid{$parent} or next;
+        my $bsth = $bdbh->prepare(<<EOQUERY);
+update pages set parentid=? where pageid=?
+EOQUERY
+        $bsth->execute($bparent, $bchild);
+    }
+}
+
+sub add_post {
+    my ($wppost) = @_;
+    return if $wppost->{post_status} !~ /^(publish|future)$/;
+    my $title = $wppost->{post_title} || "";
+    my $url = get_url($title);
+    my $added = Blop::Date->now->str;
+    my $published = $wppost->{post_date} || "";
+    my $content = $wppost->{post_content} || "";
+    $content = process_content($content);
+    my ($wpcat, $tags) = get_terms($wppost);
+    my $categoryid = get_bcat($wpcat);
+    print "Adding post \"$title\" url \"$url\" published on $published\n";
+    my $bsth = $bdbh->prepare(<<EOQUERY);
+insert into posts set title=?, url=?, added=?, published=?, categoryid=?, content=?
+EOQUERY
+    $bsth->execute($title, $url, $added, $published, $categoryid, $content);
+    my $postid = $bsth->{mysql_insertid};
+    $bsth = $bdbh->prepare(<<EOSQL);
+insert into tags set postid=?, name=?
+EOSQL
+    for my $tag (@$tags) {
+        print "Tagging \"$tag->{slug}\"\n";
+        $bsth->execute($postid, $tag->{slug});
+    }
+    my $files = get_files($wppost);
+    if (-e "tmp") {
+        system "mkdir", "-p", "post/$postid";
+        system "mv", "tmp", "post/$postid/files"
+    }
+    my $post = $blop->post(postid => $postid);
+    $post->update_content;
+    my $label = $post->label;
+    $blop->log(content => "Added post \"$label\"", postid => $postid);
+}
+
+sub usage {
+    print <<EOUSAGE;
+Usage: migratewp [-h] [-p <prefix>] <wpdir>
+
+Options:
+
+-h           show help text
+-p <prefix>  prefix for wordpress tables. default "wp_".
+<wpdir>      wordpress directory
+EOUSAGE
+    exit;
+}
+
