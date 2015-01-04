@@ -18,8 +18,6 @@ EOSQL
     return $tag;
 }
 
-my $max_posts = 0;
-
 sub list {
     my ($class) = @_;
     my $blop = Blop::instance();
@@ -34,9 +32,6 @@ EOSQL
     while (my $tag = $sth->fetchrow_hashref()) {
         $tag = bless $tag, $class;
         push @tags, $tag;
-        if ($tag->{posts} > $max_posts) {
-            $max_posts = $tag->{posts};
-        }
     }
     return \@tags;
 }
@@ -45,14 +40,6 @@ sub fullurl {
     my ($self) = @_;
     my $blop = Blop::instance();
     return "$blop->{urlbase}/tag/" . $blop->escape_uri($self->{name});
-}
-
-sub size {
-    my ($self) = @_;
-    my $min = 10;
-    my $max = 60;
-    my $size = int ($min + ($self->{posts} / $max_posts) * ($max - $min));
-    return $size . "px";
 }
 
 1;

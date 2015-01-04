@@ -43,6 +43,14 @@ sub display_tags {
     my ($markup, $elem) = @_;
     return "" if $markup->{update};
     my $blop = Blop::instance() or return "";
+    my $tags = $blop->tags;
+    my $max_posts = 0;
+    for my $tag (@$tags) {
+        $max_posts = $tag->{posts} if $tag->{posts} > $max_posts;
+    }
+    for my $tag (@$tags) {
+        $tag->{size} = int (8 + $tag->{posts} / $max_posts * 50) . "px";
+    }
     return $blop->template("tags-widget.html", elem => $elem);
 }
 
