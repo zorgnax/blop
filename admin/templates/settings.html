@@ -17,12 +17,12 @@
 
 <div class="aentry">
 <label for="email">Admin Email</label><br/>
-<input id="email" name="email" type="text" value="[% blop.conf.email %]"/><span class="email-error aform-error"></span>
+<input id="email" name="email" type="text" value="[% blop.conf.email | html %]"/><span class="email-error aform-error"></span>
 </div>
 
 <div class="aentry">
 <label for="ppp">Posts Per Page (PPP)</label><br/>
-<input id="ppp" name="ppp" type="text" value="[% blop.conf.ppp %]"/><span class="ppp-error aform-error"></span>
+<input id="ppp" name="ppp" type="text" value="[% blop.conf.ppp | html %]"/><span class="ppp-error aform-error"></span>
 </div>
 
 <div class="aentry">
@@ -71,34 +71,34 @@
 
 <div class="aentry">
 <label for="gallerysmall">Small Thumbnails</label><br/>
-<input id="gallerysmall" name="gallerysmall" type="text" value="[% blop.conf.gallery_small %]"/><span class="gallerysmall-error aform-error"></span>
+<input id="gallerysmall" name="gallerysmall" type="text" value="[% blop.conf.gallery_small | html %]"/><span class="gallerysmall-error aform-error"></span>
 </div>
 
 <div class="aentry">
 <label for="gallerymedium">Medium Thumbnails</label><br/>
-<input id="gallerymedium" name="gallerymedium" type="text" value="[% blop.conf.gallery_medium %]"/><span class="gallerymedium-error aform-error"></span>
+<input id="gallerymedium" name="gallerymedium" type="text" value="[% blop.conf.gallery_medium | html %]"/><span class="gallerymedium-error aform-error"></span>
 </div>
 
 <div class="aentry">
 <label for="gallerylarge">Large Thumbnails</label><br/>
-<input id="gallerylarge" name="gallerylarge" type="text" value="[% blop.conf.gallery_large %]"/><span class="gallerylarge-error aform-error"></span>
+<input id="gallerylarge" name="gallerylarge" type="text" value="[% blop.conf.gallery_large | html %]"/><span class="gallerylarge-error aform-error"></span>
 </div>
 
 <h3>Search Engine Meta Tags</h3>
 
 <div class="aentry">
 <label for="metadesc">Description</label><br/>
-<input id="metadesc" name="metadesc" type="text" value="[% blop.conf.meta_description %]"/><span class="metadesc-error aform-error"></span>
+<input id="metadesc" name="metadesc" type="text" value="[% blop.conf.meta_description | html %]"/><span class="metadesc-error aform-error"></span>
 </div>
 
 <div class="aentry">
 <label for="metatags">Keywords <span class="input-info">comma separated</span></label><br/>
-<input id="metatags" name="metatags" type="text" value="[% blop.conf.meta_tags %]"/><span class="metatags-error aform-error"></span>
+<input id="metatags" name="metatags" type="text" value="[% blop.conf.meta_tags | html %]"/><span class="metatags-error aform-error"></span>
 </div>
 
 <div class="aentry">
 <label for="metaauthor">Author</label><br/>
-<input id="metaauthor" name="metaauthor" type="text" value="[% blop.conf.meta_author %]"/><span class="metaauthor-error aform-error"></span>
+<input id="metaauthor" name="metaauthor" type="text" value="[% blop.conf.meta_author | html %]"/><span class="metaauthor-error aform-error"></span>
 </div>
 
 <h3>Theme Components</h3>
@@ -127,6 +127,11 @@
 <input id="background" name="background" type="file"/>
 <a href="#" class="abort" style="display:none">Abort</a><br/>
 <div class="bform-error component-mesg"></div>
+</div>
+
+<div class="aentry">
+<label for="extralinks">Extra Page Links <span class="input-info">Format: title url, title url, ...</span></label><br/>
+<input id="extralinks" name="extralinks" type="text" value="[% blop.conf.extra_links | html %]"/><span class="extralinks-error aform-error"></span>
 </div>
 
 <div class="aentry">

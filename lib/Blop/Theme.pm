@@ -140,11 +140,6 @@ sub page_menu {
         $out .= $self->page_menu(page => $page);
         $out .= "</li>\n";
     }
-    if (!$args{page} && $blop->allcat->{url}) {
-        $out .= "<li class=\"page-item\">";
-        $out .= "<a href=\"" . $blop->allcat->fullurl . "\">Blog</a>";
-        $out .= "</li>\n";
-    }
     $out .= "</ul>\n";
     return $out;
 }

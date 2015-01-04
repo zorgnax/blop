@@ -249,6 +249,7 @@ sub add_post {
     my ($wppost) = @_;
     return if $wppost->{post_status} !~ /^(publish|future)$/;
     my $title = $wppost->{post_title} || "";
+    $title =~ s{^\s+|\s+$}{}g;
     my $url = get_url($title);
     my $added = Blop::Date->now->str;
     my $published = $wppost->{post_date} || "";

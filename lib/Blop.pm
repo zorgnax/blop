@@ -430,8 +430,16 @@ sub page {
 sub pages {
     my ($self) = @_;
     return $self->{pages} if $self->{pages};
-    $self->{pages} = Blop::Page->list();
-    return $self->{pages};
+    my $pages = Blop::Page->list();
+    my $extra_links = $self->{conf}{extra_links} || "";
+    while ($extra_links =~ /\s*([^,]+)\s+([^,]+)/g) {
+        my $title = $1;
+        my $fullurl = $2;
+        my $link = bless {title => $title, fullurl => $fullurl}, "Blop::Page";
+        push @$pages, $link;
+    }
+    $self->{pages} = $pages;
+    return $pages;
 }
 
 sub parent_pages {

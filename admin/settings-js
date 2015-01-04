@@ -109,6 +109,10 @@ if (diff("metaauthor", "meta_author")) {
     $args{meta_author} = $cgi->param("metaauthor");
 }
 
+if (diff("extralinks", "extra_links")) {
+    $args{extra_links} = $cgi->param("extralinks");
+}
+
 if ($out->{error}) {
     print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json($out);

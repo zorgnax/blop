@@ -77,6 +77,7 @@ EOSQL
 
 sub fullurl {
     my ($self) = @_;
+    return $self->{fullurl} if $self->{fullurl};
     my $blop = Blop::instance();
     return "$blop->{urlbase}/$self->{url}";
 }
