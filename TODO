@@ -1,0 +1,9 @@
+Add tags widget
+add_category will be able to determine if it needs to
+gallery and listing to take regexp attr
+hierarchical pages in default theme (drop down menu)
+edit page 4 should be edit "About" page
+when error occurs during template processing, the page is messed up. see if you can make it output better, or create your own templating system.
+page links need their own line if they wrap after the site title
+post by mail support? http://codex.wordpress.org/Post_to_your_blog_using_email
+move find_bases inside Blop->new, possibly separate blop.conf redirect from read_conf

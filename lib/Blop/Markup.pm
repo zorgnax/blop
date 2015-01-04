@@ -79,7 +79,7 @@ sub add_paragraph {
                 }
             }
         }
-        if (defined $item && !ref $item && $item =~ /^(\s+)$/ms) {
+        if (defined $item && !ref $item && $item =~ /^(\s+)$/) {
             push @tmp, $1;
             next;
         }
