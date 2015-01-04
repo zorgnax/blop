@@ -145,9 +145,12 @@ sub display_listing {
     my ($markup, $elem) = @_;
     my $blop = Blop::instance() or return "";
     my $entry = $markup->{entry} or return "";
+    my $regex_str = $elem->{hash}{regex} || "";
+    my $regex = qr{$regex_str};
     my $html = "<ul class=\"listing\">\n";
     my $files = $entry->files;
     for my $file (@$files) {
+        next if $regex_str && $file->{name} !~ $regex;
         $html .= "<li><a href=\"$file->{fullurl}\">" .
                  $blop->escape_html($file->{name}) .
                  "</a> <span class=\"muted\">" . $file->{size} .
@@ -237,10 +240,13 @@ sub display_gallery {
     my $entry = $markup->{entry} or return "";
     my $blop = Blop::instance();
     my $size = $elem->{hash}{size} || "medium";
+    my $regex_str = $elem->{hash}{regex} || "";
+    my $regex = qr{$regex_str};
     my $html = "<div class=\"gallery\">\n";
     my $files = $entry->files;
     for my $file (@$files) {
         next if $file->{name} !~ /\.(jpe?g|gif|png)$/i;
+        next if $regex_str && $file->{name} !~ $regex;
         my $thumb = $entry->content_fullurl . "/thumb/$file->{name}";
         $thumb =~ s{(\.\w+)$}{.$size$1};
         $html .= "<a href=\"" . $file->{fullurl} . "\"><img src=\"" .
