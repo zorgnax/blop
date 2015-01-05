@@ -22,7 +22,7 @@ elsif ($path_info) {
 }
 
 my $limit = $cgi->param("limit");
-$limit = 1000 if !defined $limit;
+$limit = 100 if !defined $limit;
 if ($limit !~ /^\d+$/) {
     die "Invalid limit param.\n";
 }

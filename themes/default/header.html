@@ -39,10 +39,8 @@
     </span>
 
     [% IF blop.pages.size %]
-    <span class="page-links[% IF blop.pages.size > 4 %] page-links-block[% END %]">
-    [% FOREACH page_ IN blop.pages %]
-    <a href="[% page_.fullurl %]">[% page_.title %]</a>
-    [% END %]
+    <span class="[% IF blop.pages.size < 4 %]page-links-b[% ELSE %]page-links[% END %]">
+    [% theme.page_menu %]
     </span>
     [% END %]
 </div>

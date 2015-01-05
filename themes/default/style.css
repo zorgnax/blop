@@ -52,32 +52,82 @@ a:hover, a:focus {
     font-weight: bold;
 }
 
-.page-links {
-    font-size: 19px;
+.page-links-b {
+    font-size: 20px;
+    display: inline-block;
+    margin-left: 30px;
 }
 
-.page-links a {
-    text-decoration: none;
-    margin-left: 20px;
-    color: #454545;
+.page-links-b ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.page-links a:hover, .page-links a:focus {
-    text-decoration: underline;
+.page-links-b > ul > li {
+    display: inline;
+    position: relative;
+    padding-right: 20px;
+    padding-bottom: 12px;
 }
 
-.page-links.page-links-block {
+.page-links-b ul ul {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    display: none;
+    width: 175px;
+}
+
+.page-links-b ul ul li {
+    display: list-item;
+    padding: 10px;
+}
+
+.page-links-b li:hover > ul {
     display: block;
+    background: #f0f0f0;
+    border-top: 1px solid #bbbbbb;
+    border-bottom: 1px solid #bbbbbb;
+}
+
+.page-links {
     font-size: 14px;
-    margin-top: 6px;
+    display: block;
+    margin-top: 10px;
 }
 
-.page-links.page-links-block a {
-    margin-left: 15px;
+.page-links ul {
+    padding-left: 0px;
+    list-style: none;
+    margin: 0;
 }
 
-.page-links.page-links-block a:first-child {
-    margin-left: 0;
+.page-links > ul > li {
+    display: inline;
+    padding-right: 14px;
+    padding-bottom: 6px;
+    position: relative;
+}
+
+.page-links ul ul {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    display: none;
+    width: 175px;
+}
+
+.page-links ul ul li {
+    display: list-item;
+    padding: 10px;
+}
+
+.page-links li:hover > ul {
+    display: block;
+    background: #f0f0f0;
+    border-top: 1px solid #bbbbbb;
+    border-bottom: 1px solid #bbbbbb;
 }
 
 .title-wrap {
