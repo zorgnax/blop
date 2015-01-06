@@ -1,4 +1,4 @@
-[% title = category ? "Edit Category " _ category.categoryid : "Add Category" %]
+[% title = category ? "Edit " _ category.label2 : "Add Category" %]
 [% PROCESS header.html x1="Manage" x2="Categories" %]
 
 <form id="category" name="category" method="post" class="aform">

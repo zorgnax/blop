@@ -226,6 +226,13 @@ sub label {
     return $self->{title} ? $self->{title} : "Page $self->{pageid}";
 }
 
+sub label2 {
+    my ($self) = @_;
+    my $label2 = "Page ";
+    $label2 .= $self->{title} ? "\"$self->{title}\"" : $self->{pageid};
+    return $label2;
+}
+
 sub short {
     my ($self) = @_;
     return "Page $self->{pageid}";

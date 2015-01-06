@@ -289,6 +289,13 @@ sub label {
     return $self->{title} ? $self->{title} : "Post $self->{postid}";
 }
 
+sub label2 {
+    my ($self) = @_;
+    my $label2 = "Post ";
+    $label2 .= $self->{title} ? "\"$self->{title}\"" : $self->{postid};
+    return $label2;
+}
+
 sub short {
     my ($self) = @_;
     return "Post $self->{postid}";

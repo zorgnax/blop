@@ -1,4 +1,4 @@
-[% title = post ? "Edit Post " _ post.postid : "Add Post" %]
+[% title = post ? "Edit " _ post.label2 : "Add Post" %]
 [% PROCESS header.html x1="Publish" x2="Post" %]
 
 <form id="post" name="post" method="post" class="aform">

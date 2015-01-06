@@ -157,5 +157,12 @@ sub editurl {
     return "$blop->{urlbase}/admin/category/$self->{categoryid}";
 }
 
+sub label2 {
+    my ($self) = @_;
+    my $label2 = "Category ";
+    $label2 .= $self->{name} ? "\"$self->{name}\"" : $self->{categoryid};
+    return $label2;
+}
+
 1;
 
