@@ -1,4 +1,3 @@
-when error occurs during template processing, the page is messed up. see if you can make it output better, or create your own templating system.
 move find_bases inside Blop->new, possibly separate blop.conf redirect from read_conf
 navigation lists should show: prev 1 2 ... 29 30 31 ... 64 65 next
                          not: first prev 28 29 30 31 32 next last

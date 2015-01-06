@@ -147,11 +147,12 @@ EOSQL
     my ($found_rows) = $sth->fetchrow_array();
     my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "post");
 
-    print $blop->http_header();
-    print $blop->template(
+    my $content = $blop->template(
         "listing.html", category => $category, tags => \@tags, posts => \@posts,
         navigation => $navigation, search => $search, year => $year,
         month => $month, day => $day);
+    print $blop->http_header();
+    print $content;
     exit;
 }
 
@@ -163,22 +164,25 @@ sub post {
     }
     $blop->{display_post} = $post;
     $blop->{display_category} = $category;
+    my $content = $blop->template("post.html", post => $post, category => $category);
     print $blop->http_header();
-    print $blop->template("post.html", post => $post, category => $category);
+    print $content;
     exit;
 }
 
 sub page {
     $blop->{display_page} = $page;
+    my $content = $blop->template("page.html", page => $page);
     print $blop->http_header();
-    print $blop->template("page.html", page => $page);
+    print $content;
     exit;
 }
 
 sub not_found {
     $blop->{not_found} = 1;
+    my $content = $blop->template("not-found.html", path => $path);
     print $blop->http_header("Status" => "404 Not Found");
-    print $blop->template("not-found.html", path => $path);
+    print $content;
     exit;
 }
 
