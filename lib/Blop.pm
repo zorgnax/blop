@@ -130,8 +130,11 @@ sub background {
 }
 
 sub read_conf {
-    my ($self) = @_;
+    my ($self, $fatal) = @_;
     if (!-e "$self->{base}blop.conf") {
+        if ($fatal) {
+            die "Blop has not been installed.\n";
+        }
         print <<EOHEADER;
 Status: 303 See Other
 Location: $self->{urlbase}/admin/install
