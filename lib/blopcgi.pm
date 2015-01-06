@@ -2,15 +2,13 @@ package blopcgi;
 use strict;
 use warnings;
 use Blop;
-use Cwd;
 
 my $blop;
 
 sub import {
     my ($class, %args) = @_;
-    my ($base, $urlbase, $pluginbase, $pluginurlbase) = find_bases();
-    $blop = Blop->new(base => $base, urlbase => $urlbase,
-                      js => $args{js}, text => $args{text});
+    $blop = Blop->new(js => $args{js}, text => $args{text});
+    $blop->find_bases();
     strict->import;
     warnings->import;
     no strict "refs";
@@ -18,31 +16,6 @@ sub import {
     *{$caller . "::blop"} = \$blop;
     *{$caller . "::cgi"} = \$blop->cgi;
     *{$caller . "::dump"} = sub {$blop->dump(@_)};
-}
-
-sub find_bases {
-    my $base = "";
-    my $urlbase = $ENV{SCRIPT_NAME} || "";
-    $urlbase =~ s{/+[^/]+$}{};
-    my $rel = "";
-    my $dir = Cwd::cwd;
-    while (length($dir)) {
-        if (-e "$dir/.blop" && -e "$dir/index.cgi") {
-            last;
-        }
-        $dir =~ s{(/+[^/]+)$}{};
-        $rel = "$1$rel";
-        $base .= "../";
-        $urlbase =~ s{/+[^/]+$}{};
-    }
-    my $pluginbase;
-    my $pluginurlbase;
-    if ($rel =~ m{^(/plugin/[^/]+)}) {
-        $pluginurlbase = "$urlbase$1";
-        $pluginbase = $base;
-        $pluginbase =~ s{../../$}{};
-    }
-    return ($base, $urlbase, $pluginbase, $pluginurlbase);
 }
 
 sub simple_output_error {

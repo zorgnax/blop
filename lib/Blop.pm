@@ -22,6 +22,7 @@ use Blop::Widget;
 use Blop::Config;
 use Blop::Log;
 use Blop::Theme;
+use Cwd;
 
 my $blop;
 my $template;
@@ -38,6 +39,40 @@ sub new {
     $self->{urlbase} ||= "";
     $blop = $self;
     return $self;
+}
+
+sub find_bases {
+    my ($self) = @_;
+    my $base = "";
+    my $urlbase = $ENV{SCRIPT_NAME} || "";
+    $urlbase =~ s{/+[^/]+$}{};
+    my $rel = "";
+    my $dir = Cwd::cwd;
+    my $found_base;
+    while (length($dir)) {
+        if (-e "$dir/.blop" && -e "$dir/index.cgi") {
+            $found_base = 1;
+            last;
+        }
+        $dir =~ s{(/+[^/]+)$}{};
+        $rel = "$1$rel";
+        $base .= "../";
+        $urlbase =~ s{/+[^/]+$}{};
+    }
+    my $pluginbase;
+    my $pluginurlbase;
+    if ($rel =~ m{^(/plugin/[^/]+)}) {
+        $pluginurlbase = "$urlbase$1";
+        $pluginbase = $base;
+        $pluginbase =~ s{../../$}{};
+    }
+    $self->{base} = $base;
+    $self->{urlbase} = $urlbase;
+    $self->{pluginbase} = $pluginbase;
+    $self->{pluginurlbase} = $pluginurlbase;
+    if (!$found_base) {
+        die "Not a blop directory (or any parents)\n";
+    }
 }
 
 sub cgi {
