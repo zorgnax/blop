@@ -40,10 +40,10 @@
                 <h1 class="screen-reader-text">Post navigation</h1>
                 <div class="nav-links">
                     [% IF post.newer(category) %]
-                    <a href="[% post.newer.fullurl %]" rel="next"><span class="meta-nav">Next Post</span>[% post.newer.label | html %]</a>
+                    <a href="[% post.newer.fullurl %]"><span class="meta-nav">Newer Post</span>[% post.newer.label | html %]</a>
                     [% END %]
                     [% IF post.older(category) %]
-                    <a href="[% post.older.fullurl %]" rel="prev"><span class="meta-nav">Previous Post</span>[% post.older.label | html %]</a>
+                    <a href="[% post.older.fullurl %]"><span class="meta-nav">Older Post</span>[% post.older.label | html %]</a>
                     [% END %]
                 </div>
             </nav>

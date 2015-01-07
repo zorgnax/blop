@@ -145,7 +145,7 @@ EOSQL
     $sth = $blop->dbh->prepare("select found_rows()");
     $sth->execute();
     my ($found_rows) = $sth->fetchrow_array();
-    my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "post");
+    my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "post", "posts", "&laquo; newer", "older &raquo;");
 
     my $content = $blop->template(
         "listing.html", category => $category, tags => \@tags, posts => \@posts,

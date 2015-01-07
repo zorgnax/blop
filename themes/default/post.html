@@ -31,15 +31,15 @@
 
 <br/>
 
-<div class="next-prev">
+<div class="navigation-links">
 [% IF post.newer(category) %]
-<span class="next-link">
-← <a href="[% post.newer.fullurl %]">[% post.newer.title || "Next Post" | html %]</a>
+<span class="newer-link">
+← <a href="[% post.newer.fullurl %]">[% post.newer.title || "Newer Post" | html %]</a>
 </span>
 [% END %]
 [% IF post.older(category) %]
-<span class="prev-link">
-<a href="[% post.older.fullurl %]">[% post.older.title || "Previous Post" | html %]</a> →
+<span class="older-link">
+<a href="[% post.older.fullurl %]">[% post.older.title || "Older Post" | html %]</a> →
 </span>
 [% END %]
 <span style="clear:both;">&nbsp;</span>

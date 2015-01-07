@@ -1,3 +1,6 @@
-navigation lists should show: prev 1 2 ... 29 30 31 ... 64 65 next
-                         not: first prev 28 29 30 31 32 next last
-give backups and wordpress migrations their own plugin
+give backups and wordpress migrations their own plugin, maybe
+clean migratewp
+write your own templating system
+posts and pages lists in admin should have a date mouseover
+remove p from tar xvpf so if we cache templates, updates will be seen in cached template compiles
+
