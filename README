@@ -69,7 +69,8 @@ urls may end up looking like /tag/%3A%29 and /tag/%3A%28.
 
 *   Lets you edit your own comments.
 
-*   If top to bottom is newest to oldest, left to right is newest to oldest (next and prev links on posts).
+*   If top to bottom is newest to oldest, left to right is newest to
+oldest (prev and next links on posts).
 
 *   Fully configurable sidebar and footer widgets.
 

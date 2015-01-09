@@ -26,12 +26,14 @@ elsif (defined $postid) {
     $sth->execute();
     $postid = $sth->{mysql_insertid};
     $entry = bless {postid => $postid}, "Blop::Post";
+    $blop->log(content => "Added post \"Post $postid\" stub for uploads", postid => $postid);
 }
 elsif (defined $pageid) {
     my $sth = $blop->dbh->prepare("insert into pages set added=$now");
     $sth->execute();
     $pageid = $sth->{mysql_insertid};
     $entry = bless {pageid => $pageid}, "Blop::Post";
+    $blop->log(content => "Added page \"Page $pageid\" stub for uploads", pageid => $pageid);
 }
 else {
     die "An entry is required.\n";

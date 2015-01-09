@@ -5,7 +5,8 @@ create table posts (
     added datetime,
     published datetime,
     categoryid int unsigned not null,
-    content text not null);
+    content text not null,
+    index(published));
 
 create table categories (
     categoryid int unsigned primary key auto_increment,
@@ -29,7 +30,8 @@ create table pages (
     sequence float not null,
     parentid int unsigned not null,
     hidden int unsigned not null,
-    noheading int unsigned not null);
+    noheading int unsigned not null,
+    index(published));
 
 create table comments (
     commentid int unsigned primary key auto_increment,

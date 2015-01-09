@@ -20,7 +20,7 @@ if ($offset !~ /^\d+$/) {
 my $sth = $blop->dbh->prepare(<<EOSQL);
 select sql_calc_found_rows *
 from pages
-order by !published, added desc
+order by !published, published desc
 limit $limit
 offset $offset
 EOSQL

@@ -58,7 +58,7 @@ from
     $join
 $where
 group by p.postid
-order by !p.published, p.added desc
+order by !p.published, p.published desc
 limit $limit
 offset $offset
 EOSQL

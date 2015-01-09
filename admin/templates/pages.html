@@ -11,7 +11,7 @@
     [% ELSE %]
     <td><a href="[% page.editurl %]">[% page.label | html %]</a></td>
     <td>/[% page.url | html %]</td>
-    <td>[% page.published.natural | html %]</td>
+    <td><span title="[% page.published.str %]">[% page.published.natural | html %]</span></td>
     [% END %]
     <td>[% page.num_files %]</td>
     <td class="entry-actions">

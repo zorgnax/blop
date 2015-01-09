@@ -1,6 +1,5 @@
-give backups and wordpress migrations their own plugin, maybe
+why is the page unavailable
+write your own templating system, compiled templates should have the same mtime as the template so you know when to update them
 clean migratewp
-write your own templating system
-posts and pages lists in admin should have a date mouseover
-remove p from tar xvpf so if we cache templates, updates will be seen in cached template compiles
+
 
