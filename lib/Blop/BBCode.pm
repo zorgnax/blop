@@ -14,6 +14,7 @@ our %bbcode = (
                 display => \&display_gallery},
     thumb => {norecurse => 1, update => \&update_thumb, display => \&display_thumb},
     image => {norecurse => 1, display => \&display_image},
+    perl => {block => 1, norecurse => 1, display => \&display_perl},
     %Blop::Widget::widgets,
 );
 
@@ -278,6 +279,15 @@ sub display_image {
     my $url = $entry->content_fullurl . "/files/$name";
     my $html = "<span class=\"image\"><img src=\"$url\"/></span>\n";
     return $html;
+}
+
+sub display_perl {
+    my ($markup, $elem) = @_;
+    my $code = $elem->{content} || "";
+    local *STDOUT;
+    open STDOUT, ">", \my $output;
+    eval $code;
+    return $output;
 }
 
 1;
