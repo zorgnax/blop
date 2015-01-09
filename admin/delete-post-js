@@ -21,6 +21,11 @@ EOSQL
 $sth->execute($postid);
 
 $sth = $blop->dbh->prepare(<<EOSQL);
+delete from comments where postid=?
+EOSQL
+$sth->execute($postid);
+
+$sth = $blop->dbh->prepare(<<EOSQL);
 delete from posts where postid=?
 EOSQL
 $sth->execute($postid);
