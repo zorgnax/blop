@@ -239,7 +239,6 @@ sub create_thumb_dir {
 sub display_gallery {
     my ($markup, $elem) = @_;
     my $entry = $markup->{entry} or return "";
-    my $blop = Blop::instance();
     my $size = $elem->{hash}{size} || "medium";
     my $regex_str = $elem->{hash}{regex} || "";
     my $regex = qr{$regex_str};
@@ -261,7 +260,6 @@ sub display_thumb {
     my ($markup, $elem) = @_;
     my $entry = $markup->{entry} or return "";
     my $name = $elem->{args}[0] or return "";
-    my $blop = Blop::instance();
     my $size = $elem->{hash}{size} || "medium";
     my $thumb = $entry->content_fullurl . "/thumb/$name";
     $thumb =~ s{(\.\w+)$}{.$size$1};
@@ -283,6 +281,10 @@ sub display_image {
 
 sub display_perl {
     my ($markup, $elem) = @_;
+    my $blop = Blop::instance();
+    if (-e "$blop->{base}.demo") {
+        return "";
+    }
     my $code = $elem->{content} || "";
     local *STDOUT;
     open STDOUT, ">", \my $output;
