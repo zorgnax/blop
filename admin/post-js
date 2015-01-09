@@ -20,7 +20,7 @@ if ($postid) {
 my $url = $cgi->param("url");
 if (defined $url && length($url)) {
     if (!$blop->url_available($url) && (!$post || $post->{url} ne $url)) {
-        $out->{urlError} = "Unavailable.";
+        $out->{urlError} = $@ || "Unavailable.";
         $out->{error} = 1;
     }
 }

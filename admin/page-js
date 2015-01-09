@@ -22,7 +22,7 @@ my $url = $cgi->param("url");
 $url = "" if !defined $url;
 if (!$page || $page->{url} ne $url) {
     if (!$blop->url_available($url)) {
-        $out->{urlError} = "Unavailable.";
+        $out->{urlError} = $@ || "Unavailable.";
         $out->{error} = 1;
     }
 }

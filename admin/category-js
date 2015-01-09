@@ -30,7 +30,7 @@ elsif (!$category || $category->{name} ne $name) {
 my $url = $cgi->param("url") || "";
 if (!$category || $category->{url} ne $url) {
     if (!$blop->url_available($url)) {
-        $out->{urlError} = "Unavailable.";
+        $out->{urlError} = $@ || "Unavailable.";
         $out->{error} = 1;
     }
 }

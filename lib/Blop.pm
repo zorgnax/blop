@@ -516,16 +516,29 @@ sub widgets {
     return sort {$a->{name} cmp $b->{name}} values %Blop::Widget::widgets;
 }
 
-sub url_available {
+sub assert_url_available {
     my ($self, $url) = @_;
     if (length($url) && -e "$self->{base}$url") {
-        return 0;
+        die "URL conflicts with an existing file.\n";
     }
-    return 0 if $url =~ m{^(admin|tag|themes|\d{4}|post/\d+|page/\d+|sect)(/|$)};
-    return 0 if $self->post(url => $url);
-    return 0 if $self->page(url => $url);
-    return 0 if $self->category(url => $url);
+    if ($url =~ m{^(admin|tag|themes|\d{4}|post/\d+|page/\d+|sect)(/|$)}) {
+        die "URL conflicts with special name.\n";
+    }
+    if ($self->post(url => $url)) {
+        die "URL conflicts with an existing post.\n";
+    }
+    if ($self->page(url => $url)) {
+        die "URL conflicts with an existing page.\n";
+    }
+    if ($self->category(url => $url)) {
+        die "URL conflicts with an existing category.\n";
+    }
     return 1;
+}
+
+sub url_available {
+    my ($self, $url) = @_;
+    return eval {$self->assert_url_available($url)};
 }
 
 sub url {

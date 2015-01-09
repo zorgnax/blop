@@ -1,5 +1,6 @@
 why is the page unavailable
 write your own templating system, compiled templates should have the same mtime as the template so you know when to update them
 clean migratewp
+use name in admin/page/123 or admin/page/name-of-page-url
 
 
