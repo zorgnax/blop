@@ -8,9 +8,13 @@ $blop->require_admin();
 my $post;
 
 my $path_info = $ENV{PATH_INFO} || "";
-if ($path_info =~ m{/(\d+)$}) {
+if ($path_info =~ m{^/(\d+)$}) {
     my $postid = $1;
     $post = $blop->post(postid => $postid) or die "Cannot find post $postid.\n";
+}
+elsif ($path_info =~ m{^/(.*)$}) {
+    my $url = $1;
+    $post = $blop->post(url => $url) or die "Cannot find post $url.\n";
 }
 elsif ($path_info) {
     die "Unrecognized path info.\n";

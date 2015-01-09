@@ -13,6 +13,10 @@ if ($path_info =~ m{/(\d+)$}) {
     $category = $blop->category(categoryid => $categoryid)
         or die "Cannot find category $categoryid.\n";
 }
+elsif ($path_info =~ m{^/(.*)$}) {
+    my $url = $1;
+    $category = $blop->category(url => $url) or die "Cannot find category $url.\n";
+}
 elsif ($path_info) {
     die "Unrecognized path info.\n";
 }
