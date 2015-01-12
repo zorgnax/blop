@@ -240,10 +240,11 @@ sub display_gallery {
     my ($markup, $elem) = @_;
     my $entry = $markup->{entry} or return "";
     my $size = $elem->{hash}{size} || "medium";
+    my $sort = $elem->{hash}{sort} || "";
     my $regex_str = $elem->{hash}{regex} || "";
     my $regex = qr{$regex_str};
     my $html = "<div class=\"gallery\">\n";
-    my $files = $entry->files;
+    my $files = $entry->files($sort);
     for my $file (@$files) {
         next if $file->{name} !~ /\.(jpe?g|gif|png)$/i;
         next if $regex_str && $file->{name} !~ $regex;

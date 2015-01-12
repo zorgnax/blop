@@ -95,11 +95,28 @@ sub editurl {
     return "$blop->{urlbase}/admin/page/$self->{pageid}";
 }
 
+sub get_file_paths {
+    my ($self, $sort) = @_;
+    my @paths = glob ($self->content_path . "/files/*");
+    if ($sort eq "time") {
+        my %mtime;
+        for my $path (@paths) {
+            $mtime{$path} = (stat($path))[9];
+        }
+        @paths = sort {$mtime{$a} <=> $mtime{$b}} @paths;
+    }
+    else {
+        @paths = sort @paths;
+    }
+    return \@paths;
+}
+
 sub files {
-    my ($self) = @_;
+    my ($self, $sort) = @_;
     my @files;
     my $blop = Blop::instance();
-    for my $path (sort glob $self->content_path . "/files/*") {
+    my $paths = $self->get_file_paths($sort);
+    for my $path (@$paths) {
         next if -d $path;
         $path =~ m{([^/]+)$};
         my $name = $1;
