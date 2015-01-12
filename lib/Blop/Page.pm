@@ -99,7 +99,7 @@ sub files {
     my ($self) = @_;
     my @files;
     my $blop = Blop::instance();
-    for my $path (glob $self->content_path . "/files/*") {
+    for my $path (sort glob $self->content_path . "/files/*") {
         next if -d $path;
         $path =~ m{([^/]+)$};
         my $name = $1;
