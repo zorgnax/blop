@@ -1,4 +1,0 @@
-write your own templating system, compiled templates should have the same mtime as the template so you know when to update them
-clean migratewp
-
-
