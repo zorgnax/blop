@@ -105,34 +105,6 @@ sub get_url {
 sub process_content {
     my ($content) = @_;
     $content =~ s{\r?\n}{\n}g;
-    $content =~ s{<font color="black".*?>you can click on.*?</font>}{}si;
-    $content =~ s{<font color[^\n]+to hire this.*?</font>}{}si;
-    $content =~ s{\nTo Hire this Artist:.*}{}si;
-    $content =~ s{<div class="bigbox">\n*(.*?)\n*</div>}{$1}sg;
-    my $galleries = 0;
-    while ($content =~ /\[gallery\b/g) {
-        $galleries++;
-    }
-    my $grouped_galleries = 0;
-    if ($content =~ /((\[gallery[^\]]*\]\s*){2,})/s) {
-        my $str = $1;
-        while ($str =~ /\[gallery\b/g) {
-            $grouped_galleries++;
-        }
-    }
-    if ($galleries == 1) {
-        $content =~ s{\[gallery.*?\]}{[gallery /]}sg
-    }
-    elsif ($galleries > 1 && $grouped_galleries == $galleries) {
-        $content =~ s{((\[gallery[^\]]*\]\s*){2,})}{[gallery /]}s;
-    }
-    elsif ($galleries > 1) {
-        $content =~ s{
-            \[gallery[^\]]+pic="([^"]*)"[^\]]*\]
-        }{[thumb "$1.jpg" size="large" /]}gxs;
-    }
-    $content =~ s{^\s+|\n+$}{}g;
-    $content .= "\n";
     return $content;
 }
 
