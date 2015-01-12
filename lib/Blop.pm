@@ -156,7 +156,7 @@ EOHEADER
 
 sub dbh {
     my ($self) = @_;
-    return $self->{dbh} if $self->{dbh};
+    return $self->{dbh} if exists $self->{dbh};
     my $conf = Blop::Config::read("$self->{base}blop.conf");
     my $dsn = "dbi:mysql:host=$conf->{dbhost};database=$conf->{db};";
     $dsn .= "mysql_multi_statements=1";

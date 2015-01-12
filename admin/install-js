@@ -31,6 +31,7 @@ if ($confirm ne $pass) {
     $out->{error} = 1;
 }
 
+$blop->{dbh} = undef;
 my $dbhost = $cgi->param("dbhost") || "";
 my $dbuser = $cgi->param("dbuser") || "";
 my $dbpass = $cgi->param("dbpass") || "";
