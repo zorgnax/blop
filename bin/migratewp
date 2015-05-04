@@ -261,7 +261,6 @@ Usage: migratewp [-h] [-p <prefix>] <wpdir>
 Options:
 
 -h           show help text
--p <prefix>  prefix for wordpress tables. default "wp_".
 <wpdir>      wordpress directory
 EOUSAGE
     exit;
