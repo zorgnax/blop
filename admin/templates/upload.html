@@ -14,11 +14,12 @@ Insert:
 <br/>
 <div class="bform-mesg bform-error"></div>
 <table class="files-list"[% IF !entry.files.size %] style="display:none"[% END %]>
-<tr><th>File</th><th>Size</th><th>Insert</th><th>Action</th></tr>
+<tr><th>File</th><th>Size</th><th>Date</th><th>Insert</th><th>Action</th></tr>
 [% FOREACH file IN entry.files %]
 <tr data-name="[% file.name %]" data-url="[% file.url %]">
-    <td><a href="[% file.fullurl %]" target="_blank">[% file.name %]</a></td>
+    <td class="file-name"><a href="[% file.fullurl %]" target="_blank">[% file.name %]</a></td>
     <td class="muted">[% file.size %]</td>
+    <td class="muted">[% file.time %]</td>
     <td class="file-inserts">
         <select>
             <option value=""></option>
@@ -32,7 +33,8 @@ Insert:
         </select>
     </td>
     <td class="file-actions">
-        <a href="#" class="file-delete">delete</a>
+        <a href="#" class="file-rename"><i class="fa fa-pencil"></i></a>
+        <a href="#" class="file-delete"><i class="fa fa-trash"></i></a>
     </td>
 </tr>
 [% END %]

@@ -35,6 +35,12 @@ sub new {
     return $self;
 }
 
+sub new_epoch {
+    my ($class, $epoch) = @_;
+    my $self = bless {epoch => $epoch}, $class;
+    return $self;
+}
+
 sub now {
     my ($class) = @_;
     my $self = bless {epoch => time}, $class;
@@ -44,6 +50,12 @@ sub now {
 sub str {
     my ($self) = @_;
     my $str = POSIX::strftime("%Y-%m-%d %H:%M:%S", localtime($self->{epoch}));
+    return $str;
+}
+
+sub strftime {
+    my ($self, $fmt) = @_;
+    my $str = POSIX::strftime($fmt, localtime($self->{epoch}));
     return $str;
 }
 

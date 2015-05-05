@@ -2,35 +2,54 @@ package Blop::Entry;
 use strict;
 use warnings;
 
-sub get_file_paths {
-    my ($self, $sort) = @_;
-    my @paths = glob ($self->content_path . "/files/*");
+sub sort_files {
+    my ($self, $files, $sort) = @_;
     if ($sort && $sort =~ /^time(\s+desc)?$/) {
         my $desc = $1;
-        my %mtime;
-        for my $path (@paths) {
-            $mtime{$path} = (stat($path))[9];
-        }
         if ($desc) {
-            @paths = sort {$mtime{$b} <=> $mtime{$a}} @paths;
+            return [sort {$b->{time}{epoch} <=> $a->{time}{epoch}} @$files];
         }
         else {
-            @paths = sort {$mtime{$a} <=> $mtime{$b}} @paths;
+            return [sort {$a->{time}{epoch} <=> $b->{time}{epoch}} @$files];
         }
     }
     elsif ($sort && $sort =~ /^(name|(name\s+desc)|(desc))$/) {
         my $desc = $2 || $3;
         if ($desc) {
-            @paths = reverse sort @paths;
+            return [sort {$b->{name} cmp $a->{name}} @$files];
         }
         else {
-            @paths = sort @paths;
+            return [sort {$a->{name} cmp $b->{name}} @$files];
         }
     }
     else {
-        @paths = sort @paths;
+        return [sort {$a->{name} cmp $b->{name}} @$files];
     }
-    return \@paths;
+}
+
+sub files {
+    my ($self, $sort) = @_;
+    my $files = [];
+    my $blop = Blop::instance();
+    my @paths = glob ($self->content_path . "/files/*");
+    for my $path (@paths) {
+        my @stat = stat($path);
+        next if -d _;
+        my $time = Blop::Date->new_epoch($stat[9]);
+        $path =~ m{([^/]+)$};
+        my $name = $1;
+        my $file = {
+            name => $name,
+            path => $path,
+            url => "/" . $self->content_url . "/files/$name",
+            fullurl => $self->content_fullurl . "/files/$name",
+            size => $blop->human_readable(-s $path),
+            time => $time,
+        };
+        push @$files, $file;
+    }
+    $files = $self->sort_files($files, $sort);
+    return $files;
 }
 
 1;

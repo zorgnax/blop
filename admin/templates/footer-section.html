@@ -38,6 +38,7 @@ var upload = new Upload({
     csrf: "[% blop.csrf %]",
     processUrl: "[% urlbase %]/admin/upload-js",
     deleteUrl: "[% urlbase %]/admin/delete-file-js",
+    renameUrl: "[% urlbase %]/admin/rename-file-js",
     editor: editor
 });
 upload.extraParams = function () {

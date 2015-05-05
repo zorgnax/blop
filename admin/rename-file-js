@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi js => 1;
+
+$blop->read_conf;
+$blop->assert_admin;
+$blop->assert_csrf;
+
+my $postid = $cgi->param("postid");
+my $pageid = $cgi->param("pageid");
+my $section = $cgi->param("section");
+my $entry;
+if ($section) {
+    $entry = $blop->section($section) or die "Invalid section.\n";
+}
+elsif ($postid) {
+    if ($postid !~ /^\d+$/) {
+        die "Invalid postid.\n";
+    }
+    $entry = bless {postid => $postid}, "Blop::Post";
+}
+elsif ($pageid) {
+    if ($pageid !~ /^\d+$/) {
+        die "Invalid pageid.\n";
+    }
+    $entry = bless {pageid => $pageid}, "Blop::Page";
+}
+else {
+    die "An entry is required.\n";
+}
+
+my $name = $cgi->param("name");
+if (!$name) {
+    die "A file name is required.\n";
+}
+if ($name =~ m{(^|/)\.\.($|/)}) {
+    die "Name cannot traverse upwards.\n";
+}
+
+my $new_name = $cgi->param("newname");
+if (!$new_name) {
+    die "A new file name is required.\n";
+}
+if ($new_name =~ m{(^|/)\.\.($|/)}) {
+    die "New name cannot traverse upwards.\n";
+}
+
+my $path = $entry->content_path . "/files/$name";
+my $new_path = $entry->content_path . "/files/$new_name";
+
+if (!rename $path, $new_path) {
+    die "Can't rename $name to $new_name: $!\n";
+}
+
+print $blop->http_header("Content-Type" => "application/json");
+print $blop->escape_json({
+    ok => 1,
+    mesg => "Renamed $name to $new_name\n",
+});
+

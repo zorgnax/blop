@@ -13,27 +13,6 @@ sub new {
     return $self;
 }
 
-sub files {
-    my ($self, $sort) = @_;
-    my @files;
-    my $blop = Blop::instance();
-    my $paths = $self->get_file_paths($sort);
-    for my $path (@$paths) {
-        next if -d $path;
-        $path =~ m{([^/]+)$};
-        my $name = $1;
-        my $file = {
-            name => $name,
-            path => $path,
-            url => "/" . $self->content_url . "/files/$name",
-            fullurl => $self->content_fullurl . "/files/$name",
-            size => $blop->human_readable(-s $path),
-        };
-        push @files, $file;
-    }
-    return \@files;
-}
-
 sub content_url {
     my ($self) = @_;
     return $self->{content_url} if $self->{content_url};

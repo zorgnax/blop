@@ -109,7 +109,7 @@ Upload.prototype.addFileToList = function (data) {
         select.append("<option value=\"image\">Image</option> ");
     }
     select.append("<option value=\"link\">link</option>");
-    tr.append("<td class=\"file-actions\"><a href=\"#\" class=\"file-delete\">delete</a></td>");
+    tr.append("<td class=\"file-actions\"><a href=\"#\" class=\"file-rename\"><i class=\"fa fa-pencil\"></i></a>\n<a href=\"#\" class=\"file-delete\"><i class=\"fa fa-trash\"></i></a></td>");
     tr.data("name", data.name);
     tr.data("url", data.url);
     this.setFileRow(tr);
@@ -181,8 +181,50 @@ Upload.prototype.delete = function (name, tr) {
     });
 }
 
+Upload.prototype.rename = function (name, tr) {
+    var newName = prompt("Enter the new name for the file:", name);
+    if (!newName)
+        return;
+    tr.data("name", newName);
+    var a = tr.find(".file-name a");
+    a.text(newName);
+    var href = a.attr("href");
+    href = href.replace(/\/[^/]+$/, "/" + newName);
+    a.attr("href", href);
+    var url = tr.data("url");
+    url = url.replace(/\/[^/]+$/, "/" + newName);
+    tr.data("url", url);
+
+    this.mesg.text("Processing...");
+    var self = this;
+    var data = {name: name, newname: newName, csrf: this.args.csrf};
+    if (this.extraParams) {
+        var extra = this.extraParams();
+        $.each(extra, function (key, value) {
+            data[key] = value;
+        });
+    }
+    var ajax = $.ajax({
+        url: this.args.renameUrl,
+        type: "POST",
+        data: data
+    });
+    ajax.done(function (data, textStatus, jqXHR) {
+        if (!data.error) {
+            self.mesg.text(data.mesg ? data.mesg : "Okay!");
+            return;
+        }
+        self.mesg.text(data.mesg ? data.mesg : "");
+    });
+}
+
 Upload.prototype.setFileRow = function (tr) {
     var self = this;
+    var renameLink = tr.find("a.file-rename");
+    renameLink.on("click", function (event) {
+        event.preventDefault();
+        self.rename(tr.data("name"), tr);
+    });
     var deleteLink = tr.find("a.file-delete");
     deleteLink.on("click", function (event) {
         event.preventDefault();
