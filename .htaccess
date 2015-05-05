@@ -6,6 +6,7 @@ AddHandler cgi-script .cgi .pl
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
+RewriteRule "^(.*/)?\." - [F,L]
 RewriteRule ^blop.conf$ - [F,L]
 RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
 RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-d

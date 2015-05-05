@@ -98,12 +98,12 @@ sub editurl {
 sub get_file_paths {
     my ($self, $sort) = @_;
     my @paths = glob ($self->content_path . "/files/*");
-    if ($sort eq "time") {
+    if ($sort && $sort eq "time") {
         my %mtime;
         for my $path (@paths) {
             $mtime{$path} = (stat($path))[9];
         }
-        @paths = sort {$mtime{$a} <=> $mtime{$b}} @paths;
+        @paths = sort {$mtime{$b} <=> $mtime{$a}} @paths;
     }
     else {
         @paths = sort @paths;

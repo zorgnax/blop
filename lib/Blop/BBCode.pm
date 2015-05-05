@@ -187,12 +187,10 @@ sub update_thumb {
     create_thumb($entry, $name, $elem);
 }
 
-sub create_thumb {
-    my ($entry, $file_name, $elem, $force) = @_;
-    return if $file_name !~ /\.(jpe?g|gif|png)$/i;
+sub get_spec {
+    my ($size) = @_;
     my $blop = Blop::instance() or return;
     my %default = (small => "x125>", medium => "x250>", large => "700>");
-    my $size = $elem->{hash}{size} || "medium";
     my $spec;
     if ($blop->{conf}{"gallery_$size"}) {
         $spec = $blop->{conf}{"gallery_$size"};
@@ -203,6 +201,14 @@ sub create_thumb {
     else {
         $spec = $size;
     }
+    return $spec;
+}
+
+sub create_thumb {
+    my ($entry, $file_name, $elem, $force) = @_;
+    return if $file_name !~ /\.(jpe?g|gif|png)$/i;
+    my $size = $elem->{hash}{size} || "medium";
+    my $spec = get_spec($size);
     my ($geometry, $extent);
     if ($spec =~ m{^e(.+)}) {
         $geometry = "$1^";
@@ -213,7 +219,7 @@ sub create_thumb {
     }
     my $dir = create_thumb_dir($entry);
     my $thumb = "$dir/$file_name";
-    $thumb =~ s{(\.\w+)$}{.$size$1};
+    $thumb =~ s{(\.\w+)$}{.$spec$1};
     return if -e $thumb && !$force;
     my $magick = Image::Magick->new;
     my $path = $entry->content_path . "/files/$file_name";
@@ -240,6 +246,7 @@ sub display_gallery {
     my ($markup, $elem) = @_;
     my $entry = $markup->{entry} or return "";
     my $size = $elem->{hash}{size} || "medium";
+    my $spec = get_spec($size);
     my $sort = $elem->{hash}{sort} || "";
     my $regex_str = $elem->{hash}{regex} || "";
     my $regex = qr{$regex_str};
@@ -249,7 +256,8 @@ sub display_gallery {
         next if $file->{name} !~ /\.(jpe?g|gif|png)$/i;
         next if $regex_str && $file->{name} !~ $regex;
         my $thumb = $entry->content_fullurl . "/thumb/$file->{name}";
-        $thumb =~ s{(\.\w+)$}{.$size$1};
+        $thumb =~ s{(\.\w+)$}{.$spec$1};
+        create_thumb($entry, $file->{name}, $elem);
         $html .= "<a href=\"" . $file->{fullurl} . "\"><img src=\"" .
                  $thumb . "\"/></a>\n";
     }
@@ -262,8 +270,10 @@ sub display_thumb {
     my $entry = $markup->{entry} or return "";
     my $name = $elem->{args}[0] or return "";
     my $size = $elem->{hash}{size} || "medium";
+    my $spec = get_spec($size);
     my $thumb = $entry->content_fullurl . "/thumb/$name";
-    $thumb =~ s{(\.\w+)$}{.$size$1};
+    $thumb =~ s{(\.\w+)$}{.$spec$1};
+    create_thumb($entry, $name, $elem);
     my $url = $entry->content_fullurl . "/files/$name";
     my $html = "<span class=\"thumb\">";
     $html .= "<a href=\"$url\"><img src=\"$thumb\"/></a>";
