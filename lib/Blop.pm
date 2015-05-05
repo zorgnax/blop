@@ -316,6 +316,7 @@ sub http_header {
     if (!$headers{"Content-Type"}) {
         $out .= "Content-Type: text/html; charset=utf-8\n";
     }
+    $out .= "Pragma: no-cache\n";
     $out .= "\n";
     return $out;
 }
