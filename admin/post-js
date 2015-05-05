@@ -147,8 +147,8 @@ for my $tag (@tags) {
 }
 
 for my $tag (@{$post->tags}) {
-    if (!$tag_hash{$tag}) {
-        $post->rm_tag($tag);
+    if (!$tag_hash{$tag->{name}}) {
+        $post->rm_tag($tag->{name});
         $tags_edited = 1;
     }
 }

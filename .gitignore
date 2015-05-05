@@ -8,4 +8,5 @@
 /admin/priv/*
 !/admin/priv/.htaccess
 /t/markup/*.got
+/blop.tar.gz
 
