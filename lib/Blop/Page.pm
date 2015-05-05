@@ -2,6 +2,7 @@ package Blop::Page;
 use strict;
 use warnings;
 use Blop;
+use parent "Blop::Entry";
 
 sub new {
     my ($class, %args) = @_;
@@ -93,22 +94,6 @@ sub editurl {
     my ($self) = @_;
     my $blop = Blop::instance();
     return "$blop->{urlbase}/admin/page/$self->{pageid}";
-}
-
-sub get_file_paths {
-    my ($self, $sort) = @_;
-    my @paths = glob ($self->content_path . "/files/*");
-    if ($sort && $sort eq "time") {
-        my %mtime;
-        for my $path (@paths) {
-            $mtime{$path} = (stat($path))[9];
-        }
-        @paths = sort {$mtime{$b} <=> $mtime{$a}} @paths;
-    }
-    else {
-        @paths = sort @paths;
-    }
-    return \@paths;
 }
 
 sub files {

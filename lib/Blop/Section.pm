@@ -2,6 +2,7 @@ package Blop::Section;
 use strict;
 use warnings;
 use Blop;
+use parent "Blop::Entry";
 
 sub new {
     my ($class, $name) = @_;
@@ -10,22 +11,6 @@ sub new {
     my $self = bless {name => $name}, $class;
     $self->{content} = $blop->{conf}{$name};
     return $self;
-}
-
-sub get_file_paths {
-    my ($self, $sort) = @_;
-    my @paths = glob ($self->content_path . "/files/*");
-    if ($sort && $sort eq "time") {
-        my %mtime;
-        for my $path (@paths) {
-            $mtime{$path} = (stat($path))[9];
-        }
-        @paths = sort {$mtime{$b} <=> $mtime{$a}} @paths;
-    }
-    else {
-        @paths = sort @paths;
-    }
-    return \@paths;
 }
 
 sub files {

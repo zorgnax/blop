@@ -6,6 +6,7 @@ use Blop::Category;
 use Blop::Tag;
 use Blop::Markup;
 use Blop::Comment;
+use parent "Blop::Entry";
 
 sub new {
     my ($class, %args) = @_;
@@ -156,22 +157,6 @@ sub category {
         $self->{category} = Blop::Category->new(categoryid => $self->{categoryid});
     }
     return $self->{category};
-}
-
-sub get_file_paths {
-    my ($self, $sort) = @_;
-    my @paths = glob ($self->content_path . "/files/*");
-    if ($sort && $sort eq "time") {
-        my %mtime;
-        for my $path (@paths) {
-            $mtime{$path} = (stat($path))[9];
-        }
-        @paths = sort {$mtime{$b} <=> $mtime{$a}} @paths;
-    }
-    else {
-        @paths = sort @paths;
-    }
-    return \@paths;
 }
 
 sub files {
