@@ -484,7 +484,7 @@ sub display_html {
         $content = $elem->{content};
         $post = "</$elem->{tag}>";
     }
-    elsif ($elem->{content}) {
+    elsif ($elem->{content} || $elem->{tag} eq "iframe") {
         $pre = "<$elem->{tag}$elem->{attr}>";
         $content = $self->display($elem->{content});
         $post = "</$elem->{tag}>";
