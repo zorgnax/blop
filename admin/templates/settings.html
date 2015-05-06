@@ -1,4 +1,4 @@
-[% PROCESS header.html title="Settings" x1="Settings" x2="General" %]
+[% PROCESS header.html title="Settings" x1="Settings" x2="Settings" %]
 
 <form id="settings" name="settings" method="post" class="aform">
 <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
@@ -132,6 +132,12 @@
 <div class="aentry">
 <label for="extralinks">Extra Page Links <span class="input-info">Format: title url, title url, ...</span></label><br/>
 <input id="extralinks" name="extralinks" type="text" value="[% blop.conf.extra_links | html %]"/><span class="extralinks-error aform-error"></span>
+</div>
+
+<div class="aentry">
+<label for="analyticscontent">Analytics Code <span class="input-info">Added to bottom of every page</span></label><br/>
+<textarea id="analyticscontent" name="analyticscontent">[% blop.conf.analytics | html %]</textarea>
+<span class="analyticscontent-error aform-error"></span>
 </div>
 
 <div class="aentry">

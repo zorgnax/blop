@@ -113,6 +113,10 @@ if (diff("extralinks", "extra_links")) {
     $args{extra_links} = $cgi->param("extralinks");
 }
 
+if (diff("analyticscontent", "analytics")) {
+    $args{analytics} = $cgi->param("analyticscontent");
+}
+
 if ($out->{error}) {
     print $blop->http_header("Content-Type" => "application/json");
     print $blop->escape_json($out);

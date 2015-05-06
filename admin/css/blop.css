@@ -17,6 +17,13 @@ code {
     font-family: Monaco, Consolas, ProFont, monospace;
 }
 
+.aform textarea {
+    width: 500px;
+    height: 150px;
+    padding: 5px;
+    font-family: Monaco, Consolas, ProFont, monospace;
+}
+
 .aform .input-info {
     color: #cccccc;
     font-size: smaller;
