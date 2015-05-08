@@ -1,5 +1,16 @@
 </div>
 <div class="footer">Blop build [% blop.build %]</div>
+<script type="text/javascript">
+    (function () {
+        var tag = document.createElement("script");
+        tag.type = "text/javascript";
+        tag.async = true;
+        tag.src = "[% urlbase %]/admin/tracker-js?referer=" +
+                  encodeURIComponent(document.referrer);
+        var script = document.getElementsByTagName("script")[0];
+        script.parentNode.insertBefore(tag, script);
+    })();
+</script>
 </body>
 </html>
 

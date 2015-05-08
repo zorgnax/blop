@@ -96,6 +96,7 @@ sub template {
     $vars{dump} = sub {return "<pre>" . $self->dump(@_ ? @_ : \%vars) . "</pre>"};
     $vars{theme} = $self->{theme};
     $vars{cgi} = $self->cgi;
+    $vars{json} = sub {return $self->escape_json(@_)};
     $template->process($file, \%vars, \my $out) or die $template->error;
     return $out;
 }

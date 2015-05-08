@@ -6,7 +6,7 @@ create table posts (
     published datetime,
     categoryid int unsigned not null,
     content text not null,
-    index(published));
+    key(published));
 
 create table categories (
     categoryid int unsigned primary key auto_increment,
@@ -31,7 +31,7 @@ create table pages (
     parentid int unsigned not null,
     hidden int unsigned not null,
     noheading int unsigned not null,
-    index(published));
+    key(published));
 
 create table comments (
     commentid int unsigned primary key auto_increment,
@@ -66,4 +66,18 @@ create table log (
     postid int unsigned,
     pageid int unsigned,
     categoryid int unsigned);
+
+create table visits (
+    visitid int unsigned primary key auto_increment,
+    date datetime not null,
+    host varchar(256),
+    path varchar(256),
+    referer varchar(256),
+    entrance int unsigned not null,
+    ipaddr varchar(16),
+    first int unsigned not null,
+    agent varchar(256),
+    key(date)
+    key(ipaddr),
+    key(first));
 

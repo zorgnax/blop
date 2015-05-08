@@ -10,6 +10,13 @@
 <li>[% blop.num_comments.approved %] comments[% IF blop.num_comments.pending %] ([% blop.num_comments.pending %] pending)[% END %]</li>
 </ul>
 
+<h3>Visits</h3>
+<p>
+    [% visits.page_views %] page views, [% visits.unique_ips %] unique IPs
+</p>
+
+<canvas id="visits-graph" width="1000" height="265"></canvas>
+
 <h3>Log</h3>
 <ul class="logs">
 [% FOREACH log IN logs %]
@@ -17,5 +24,34 @@
 [% END %]
 </ul>
 
+<script type="text/javascript" src="[% urlbase %]/admin/js/chartjs/Chart.js"></script>
+<script type="text/javascript">
+    var ctx = $("#visits-graph").get(0).getContext("2d");
+    var data = {
+        labels: [% json(visits.labels) %],
+        datasets: [
+            {
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(151,187,205,1)",
+                data: [% json(visits.counts) %]
+            },
+            {
+                fillColor: "rgba(220,220,220,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: [% json(visits.ip_counts) %]
+            },
+        ]
+    };
+    var config = {showTooltips: false};
+    var chart = new Chart(ctx).Line(data, config);
+</script>
 [% PROCESS footer.html %]
 

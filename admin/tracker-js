@@ -1,0 +1,65 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+
+$SIG{__DIE__} = sub {
+    print "Content-Type: application/javascript\n\n";
+    my $mesg = "@_";
+    $mesg =~ s{^}{// }gms;
+    print "$mesg";
+    exit 255;
+};
+
+my $url = $ENV{HTTP_REFERER} || "";
+my $host = "";
+my $path = "";
+if ($url =~ m{//([^/]+)(.*)}) {
+    $host = $1 || "";
+    $path = $2 || "";
+}
+
+if ($host ne $ENV{HTTP_HOST}) {
+    die "Only intended for $host\n";
+}
+
+my $referer = $cgi->param("referer") || "";
+my $referer_host = "";
+if ($referer =~ m{//([^/]+)(.*)}) {
+    $referer_host = $1 || "";
+}
+
+my $entrance = 0;
+if ($referer_host ne $host) {
+    $entrance = 1;
+}
+
+my $sth = $blop->dbh->prepare("select value from config where name=\"timezone\"");
+$sth->execute();
+my ($timezone) = $sth->fetchrow_array();
+if ($timezone) {
+    $ENV{TZ} = $timezone;
+}
+
+my $now = Blop::Date->now->str;
+my $ipaddr = $ENV{REMOTE_ADDR};
+my $agent = $ENV{HTTP_USER_AGENT};
+
+$sth = $blop->dbh->prepare(<<EOSQL);
+select min(visitid) from visits where ipaddr=?
+EOSQL
+$sth->execute($ipaddr);
+my ($other_visit) = $sth->fetchrow_array();
+my $first = 0;
+if (!$other_visit) {
+    $first = 1;
+}
+
+$sth = $blop->dbh->prepare(<<EOSQL);
+insert into visits set
+    date=?, host=?, path=?, referer=?, entrance=?, ipaddr=?, first=?, agent=?
+EOSQL
+$sth->execute($now, $host, $path, $referer, $entrance, $ipaddr, $first, $agent);
+
+print "Content-Type: application/javascript\n\n";
+print "// okay!\n";
+

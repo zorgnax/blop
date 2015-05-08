@@ -7,7 +7,7 @@ my $blop;
 
 sub import {
     my ($class, %args) = @_;
-    $blop = Blop->new(js => $args{js}, text => $args{text});
+    $blop = Blop->new(json => $args{json}, text => $args{text});
     $blop->find_bases();
     strict->import;
     warnings->import;
@@ -19,7 +19,7 @@ sub import {
 }
 
 sub simple_output_error {
-    if ($blop && $blop->{js}) {
+    if ($blop && $blop->{json}) {
         print "Content-Type: application/json\n\n";
         print "{\"error\": 1, \"mesg\": " . Blop->escape_json_str(@_) . "}\n";
     }
@@ -36,7 +36,7 @@ sub simple_output_error {
 }
 
 sub output_error {
-    if ($blop && $blop->{js}) {
+    if ($blop && $blop->{json}) {
         print "Content-Type: application/json\n\n";
         print "{\"error\": 1, \"mesg\": " . Blop->escape_json_str(@_) . "}\n";
     }
