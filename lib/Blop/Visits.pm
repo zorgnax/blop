@@ -15,20 +15,22 @@ from
 EOSQL
     $sth->execute();
     my $visits = $sth->fetchrow_hashref();
+    $visits->{page_views} ||= 0;
+    $visits->{unique_ips} ||= 0;
     $visits->{min_date} = Blop::Date->new($visits->{min_date});
     $visits->{max_date} = Blop::Date->new($visits->{max_date});
 
-    my $max = time;
-    my $min = $visits->{min_date}{epoch};
-    if ($min > $max - 60 * 60 * 3) {
-        $min = $max - 60 * 60 * 3;
+    my $max = Blop::Date->new_epoch(time);
+    my $min = $visits->{min_date} || $max;
+    if ($min->{epoch} > $max->{epoch} - 60 * 60 * 3) {
+        $min = Blop::Date->new_epoch($max->{epoch} - 60 * 60 * 3);
     }
     my $n = 20;
-    my $segment = ($max - $min) / $n;
+    my $segment = ($max->{epoch} - $min->{epoch}) / $n;
 
     my $query = <<EOSQL;
 select
-    floor((unix_timestamp(date) - $min) / $segment) + 1 i,
+    floor((unix_timestamp(date) - unix_timestamp("$min")) / $segment) + 1 i,
     count(*) count,
     count(distinct ipaddr) ip_count
 from
@@ -52,7 +54,7 @@ EOSQL
     my @ip_counts;
     for my $i (0 .. $n) {
         my $visit = $h{$i} || {i => $i};
-        my $time = $min + ($i - 1) * $segment;
+        my $time = $min->{epoch} + ($i - 1) * $segment;
         my $date = Blop::Date->new_epoch($time);
         $visit->{date} = $date;
         $visit->{count} ||= 0;

@@ -77,7 +77,7 @@ create table visits (
     ipaddr varchar(16),
     first int unsigned not null,
     agent varchar(256),
-    key(date)
+    key(date),
     key(ipaddr),
     key(first));
 
