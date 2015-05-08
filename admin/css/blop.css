@@ -51,6 +51,8 @@ code {
 
 .alinks-top {
     text-align: right;
+    display: inline-block;
+    float: right;
 }
 
 .alinks {
@@ -219,5 +221,11 @@ table.comments tr td {
     text-align: center;
     color: #999999;
     font-size: smaller;
+}
+
+h1.title {
+    display: inline-block;
+    margin: 0px;
+    margin-bottom: 10px;
 }
 
