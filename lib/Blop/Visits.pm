@@ -30,7 +30,7 @@ EOSQL
 
     my $query = <<EOSQL;
 select
-    floor((unix_timestamp(date) - unix_timestamp("$min")) / $segment) + 1 i,
+    round((unix_timestamp(date) - unix_timestamp("$min")) / $segment) + 1 i,
     count(*) count,
     count(distinct ipaddr) ip_count
 from
@@ -52,7 +52,7 @@ EOSQL
     my @labels;
     my @counts;
     my @ip_counts;
-    for my $i (0 .. $n) {
+    for my $i (0 .. $n + 1) {
         my $visit = $h{$i} || {i => $i};
         my $time = $min->{epoch} + ($i - 1) * $segment;
         my $date = Blop::Date->new_epoch($time);
