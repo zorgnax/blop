@@ -1,0 +1,20 @@
+[% title = "IPs" %]
+[% PROCESS header.html %]
+
+<div class="navigation-summary">[% navigation.summary %]</div>
+
+<table class="entry-list">
+<tr><th>IP</th><th>Page Views</th><th>First Date</th></tr>
+[% FOREACH visit IN visits %]
+<tr>
+    <td><a href="[% urlbase %]/admin/visits?ipaddr=[% visit.ipaddr | html %]" title="[% visit.agent | html %]">[% visit.ipaddr %]</a></td>
+    <td>[% visit.page_views %]</td>
+    <td>[% visit.min_date %]</td>
+</tr>
+[% END %]
+</table>
+
+<br/>
+<div>[% navigation.links %]</div>
+
+[% PROCESS footer.html %]

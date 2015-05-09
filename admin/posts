@@ -63,6 +63,7 @@ limit $limit
 offset $offset
 EOSQL
 $sth->execute();
+
 my @posts;
 while (my $post = $sth->fetchrow_hashref()) {
     $post = bless $post, "Blop::Post";

@@ -1,0 +1,29 @@
+[% title = "Page Views" %]
+[% PROCESS header.html %]
+
+<div class="navigation-summary">[% navigation.summary %]</div>
+
+[% IF ipaddr %]
+<p>[% ipaddr | html %]. <a href="[% urlbase %]/admin/visits">clear</a></p>
+[% ELSIF referer %]
+<p>Referred by [% referer | html %]. <a href="[% urlbase %]/admin/visits">clear</a></p>
+[% ELSIF referals %]
+<p>Referals. <a href="[% urlbase %]/admin/visits">clear</a></p>
+[% END %]
+
+<table class="entry-list">
+<tr><th>Date</th><th>IP</th><th>URL</th><th>Referer</th></tr>
+[% FOREACH visit IN visits %]
+<tr class="[% IF visit.first %]first [% END %][% IF visit.entrance %]entrance [% END %]">
+    <td>[% visit.date %]</td>
+    <td><a href="?ipaddr=[% visit.ipaddr | html %]" title="[% visit.agent | html %]">[% visit.ipaddr %]</a></td>
+    <td><span title="[% visit.host | html %]">[% visit.path | html %]</a></td>
+    <td>[% IF visit.entrance %]<a href="?referer=[% visit.referer_host | uri %]">[% visit.referer | html %]</a>[% END %]</td>
+</tr>
+[% END %]
+</table>
+
+<br/>
+<div>[% navigation.links %]</div>
+
+[% PROCESS footer.html %]

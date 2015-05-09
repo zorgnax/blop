@@ -156,6 +156,13 @@ table.entry-list td.deleted {
     color: red;
 }
 
+table.entry-list .entrance {
+}
+
+table.entry-list .first {
+    background: green;
+}
+
 .navigation-summary {
     display: inline-block;
     float: right;

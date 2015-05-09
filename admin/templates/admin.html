@@ -12,7 +12,7 @@
 
 <h3>Visits</h3>
 <p>
-    [% visits.page_views %] page views, [% visits.unique_ips %] unique IPs
+    [% visits.page_views %] page views <a href="[% urlbase %]/admin/visits"><i class="fa fa-eye"></i></a>, [% visits.unique_ips %] unique IPs <a href="[% urlbase %]/admin/ips"><i class="fa fa-globe"></i></a>, [% visits.referals %] referals <a href="[% urlbase %]/admin/visits?referals=1"><i class="fa fa-lightbulb-o"></i></a>
 </p>
 
 <canvas id="visits-graph" width="1000" height="265"></canvas>

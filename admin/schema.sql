@@ -72,12 +72,14 @@ create table visits (
     date datetime not null,
     host varchar(256),
     path varchar(256),
-    referer varchar(256),
     entrance int unsigned not null,
     ipaddr varchar(16),
     first int unsigned not null,
     agent varchar(256),
+    referer varchar(256),
+    referer_host varchar(256),
     key(date),
     key(ipaddr),
-    key(first));
+    key(first),
+    key(entrance, referer));
 

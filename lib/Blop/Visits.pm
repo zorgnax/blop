@@ -9,7 +9,7 @@ sub visits {
     my $sth = $blop->dbh->prepare(<<EOSQL);
 select
     min(date) min_date, max(date) max_date, count(*) as page_views,
-    sum(first) unique_ips
+    sum(first) unique_ips, sum(if(entrance=1 and referer!="", 1, 0)) referals
 from
     visits
 EOSQL
@@ -17,6 +17,7 @@ EOSQL
     my $visits = $sth->fetchrow_hashref();
     $visits->{page_views} ||= 0;
     $visits->{unique_ips} ||= 0;
+    $visits->{referals} ||= 0;
     $visits->{min_date} = Blop::Date->new($visits->{min_date});
     $visits->{max_date} = Blop::Date->new($visits->{max_date});
 
@@ -65,7 +66,7 @@ EOSQL
             $label = "";
         }
         elsif ($segment < 60 * 60 * 2) {
-            $label = $date->strftime("%I:%M");
+            $label = $date->strftime("%H:%M");
         }
         else {
             $label = $date->strftime("%b %d");

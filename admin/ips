@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+use lib "../lib";
+use blopcgi;
+
+$blop->read_conf();
+$blop->require_admin();
+
+my $limit = $cgi->param("limit");
+$limit = 100 if !defined $limit;
+if ($limit !~ /^\d+$/) {
+    die "Invalid limit param.\n";
+}
+
+my $offset = $cgi->param("offset");
+$offset = 0 if !defined $offset;
+if ($offset !~ /^\d+$/) {
+    die "Invalid offset param.\n";
+}
+
+my $sth = $blop->dbh->prepare(<<EOSQL);
+select sql_calc_found_rows
+    ipaddr, count(*) page_views, min(date) min_date, max(date) max_date,
+    agent
+from visits
+group by ipaddr
+order by min_date desc
+limit $limit
+offset $offset
+EOSQL
+$sth->execute();
+
+my @visits;
+while (my $visit = $sth->fetchrow_hashref()) {
+    push @visits, $visit;
+}
+
+$sth = $blop->dbh->prepare("select found_rows()");
+$sth->execute();
+my ($found_rows) = $sth->fetchrow_array();
+my $navigation = Blop::Navigation->new($limit, $offset, $found_rows, "IP");
+
+print $blop->http_header();
+print $blop->template("ips.html", visits => \@visits, navigation => $navigation);
+
