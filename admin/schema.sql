@@ -70,6 +70,7 @@ create table log (
 create table visits (
     visitid int unsigned primary key auto_increment,
     date datetime not null,
+    url varchar(256),
     host varchar(256),
     path varchar(256),
     entrance int unsigned not null,

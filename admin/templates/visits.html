@@ -1,24 +1,27 @@
 [% title = "Page Views" %]
 [% PROCESS header.html %]
 
+<div>
+    <form>
+        <input type="search" name="ipaddr" value="[% ipaddr | html %]" placeholder="IP Address"/>
+        <input type="search" name="referer" value="[% referer | html %]" placeholder="Referer"/>
+        <label><input type="checkbox" name="referals" value="1"[% IF referals %] checked="checked"[% END %] /> Referals</label>
+        <input type="submit" value="Search" />
+    </form>
+</div>
+
 <div class="navigation-summary">[% navigation.summary %]</div>
 
-[% IF ipaddr %]
-<p>[% ipaddr | html %]. <a href="[% urlbase %]/admin/visits">clear</a></p>
-[% ELSIF referer %]
-<p>Referred by [% referer | html %]. <a href="[% urlbase %]/admin/visits">clear</a></p>
-[% ELSIF referals %]
-<p>Referals. <a href="[% urlbase %]/admin/visits">clear</a></p>
-[% END %]
-
 <table class="entry-list">
-<tr><th>Date</th><th>IP</th><th>URL</th><th>Referer</th></tr>
+<tr><th>Date</th><th>IP</th><th>URL</th></tr>
 [% FOREACH visit IN visits %]
 <tr class="[% IF visit.first %]first [% END %][% IF visit.entrance %]entrance [% END %]">
-    <td><span title="[% visit.date.strftime("%A, %B %d, %Y %I:%M:%S %P") %]">[% visit.date.natural %]</span></td>
+    <td class="visit-date"><span title="[% visit.date.strftime("%A, %B %d, %Y %I:%M:%S %P") %]">[% visit.date.natural %]</span></td>
     <td><a href="?ipaddr=[% visit.ipaddr | html %]" title="[% visit.agent | html %]">[% visit.ipaddr %]</a></td>
-    <td><span title="[% visit.host | html %]">[% visit.path | html %]</a></td>
-    <td>[% IF visit.entrance %]<a href="?referer=[% visit.referer_host | uri %]">[% visit.referer | html %]</a>[% END %]</td>
+    <td>
+        [% visit.url | html %]
+        [% IF visit.entrance %]<br/><a href="?referer=[% visit.referer_host | uri %]">[% visit.referer | html %]</a>[% END %]
+    </td>
 </tr>
 [% END %]
 </table>

@@ -56,9 +56,9 @@ if (!$other_visit) {
 
 $sth = $blop->dbh->prepare(<<EOSQL);
 insert into visits set
-    date=?, host=?, path=?, referer=?, entrance=?, ipaddr=?, first=?, agent=?, referer_host=?
+    date=?, url=?, host=?, path=?, referer=?, entrance=?, ipaddr=?, first=?, agent=?, referer_host=?
 EOSQL
-$sth->execute($now, $host, $path, $referer, $entrance, $ipaddr, $first, $agent, $referer_host);
+$sth->execute($now, $url, $host, $path, $referer, $entrance, $ipaddr, $first, $agent, $referer_host);
 
 print "Content-Type: application/javascript\n\n";
 print "// okay!\n";
