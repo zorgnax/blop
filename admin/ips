@@ -31,6 +31,8 @@ $sth->execute();
 
 my @visits;
 while (my $visit = $sth->fetchrow_hashref()) {
+    $visit->{min_date} = Blop::Date->new($visit->{min_date});
+    $visit->{max_date} = Blop::Date->new($visit->{max_date});
     push @visits, $visit;
 }
 

@@ -15,7 +15,7 @@
 <tr><th>Date</th><th>IP</th><th>URL</th><th>Referer</th></tr>
 [% FOREACH visit IN visits %]
 <tr class="[% IF visit.first %]first [% END %][% IF visit.entrance %]entrance [% END %]">
-    <td>[% visit.date %]</td>
+    <td><span title="[% visit.date.strftime("%A, %B %d, %Y %I:%M:%S %P") %]">[% visit.date.natural %]</span></td>
     <td><a href="?ipaddr=[% visit.ipaddr | html %]" title="[% visit.agent | html %]">[% visit.ipaddr %]</a></td>
     <td><span title="[% visit.host | html %]">[% visit.path | html %]</a></td>
     <td>[% IF visit.entrance %]<a href="?referer=[% visit.referer_host | uri %]">[% visit.referer | html %]</a>[% END %]</td>

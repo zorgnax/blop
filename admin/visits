@@ -50,6 +50,7 @@ $sth->execute();
 
 my @visits;
 while (my $visit = $sth->fetchrow_hashref()) {
+    $visit->{date} = Blop::Date->new($visit->{date});
     push @visits, $visit;
 }
 

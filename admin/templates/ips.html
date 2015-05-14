@@ -4,12 +4,13 @@
 <div class="navigation-summary">[% navigation.summary %]</div>
 
 <table class="entry-list">
-<tr><th>IP</th><th>Page Views</th><th>First Date</th></tr>
+<tr><th>IP</th><th>Page Views</th><th>First</th><th>Latest</th></tr>
 [% FOREACH visit IN visits %]
 <tr>
     <td><a href="[% urlbase %]/admin/visits?ipaddr=[% visit.ipaddr | html %]" title="[% visit.agent | html %]">[% visit.ipaddr %]</a></td>
     <td>[% visit.page_views %]</td>
-    <td>[% visit.min_date %]</td>
+    <td><span title="[% visit.min_date.strftime("%A, %B %d, %Y %I:%M:%S %P") %]">[% visit.min_date.natural %]</span></td>
+    <td><span title="[% visit.max_date.strftime("%A, %B %d, %Y %I:%M:%S %P") %]">[% visit.max_date.natural %]</span></td>
 </tr>
 [% END %]
 </table>
