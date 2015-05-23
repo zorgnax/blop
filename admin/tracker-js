@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use lib "../lib";
 use blopcgi;
+use Blop::GeoIP;
 
 $SIG{__DIE__} = sub {
     print "Content-Type: application/javascript\n\n";
@@ -54,11 +55,21 @@ if (!$other_visit) {
     $first = 1;
 }
 
+my $gc = Blop::GeoIP->new("$blop->{base}admin/geoip/city.dat");
+my $gi = Blop::GeoIP->new("$blop->{base}admin/geoip/isp.dat");
+my $g = $gc->city($ipaddr);
+my $isp = $gi->isp($ipaddr);
+
 $sth = $blop->dbh->prepare(<<EOSQL);
 insert into visits set
-    date=?, url=?, host=?, path=?, referer=?, entrance=?, ipaddr=?, first=?, agent=?, referer_host=?
+    date=?, url=?, host=?, path=?, referer=?, entrance=?, ipaddr=?,
+    first=?, agent=?, referer_host=?, country=?, region=?, city=?, zip=?,
+    area=?, latitude=?, longitude=?, isp=?
 EOSQL
-$sth->execute($now, $url, $host, $path, $referer, $entrance, $ipaddr, $first, $agent, $referer_host);
+$sth->execute(
+    $now, $url, $host, $path, $referer, $entrance, $ipaddr, $first,
+    $agent, $referer_host, $g->{country}, $g->{region}, $g->{city},
+    $g->{zip}, $g->{area}, $g->{latitude}, $g->{longitude}, $isp);
 
 print "Content-Type: application/javascript\n\n";
 print "// okay!\n";

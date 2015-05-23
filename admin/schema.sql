@@ -79,8 +79,20 @@ create table visits (
     agent varchar(256),
     referer varchar(256),
     referer_host varchar(256),
+    country varchar(2),
+    region varchar(256),
+    city varchar(256),
+    zip varchar(16),
+    area varchar(16),
+    latitude double,
+    longitude double,
+    isp varchar(256),
     key(date),
     key(ipaddr),
     key(first),
-    key(entrance, referer));
+    key(entrance, referer),
+    key(country),
+    key(region),
+    key(city),
+);
 

@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use lib "../lib";
 use blopcgi;
+use Blop::GeoIP;
 
 $blop->read_conf();
 $blop->require_admin();
@@ -51,6 +52,9 @@ $sth->execute();
 my @visits;
 while (my $visit = $sth->fetchrow_hashref()) {
     $visit->{date} = Blop::Date->new($visit->{date});
+    if ($visit->{country}) {
+        $visit->{country_name} = $Blop::GeoIP::country_map{$visit->{country}};
+    }
     push @visits, $visit;
 }
 

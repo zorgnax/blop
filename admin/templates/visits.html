@@ -13,14 +13,18 @@
 <div class="navigation-summary">[% navigation.summary %]</div>
 
 <table class="entry-list">
-<tr><th>Date</th><th>IP</th><th>URL</th></tr>
+<tr><th>Date</th><th>IP</th><th>Loc</th><th>URL</th></tr>
 [% FOREACH visit IN visits %]
 <tr class="[% IF visit.first %]first [% END %][% IF visit.entrance %]entrance [% END %]">
     <td class="visit-date"><span title="[% visit.date.strftime("%A, %B %d, %Y %I:%M:%S %P") %]">[% visit.date.natural %]</span></td>
     <td><a href="?ipaddr=[% visit.ipaddr | html %]" title="[% visit.agent | html %]">[% visit.ipaddr %]</a></td>
     <td>
+        <img src="[% urlbase %]/admin/img/flags/[% visit.country.lower | html %].gif" title="[% visit.city | html %], [% visit.region | html %], [% visit.country_name | html %]" />
+        <i class="fa fa-book" title="[% visit.isp | html %]"></i>
+    </td>
+    <td>
         [% visit.url | html %]
-        [% IF visit.entrance %]<br/><a href="?referer=[% visit.referer_host | uri %]">[% visit.referer | html %]</a>[% END %]
+        [% IF visit.entrance && visit.referer %]<br/><a href="?referer=[% visit.referer_host | uri %]">[% visit.referer | html %]</a>[% END %]
     </td>
 </tr>
 [% END %]
