@@ -93,6 +93,6 @@ create table visits (
     key(entrance, referer),
     key(country),
     key(region),
-    key(city),
+    key(city)
 );
 
