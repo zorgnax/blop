@@ -13,7 +13,7 @@ mkdir blop
 tar cf - . ./admin/priv/.htaccess \
     --exclude ./blop.conf --exclude ./blop --exclude ./.git \
     --exclude './post/*' --exclude './page/*' --exclude './sect/*/*' \
-    --exclude './admin/priv/*' |
+    --exclude './admin/priv/*' --exclude './blop.tar.gz' |
     tar xpf - -C blop
 cp admin/priv/.htaccess blop/admin/priv
 git log --format=%cd -1 --date=iso |
