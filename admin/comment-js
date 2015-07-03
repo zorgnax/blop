@@ -17,10 +17,11 @@ if (defined $name && $name =~ /^\s*$/) {
 }
 
 my $email = $cgi->param("email");
-if ($email && $email !~ /^[\w\._-]+\@.+\.\w+$/) {
-    $out->{emailError} = "Invalid email.";
-    $out->{error} = 1;
-}
+# freeform email field to allow for twitter handles etc.
+# if ($email && $email !~ /^[\w\._-]+\@.+\.\w+$/) {
+#     $out->{emailError} = "Invalid email.";
+#     $out->{error} = 1;
+# }
 
 my $content = $cgi->param("content");
 if (defined $content && $content =~ /^\s*$/) {

@@ -3,7 +3,7 @@
 <div class="navigation-summary">[% navigation.summary %]</div>
 
 <table class="entry-list comments">
-<tr><th>Author</th><th>What</th><th>Comment</th></tr>
+<tr><th>Author</th><th>Post</th><th>Comment</th></tr>
 [% FOREACH comment IN comments %]
 <tr data-commentid="[% comment.commentid %]" class="comment-[% comment.status | lower %]">
     <td>
@@ -13,7 +13,7 @@
     </td>
     <td>
         <span class="comment-added" title="[% comment.added.str %]">[% comment.added.natural %]</span><br/>
-        <a href="[% comment.added_to.fullurl %]" title="[% comment.added_to.label | html %]">[% comment.added_to.short %]</a><br/>
+        <a href="[% comment.added_to.fullurl %]">[% comment.added_to.label | html %]</a><br/>
         <span class="comment-status">[% comment.status %]</span>
     </td>
     <td>

@@ -266,6 +266,10 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 3px;
 }
 
+.comment-form input[type=text] {
+    width: 300px;
+}
+
 .comment-form textarea {
     width: 500px;
     height: 120px;

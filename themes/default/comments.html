@@ -28,9 +28,9 @@
     [% IF blop.session %]
     <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
     [% END %]
-    <input name="name" type="text" value="[% comment.name | html %]" placeholder="Name"/><span class="name-error comment-mesg"></span><br/>
-    <input name="email" type="text" value="[% comment.email %]" placeholder="Email"/><span class="email-error comment-mesg"></span><br/>
-    <textarea name="content" placeholder="Comment">[% comment.content | html %]</textarea><br/>
+    <input name="name" type="text" value="[% comment.name | html %]" placeholder="Name *"/><span class="name-error comment-mesg"></span><br/>
+    <input name="email" type="text" value="[% comment.email %]" placeholder="Email or Twitter (Not Public)"/><span class="email-error comment-mesg"></span><br/>
+    <textarea name="content" placeholder="Comment *">[% comment.content | html %]</textarea><br/>
     <input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span>
     </form>
     [% IF comment.edited %]Last edited: [% comment.edited.natural %][% END %]
@@ -49,11 +49,11 @@
     <input type="hidden" name="csrf" value="[% blop.csrf %]"/>
     [% END %]
 
-    <input name="name" type="text" value="[% blop.last_comment.name | html %]" placeholder="Name"/><span class="name-error comment-mesg"></span><br/>
+    <input name="name" type="text" value="[% blop.last_comment.name | html %]" placeholder="Name *"/><span class="name-error comment-mesg"></span><br/>
 
-    <input name="email" type="text" value="[% blop.last_comment.email %]" placeholder="Email"/><span class="email-error comment-mesg"></span><br/>
+    <input name="email" type="text" value="[% blop.last_comment.email %]" placeholder="Email or Twitter (Not Public)"/><span class="email-error comment-mesg"></span><br/>
 
-    <textarea name="content" placeholder="Comment"></textarea><br/>
+    <textarea name="content" placeholder="Comment *"></textarea><br/>
 
     <input type="submit" value="Post Comment"/><span class="comment-mesg comment-main-mesg"></span>
 
