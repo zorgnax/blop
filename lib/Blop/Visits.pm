@@ -6,13 +6,14 @@ use Blop::Date;
 
 sub visits {
     my $blop = Blop::instance();
-    my $sth = $blop->dbh->prepare(<<EOSQL);
+    my $query = <<EOSQL;
 select
     min(date) min_date, max(date) max_date, count(*) as page_views,
     sum(first) unique_ips, sum(if(entrance=1 and referer!="", 1, 0)) referals
 from
     visits
 EOSQL
+    my $sth = $blop->dbh->prepare($query);
     $sth->execute();
     my $visits = $sth->fetchrow_hashref();
     $visits->{page_views} ||= 0;
@@ -20,6 +21,38 @@ EOSQL
     $visits->{referals} ||= 0;
     $visits->{min_date} = Blop::Date->new($visits->{min_date});
     $visits->{max_date} = Blop::Date->new($visits->{max_date});
+
+    my $query = <<EOSQL;
+select
+    count(*) as page_views, sum(first) unique_ips, sum(if(entrance=1 and referer!="", 1, 0)) referals
+from
+    visits
+where
+    date > date(now())
+EOSQL
+    my $sth = $blop->dbh->prepare($query);
+    $sth->execute();
+    my $today = $sth->fetchrow_hashref();
+    $today->{page_views} ||= 0;
+    $today->{unique_ips} ||= 0;
+    $today->{referals} ||= 0;
+    $visits->{today} = $today;
+
+    my $query = <<EOSQL;
+select
+    count(*) as page_views, sum(first) unique_ips, sum(if(entrance=1 and referer!="", 1, 0)) referals
+from
+    visits
+where
+    date > date(now() - interval 1 day) && date < date(now())
+EOSQL
+    my $sth = $blop->dbh->prepare($query);
+    $sth->execute();
+    my $yesterday = $sth->fetchrow_hashref();
+    $yesterday->{page_views} ||= 0;
+    $yesterday->{unique_ips} ||= 0;
+    $yesterday->{referals} ||= 0;
+    $visits->{yesterday} = $yesterday;
 
     my $max = Blop::Date->new_epoch(time);
     my $min = $visits->{min_date} || $max;
@@ -29,7 +62,7 @@ EOSQL
     my $n = 20;
     my $segment = ($max->{epoch} - $min->{epoch}) / $n;
 
-    my $query = <<EOSQL;
+    $query = <<EOSQL;
 select
     round((unix_timestamp(date) - unix_timestamp("$min")) / $segment) + 1 i,
     count(*) count,
